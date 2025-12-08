@@ -43,9 +43,8 @@ export const siteConfig: SiteConfig = {
 	// { type: "image", value: "https://example.com/logo.png", alt: "Firefly Logo" }
 	navbarLogo: {
 		type: "image",
-		// value: "/assets/images/favicon.png",
+		value: "/assets/images/blankspace.png",
 		// alt: "🍀",
-		value: "",
 		alt: "",
 	},
 	navbarTitle: "Daoze Tang", // 导航栏标题，可以设置为与 title 不同的值，如果不设置则使用 title
