@@ -110,7 +110,7 @@ export const siteConfig: SiteConfig = {
 
 			homeText: {
 				// 主页显示自定义文本（全局开关）
-				enable: false,
+				enable: true,
 				// 主页横幅主标题
 				title: "Lovely firefly!",
 				// 主页横幅副标题
