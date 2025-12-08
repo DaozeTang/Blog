@@ -42,6 +42,7 @@ export const siteConfig: SiteConfig = {
 	// { type: "image", value: "/assets/images/logo.webp", alt: "Firefly Logo" }
 	// { type: "image", value: "https://example.com/logo.png", alt: "Firefly Logo" }
 	navbarLogo: {
+		mode: false, // 是否渲染logo，false则只渲染标题
 		type: "image",
 		value: "/assets/images/blankspace.png",
 		// alt: "🍀",

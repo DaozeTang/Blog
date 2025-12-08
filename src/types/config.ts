@@ -42,6 +42,7 @@ export type SiteConfig = {
 	}>;
 	/** 导航栏Logo图标，可选类型：icon库、图片链接、本地图片 */
 	navbarLogo?: {
+		mode: boolean; // 是否渲染logo
 		type: "icon" | "image";
 		value: string; // icon名或图片url
 		alt?: string; // 图片alt文本

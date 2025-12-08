@@ -56,13 +56,18 @@ let links: NavBarLink[] = navBarConfig.links.map(
     ]}>
         <a href={url('/')} class="btn-plain scale-animation rounded-lg h-[3.25rem] px-5 font-bold active:scale-95">
             <div class="flex flex-row dark:text-white text-black items-center text-md">
-                                {siteConfig.navbarLogo?.type === "icon" ? (
-                                    <Icon name={siteConfig.navbarLogo.value || "material-symbols:home-pin-outline"} class="text-[1.75rem] mb-1 mr-2" />
-                                ) : siteConfig.navbarLogo?.type === "image" ? (
-                                    <img src={url(siteConfig.navbarLogo.value)} alt={siteConfig.navbarLogo.alt || siteConfig.title} class="h-[1.75rem] w-[1.75rem] mb-1 mr-2 object-contain" loading="lazy" />
-                                ) : (
-                                    <Icon name="material-symbols:home-pin-outline" class="text-[1.75rem] mb-1 mr-2" />
-                                )}
+                {/* 新增逻辑：只有当 mode 为 true 时，才进入内部的 Logo 判断逻辑 */}
+                {siteConfig.navbarLogo?.mode && (
+                    siteConfig.navbarLogo?.type === "icon" ? (
+                        <Icon name={siteConfig.navbarLogo.value || "material-symbols:home-pin-outline"} class="text-[1.75rem] mb-1 mr-2" />
+                    ) : siteConfig.navbarLogo?.type === "image" ? (
+                        <img src={url(siteConfig.navbarLogo.value)} alt={siteConfig.navbarLogo.alt || siteConfig.title} class="h-[1.75rem] w-[1.75rem] mb-1 mr-2 object-contain" loading="lazy" />
+                    ) : (
+                        <Icon name="material-symbols:home-pin-outline" class="text-[1.75rem] mb-1 mr-2" />
+                    )
+                )}
+
+                {/* 标题始终渲染（只要 navbarTitle 有值） */}
                 {navbarTitle}
             </div>
         </a>
