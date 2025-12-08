@@ -22,13 +22,15 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 		children: [
 			{
 				name: "Homepage",
-				icon: "fa6-solid:globe",
 				url: "https://dztang.net/",
+				external: true,
+				icon: "fa6-solid:globe",
 			},
 			{
 				name: "Email",
-				icon: "fa6-solid:envelope",
 				url: "mailto:tdz@s.hrbcu.edu.cn",
+				external: true,
+				icon: "fa6-solid:envelope",
 			},
 			{
 				name: "GitHub",
