@@ -21,17 +21,27 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 		icon: "material-symbols:link",
 		children: [
 			{
+				name: "Homepage",
+				icon: "fa6-solid:globe",
+				url: "https://dztang.net/",
+			},
+			{
+				name: "Email",
+				icon: "fa6-solid:envelope",
+				url: "mailto:tdz@s.hrbcu.edu.cn",
+			},
+			{
 				name: "GitHub",
-				url: "https://github.com/CuteLeaf/Firefly",
+				url: "https://github.com/DaozeTang",
 				external: true,
 				icon: "fa6-brands:github",
 			},
-			{
-				name: "Bilibili",
-				url: "https://space.bilibili.com/38932988",
-				external: true,
-				icon: "fa6-brands:bilibili",
-			},
+			// {
+			// 	name: "Bilibili",
+			// 	url: "https://space.bilibili.com/38932988",
+			// 	external: true,
+			// 	icon: "fa6-brands:bilibili",
+			// },
 		],
 	});
 
