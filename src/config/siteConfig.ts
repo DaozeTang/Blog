@@ -89,9 +89,9 @@ export const siteConfig: SiteConfig = {
 
 	backgroundWallpaper: {
 		// 壁纸模式："banner" 横幅壁纸，"overlay" 全屏壁纸，"none" 纯色背景无壁纸
-		mode: "overlay",
+		mode: "none",
 		// 是否允许用户通过导航栏切换壁纸模式，设为false可提升性能（只渲染当前模式）
-		switchable: true,
+		switchable: false,
 
 		// 背景图片配置
 		src: {
@@ -110,7 +110,7 @@ export const siteConfig: SiteConfig = {
 
 			homeText: {
 				// 主页显示自定义文本（全局开关）
-				enable: true,
+				enable: false,
 				// 主页横幅主标题
 				title: "Lovely firefly!",
 				// 主页横幅副标题
