@@ -47,7 +47,12 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 		],
 	});
 
-	links.push(LinkPreset.Friends);
+	
+	// 根据配置决定是否添加友链页面
+	if (siteConfig.pages.friends) {
+		links.push(LinkPreset.Friends);
+	}
+
 
 	// 根据配置决定是否添加留言板页面
 	if (siteConfig.pages.guestbook) {
