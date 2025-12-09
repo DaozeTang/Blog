@@ -53,6 +53,7 @@ export type SiteConfig = {
 
 	// 页面开关配置
 	pages: {
+		onlyabout: boolean; // 是否设置 关于 多级菜单
 		links: boolean; // 链接菜单开关
 		friends: boolean; // 友链页面开关
 		sponsor: boolean; // 赞助页面开关
