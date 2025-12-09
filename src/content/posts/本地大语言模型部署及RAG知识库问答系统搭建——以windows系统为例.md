@@ -5,7 +5,7 @@ pinned: false
 description: 本地大语言模型部署及RAG知识库问答系统搭建——以windows系统为例。
 tags: [深度学习, LLM, RAG]
 category: LLM
-draft: true
+draft: false
 date: 2024-10-07
 pubDate: 2024-10-07
 ---

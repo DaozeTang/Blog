@@ -5,7 +5,7 @@ pinned: false
 description: 将 PDF 页面调整为统一大小。
 tags: [PDF, 文件处理]
 category: 杂项
-draft: true
+draft: false
 date: 2025-05-19
 pubDate: 2025-05-19
 ---

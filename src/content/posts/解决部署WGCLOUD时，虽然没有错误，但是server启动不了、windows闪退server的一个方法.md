@@ -5,7 +5,7 @@ pinned: false
 description: 解决部署WGCLOUD时，server闪退的一个方法。
 tags: [WGCLOUD, 服务器]
 category: 杂项
-draft: true
+draft: false
 date: 2024-06-27
 pubDate: 2024-06-27
 ---

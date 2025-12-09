@@ -5,7 +5,7 @@ pinned: false
 description: 解决Mamba模块在ultralytics的YOLO框架中运行时Expected u.is_cuda() to be true, but got false.报错。
 tags: [计算机视觉, 深度学习, 目标检测, YOLO]
 category: 杂项
-draft: true
+draft: false
 date: 2024-07-11
 pubDate: 2024-07-11
 ---
