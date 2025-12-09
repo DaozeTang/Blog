@@ -20,64 +20,79 @@ const processedLinks = Astro.props.links.map((link: NavBarLink) => ({
 }));
 ---
 <div id="nav-menu-panel" class:list={["float-panel float-panel-closed absolute transition-all fixed right-4 px-2 py-2 max-h-[80vh] overflow-y-auto"]}>
-    {processedLinks.map((link) => (
-        <div class="mobile-menu-item">
-            {link.children && link.children.length > 0 ? (
-                <!-- 有子菜单的项目 -->
-                <div class="mobile-dropdown" data-mobile-dropdown>
-                    <button 
-                        class="group flex justify-between items-center py-2 pl-3 pr-1 rounded-lg gap-8 w-full text-left
-                            hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition"
-                        data-mobile-dropdown-trigger
-                        aria-expanded="false"
+    {processedLinks.map((link) => {
+        // --- 逻辑修改开始 ---
+        
+        // 1. 判断是否应该渲染为下拉菜单：只有当子菜单数量大于 1 时才展开
+        const showDropdown = link.children && link.children.length > 1;
+
+        // 2. 准备单链接渲染的数据：
+        // 如果不显示下拉，且有唯一的子项，直接把这个子项提取出来作为当前项渲染 (item)
+        // 否则，保持原样渲染父项 (link)
+        const item = (link.children && link.children.length === 1) ? link.children[0] : link;
+        
+        // --- 逻辑修改结束 ---
+
+        return (
+            <div class="mobile-menu-item">
+                {showDropdown ? (
+                    /* === 情况 A: 多个子项，渲染下拉菜单 (代码结构未变，仍使用原始 link 数据) === */
+                    <div class="mobile-dropdown" data-mobile-dropdown>
+                        <button 
+                            class="group flex justify-between items-center py-2 pl-3 pr-1 rounded-lg gap-8 w-full text-left
+                                hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition"
+                            data-mobile-dropdown-trigger
+                            aria-expanded="false"
+                        >
+                            <div class="flex items-center transition text-black/75 dark:text-white/75 font-bold group-hover:text-[var(--primary)] group-active:text-[var(--primary)]">
+                                {link.icon && <Icon icon={link.icon} class="text-[1.1rem] mr-2" />}
+                                {link.name}
+                            </div>
+                            <Icon icon="material-symbols:keyboard-arrow-down-rounded"
+                                  class="transition text-[1.25rem] text-[var(--primary)] mobile-dropdown-arrow duration-200"
+                            />
+                        </button>
+                        <div class="mobile-submenu" data-mobile-submenu>
+                            {link.children.map((child) => (
+                                <a href={child.external ? child.url : url(child.url)} 
+                                   class="group flex justify-between items-center py-2 pl-6 pr-1 rounded-lg gap-8
+                                       hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition"
+                                   target={child.external ? "_blank" : null}
+                                >
+                                    <div class="flex items-center transition text-black/60 dark:text-white/60 font-medium group-hover:text-[var(--primary)] group-active:text-[var(--primary)]">
+                                        {child.icon && <Icon icon={child.icon} class="text-[1.1rem] mr-2" />}
+                                        {child.name}
+                                    </div>
+                                    {child.external && <Icon icon="fa6-solid:arrow-up-right-from-square"
+                                          class="transition text-[0.75rem] text-black/25 dark:text-white/25 -translate-x-1"
+                                    />}
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+                ) : (
+                    /* === 情况 B: 无子项 或 只有1个子项 (直接渲染 item) === */
+                    /* 注意：这里所有的属性读取都从 link 改为了 item */
+                    <a href={item.external ? item.url : url(item.url)} 
+                       class="group flex justify-between items-center py-2 pl-3 pr-1 rounded-lg gap-8
+                       hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition"
+                       target={item.external ? "_blank" : null}
                     >
                         <div class="flex items-center transition text-black/75 dark:text-white/75 font-bold group-hover:text-[var(--primary)] group-active:text-[var(--primary)]">
-                            {link.icon && <Icon icon={link.icon} class="text-[1.1rem] mr-2" />}
-                            {link.name}
+                            {item.icon && <Icon icon={item.icon} class="text-[1.1rem] mr-2" />}
+                            {item.name}
                         </div>
-                        <Icon icon="material-symbols:keyboard-arrow-down-rounded"
-                              class="transition text-[1.25rem] text-[var(--primary)] mobile-dropdown-arrow duration-200"
-                        />
-                    </button>
-                    <div class="mobile-submenu" data-mobile-submenu>
-                        {link.children.map((child) => (
-                            <a href={child.external ? child.url : url(child.url)} 
-                               class="group flex justify-between items-center py-2 pl-6 pr-1 rounded-lg gap-8
-                                   hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition"
-                               target={child.external ? "_blank" : null}
-                            >
-                                <div class="flex items-center transition text-black/60 dark:text-white/60 font-medium group-hover:text-[var(--primary)] group-active:text-[var(--primary)]">
-                                    {child.icon && <Icon icon={child.icon} class="text-[1.1rem] mr-2" />}
-                                    {child.name}
-                                </div>
-                                {child.external && <Icon icon="fa6-solid:arrow-up-right-from-square"
-                                      class="transition text-[0.75rem] text-black/25 dark:text-white/25 -translate-x-1"
-                                />}
-                            </a>
-                        ))}
-                    </div>
-                </div>
-            ) : (
-                <!-- 普通链接项目 -->
-                <a href={link.external ? link.url : url(link.url)} class="group flex justify-between items-center py-2 pl-3 pr-1 rounded-lg gap-8
-                    hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition
-                "
-                   target={link.external ? "_blank" : null}
-                >
-                    <div class="flex items-center transition text-black/75 dark:text-white/75 font-bold group-hover:text-[var(--primary)] group-active:text-[var(--primary)]">
-                        {link.icon && <Icon icon={link.icon} class="text-[1.1rem] mr-2" />}
-                        {link.name}
-                    </div>
-                    {!link.external && <Icon icon="material-symbols:chevron-right-rounded"
-                          class="transition text-[1.25rem] text-[var(--primary)]"
-                    />}
-                    {link.external && <Icon icon="fa6-solid:arrow-up-right-from-square"
-                          class="transition text-[0.75rem] text-black/25 dark:text-white/25 -translate-x-1"
-                    />}
-                </a>
-            )}
-        </div>
-    ))}
+                        {!item.external && <Icon icon="material-symbols:chevron-right-rounded"
+                              class="transition text-[1.25rem] text-[var(--primary)]"
+                        />}
+                        {item.external && <Icon icon="fa6-solid:arrow-up-right-from-square"
+                              class="transition text-[0.75rem] text-black/25 dark:text-white/25 -translate-x-1"
+                        />}
+                    </a>
+                )}
+            </div>
+        );
+    })}
 </div>
 
 <style>
