@@ -6,6 +6,8 @@ description: Python 报错 module 'pkgutil' has no attribute 'ImpImporter'. Did 
 tags: [Python, Pip]
 category: 杂项
 draft: false
+date: 2024-07-13
+pubDate: 2024-07-13
 ---
 
 在使用 openmin 安装 mmcv 与 mmengine 时遇到了报错 module 'pkgutil' has no attribute 'ImpImporter'. Did you mean: 'zipimporter'?。
