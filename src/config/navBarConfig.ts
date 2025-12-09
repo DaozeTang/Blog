@@ -14,38 +14,41 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 		LinkPreset.Archive,
 	];
 
-	// 支持自定义导航栏链接,并且支持多级菜单
-	links.push({
-		name: "链接",
-		url: "/links/",
-		icon: "material-symbols:link",
-		children: [
-			{
-				name: "Homepage",
-				url: "https://dztang.net/",
-				external: true,
-				icon: "fa6-solid:globe",
-			},
-			{
-				name: "Email",
-				url: "mailto:tdz@s.hrbcu.edu.cn",
-				external: true,
-				icon: "fa6-solid:envelope",
-			},
-			{
-				name: "GitHub",
-				url: "https://github.com/DaozeTang",
-				external: true,
-				icon: "fa6-brands:github",
-			},
-			// {
-			// 	name: "Bilibili",
-			// 	url: "https://space.bilibili.com/38932988",
-			// 	external: true,
-			// 	icon: "fa6-brands:bilibili",
-			// },
-		],
-	});
+	// 根据配置决定是否添加链接菜单
+	if (siteConfig.pages.links) {
+		// 支持自定义导航栏链接,并且支持多级菜单
+		links.push({
+			name: "链接",
+			url: "/links/",
+			icon: "material-symbols:link",
+			children: [
+				{
+					name: "Homepage",
+					url: "https://dztang.net/",
+					external: true,
+					icon: "fa6-solid:globe",
+				},
+				{
+					name: "Email",
+					url: "mailto:tdz@s.hrbcu.edu.cn",
+					external: true,
+					icon: "fa6-solid:envelope",
+				},
+				{
+					name: "GitHub",
+					url: "https://github.com/DaozeTang",
+					external: true,
+					icon: "fa6-brands:github",
+				},
+				// {
+				// 	name: "Bilibili",
+				// 	url: "https://space.bilibili.com/38932988",
+				// 	external: true,
+				// 	icon: "fa6-brands:bilibili",
+				// },
+			],
+		});
+	}
 
 	
 	// 根据配置决定是否添加友链页面
