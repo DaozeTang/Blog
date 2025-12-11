@@ -1,37 +1,11 @@
 # 关于我 / About Me
 
-你好！我是 **夏叶** ，一个在数字世界中默默无闻的一片叶子。
+Hello. I am Daoze Tang, an incoming Master’s student in Computer Science and Technology at <a href="https://www.cau.edu.cn/" target="_blank">China Agricultural University</a>. Currently, I am in the final stages of completing my Bachelor of Engineering in Internet of Things Engineering at <a href="https://www.hrbcu.edu.cn/" target="_blank">Harbin University of Commerce</a>.
 
-## 🛠️ 关于本站
+My research interests lie broadly within Computer Science, with a primary focus on Computer Vision, specifically Object Detection. I am passionate about developing efficient algorithms and exploring robust visual recognition systems.
 
-这个网站使用 **Astro** 框架构建，采用了 [Firefly](https://github.com/CuteLeaf/Firefly) 模板，Firefly 是基于 [Fuwari](https://github.com/saicaca/fuwari) 的二次开发。
+Beyond my individual research, I am deeply committed to academic community building. I established and currently lead <a href="https://dztang.net/team">a student research group</a> dedicated to mentoring motivated peers, fostering collaborative inquiry, and organizing teams for high-level academic competitions.
 
-**Firefly** 是一款基于 Astro 框架和 Fuwari 模板开发的清新美观且现代化个人博客主题模板，专为技术爱好者和内容创作者设计。该主题融合了现代 Web 技术栈，提供了丰富的功能模块和高度可定制的界面，让您能够轻松打造出专业且美观的个人博客网站。
+Outside of the lab, I find inspiration in the arts. I am a guitarist and enjoy exploring diverse literature.
 
-
-**🖥️在线预览： [Firefly - Demo site](https://firefly.cuteleaf.cn/)**
-
-**🏠我的博客： [https://blog.cuteleaf.cn](https://blog.cuteleaf.cn/)**
-
-**📝Firefly使用文档： [https://docs-firefly.cuteleaf.cn](https://docs-firefly.cuteleaf.cn/)**
-
-**⭐Firefly开源地址：[https://github.com/CuteLeaf/Firefly](https://github.com/CuteLeaf/Firefly)** 
-
-**⭐Fuwari开源地址：[https://github.com/saicaca/fuwari](https://github.com/saicaca/fuwari)**
-
-::github{repo="CuteLeaf/Firefly"}
-
-::github{repo="saicaca/fuwari"}
-
-
-## 📫 联系方式
-
-如果你想和我交流技术问题，分享有趣的想法，或者只是想打个招呼，欢迎通过以下方式联系我：
-
-- 💻 **GitHub**: [CuteLeaf](https://github.com/CuteLeaf)
-- ✉️ **Email**: [xiaye@msn.com](mailto:xiaye@msn.com)
-
----
-
-*感谢你的来访！希望在这里能找到对你有用的内容！*
-
+I am actively seeking opportunities for academic collaboration, Joint PhD programs, and future doctoral positions. If you are interested in my research or potential cooperation, please feel free to contact me.
