@@ -12,17 +12,6 @@ pubDate: 2025-12-17
 
 # 第一步：准备 Miniconda 环境
 
-下载并安装 Miniconda（如果已安装可跳过）：
-
-```
-mkdir -p ~/miniconda3
-wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
-bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
-rm -rf ~/miniconda3/miniconda.sh
-~/miniconda3/bin/conda init bash
-source ~/.bashrc
-```
-
 创建专属虚拟环境：
 
 ```
