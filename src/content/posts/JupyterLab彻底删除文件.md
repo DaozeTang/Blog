@@ -12,8 +12,8 @@ pubDate: 2
 
 JupyterLab删除的文件会被保存在Trash路径，通过以下命令访问。
 
-'''
+```
 cd ~/.local/share/Trash
-'''
+```
 
 删除路径中的文件即可彻底删除。
