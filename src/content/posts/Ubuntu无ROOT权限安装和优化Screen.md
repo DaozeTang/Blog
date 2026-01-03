@@ -146,12 +146,14 @@ backtick 2 0 0 sh -c 'echo $PPID'
 
 # 3. Configure the status line (hardstatus)
 #    Use 'alwayslastline' to fix it at the bottom of the terminal.
-hardstatus alwayslastline
+#hardstatus alwayslastline
+hardstatus on
 
 # 4. Define the format string
 #    Format: Hostname | Username | Session ID | Session Name | Date Time
 #    Colors: %{= kw} (Black bg, White fg), %{g} (Green separators), etc.
-hardstatus string "%{= kw}%H %{g}| %{C}%1` %{g}| %{M}%2` %{g}| %{Y}%S %{g}| %{W}%Y-%m-%d %c"
+#hardstatus string "%{= kw}%H %{g}| %{C}%1` %{g}| %{M}%2` %{g}| %{Y}%S %{g}| %{W}%Y-%m-%d %c"
+hardstatus string "%2` | %S"
 
 # --- MODIFIED SECTION END ---
 
@@ -179,7 +181,7 @@ termcapinfo xterm 'is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l'
 # following termcapinfo line which tells xterm to use the normal screen buffer
 # (which has scrollback), not the alternate screen buffer.
 #
-termcapinfo xterm|xterms|xs|rxvt ti@:te@
+termcapinfo xterm*|xterms|xs|rxvt ti@:te@
 
 # Enable non-blocking mode to better cope with flaky ssh connections.
 defnonblock 5
