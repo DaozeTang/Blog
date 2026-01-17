@@ -14,7 +14,7 @@ pubDate: 2026-01-10
 
 压缩包中可以得到类似'tailscale_1.92.5_amd64'的文件夹，其中包含'tailscale'、'tailscaled'等，将其解压至'~/tailscale_1.92.5_amd64'路径。
 
-相对路径运行遇到问题可以尝试将'~'替换为'/home/[username]'。'
+相对路径运行遇到问题可以尝试将'~'替换为'/home/[username]'。
 
 首先启动守护程序，依次执行：
 
