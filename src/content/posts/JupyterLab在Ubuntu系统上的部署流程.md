@@ -81,3 +81,82 @@ jupyter lab
 ```
 
 # 部署完成
+
+# 设置开机启动运行
+
+1. 获取 JupyterLab 的绝对路径
+
+首先，需要找出 conda 环境中 jupyter-lab 程序的绝对路径。打开终端，运行：
+
+```
+conda activate tangdz-jupyterlab
+which jupyter-lab
+```
+
+终端会输出一个路径，通常长这样：
+
+```
+/home/[username]/miniconda3/envs/[envname]/bin/jupyter-lab
+```
+
+把这串路径复制下来。
+
+2. 创建 Systemd 服务文件
+
+使用习惯的编辑器创建一个新的服务配置文件：
+
+```
+nano ~/.config/systemd/user/jupyterlab.service
+```
+
+将以下内容粘贴进去（注意替换刚刚复制的绝对路径）：
+
+```
+[Unit]
+Description=JupyterLab Server
+After=network.target
+
+[Service]
+Type=simple
+# 设置 JupyterLab 启动时的默认工作目录
+WorkingDirectory=/home/[username]
+
+# 这里的环境变量是为了确保 jupyter 能够找到正确的 conda 依赖
+Environment="PATH=/home/[username]/miniconda3/envs/[envname]/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+# 替换为刚刚通过 which 命令查到的绝对路径
+ExecStart=[绝对路径] --no-browser --ip=0.0.0.0
+
+# 崩溃后自动重启
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=default.target
+```
+
+3. 重新加载并启动服务
+
+```
+# 重新加载 user systemd 守护进程
+systemctl --user daemon-reload
+
+# 设置开机自启
+systemctl --user enable jupyterlab.service
+
+# 立即启动服务
+systemctl --user start jupyterlab.service
+```
+
+4. 检查状态和日志
+
+查看运行状态：
+
+```
+systemctl --user status jupyterlab.service
+```
+
+查看日志（获取 Token）：
+```
+journalctl --user -u jupyterlab.service -n 50 -f
+```
