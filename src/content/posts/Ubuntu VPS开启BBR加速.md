@@ -1,13 +1,13 @@
 ---
 title: Ubuntu VPS开启BBR加速
-published: 2026-4-10
+published: 2026-04-10
 pinned: false
 description: Ubuntu VPS开启BBR加速。
 tags: [VPS, BBR, Ubuntu]
 category: 杂项
 draft: false
-date: 2026-4-10
-pubDate: 2026-4-10
+date: 2026-04-10
+pubDate: 2026-04-10
 ---
 
 1.检查内核版本

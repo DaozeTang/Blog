@@ -1,13 +1,13 @@
 ---
 title: Ubuntu VPS自建代理节点
-published: 2026-4-10
+published: 2026-04-10
 pinned: false
 description: Ubuntu VPS自建代理节点。
 tags: [VPS, 代理节点, Ubuntu]
 category: 杂项
 draft: false
-date: 2026-4-10
-pubDate: 2026-4-10
+date: 2026-04-10
+pubDate: 2026-04-10
 ---
 
 1.更新系统并安装基础组件
