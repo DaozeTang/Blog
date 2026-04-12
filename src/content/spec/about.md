@@ -4,8 +4,8 @@ Hello. I am Daoze Tang, an incoming Master's student in Computer Science and Tec
 
 My research interests lie broadly within the field of Computer Science, with a primary focus on <b>Computer Vision</b>, particularly Object Detection. I am dedicated to developing efficient algorithms and exploring robust visual recognition systems.
 
-Beyond individual research, I founded and currently lead a student research group dedicated to fostering motivated peers and organizing teams to participate in top-tier academic competitions.
+Beyond individual research, I founded and currently lead a student research group dedicated to fostering motivated peers and organizing teams to participate in academic competitions.
 
-Outside the laboratory, I draw inspiration from the arts. I am an avid guitarist and enjoy exploring diverse literary genres.
+Outside the laboratory, I draw inspiration from the arts. I am a guitarist and enjoy exploring diverse literary genres.
 
 I am actively seeking academic collaborations, joint doctoral training programs, and prospective Ph.D. positions. If you are interested in my research or potential collaboration, please feel free to contact me.
