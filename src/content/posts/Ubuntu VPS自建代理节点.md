@@ -110,3 +110,75 @@ rules:
 填写好配置文件后，将配置文件直接拖入 Clash Verge 的 [订阅] UI 页面中，选中后即可同其他订阅链接般正常使用。
 
 实测，Cloudflare WARP 的 IP 无法解锁服务。如果需要访问流媒体或AI，需要选择原生纯净 IP 的 VPS 或使用 DNS解锁 / 静态ISP代理 等方式。
+
+6. 补充 Hysteria 2 UDP 链接快速部署方案
+
+使用一键安装脚本跟随引导部署：
+
+```
+bash <(curl -fsSL https://raw.githubusercontent.com/Misaka-blog/hysteria-install/main/hy2/hysteria.sh)
+```
+
+在VPS防火墙上将对应端口的 TCP、UDP 协议放行。
+
+在配置文件中添加节点的对应信息。
+
+```
+mode: rule
+log-level: info
+allow-lan: false
+
+# 代理节点配置区域
+proxies:
+  # ---------------- 节点 1：原来的 VLESS-Reality 节点 ----------------
+  - name: "My-VLESS-Node"          # [自定义] 节点名称，可以随便改（如 "US-Node-1"）
+    type: vless
+    server: YOUR_SERVER_IP         # [必填] 替换为服务器 IP 或域名
+    port: YOUR_PORT                # [必填] 替换为节点端口 (纯数字，如 443)
+    uuid: YOUR_UUID                # [必填] 替换为 UUID
+    network: tcp                   # 传输协议，通常为 tcp, ws 或 grpc
+    tls: true
+    udp: true
+    servername: YOUR_SNI           # [必填] 替换为伪装域名 (SNI，如 aws.amazon.com)
+    client-fingerprint: chrome     # 客户端指纹，建议保留 chrome 或 safari
+    reality-opts:                  # Reality 专属配置 (如果新节点不是 Reality 协议，删除这两行)
+      public-key: YOUR_PUBLIC_KEY  # [必填] 替换为 Public Key (pbk)
+      short-id: YOUR_SHORT_ID      # [选填] 替换为 Short Id (sid)，如果没有则删除此行
+
+  # ---------------- 节点 2：新增的 Hysteria 2 节点 ----------------
+  - name: "My-Hysteria-2-Node"     # [自定义] 节点名称，可以随便改（如 "US-Node-1"）
+    type: hysteria2
+    server: YOUR_SERVER_IP         # [必填] 替换为服务器 IP 或域名
+    port: YOUR_PORT                # [必填] 替换为节点端口 (纯数字，如 443)
+    password: "YOUR_PASSWORD"      # [必填] 替换为节点密码
+    sni: YOUR_SNI                  # [必填] 替换为伪装域名 (SNI，如 aws.amazon.com)
+    skip-cert-verify: true         # 对应 insecure=1 (允许自签证书)
+    # Hysteria 建议配置上下行带宽(Mbps)，可以根据你的实际宽带调整，这里默认填宽带500M
+    up: 100
+    down: 500
+
+# 代理组配置区域
+proxy-groups:
+  - name: "PROXIES"
+    type: select
+    proxies:
+      - "My-Hysteria-2-Node"       # 把 Hysteria2 加进来 (放第一位方便优先选)
+      - "My-VLESS-Node"            # [注意] 这里的名字必须和上面 proxies 里的 name 一模一样
+
+# 路由规则区域 (已配置绕过大陆)
+rules:
+  # 1. 局域网及本地流量直连 (防止影响本地打印机、NAS 等)
+  - GEOSITE,private,DIRECT
+  - GEOIP,lan,DIRECT,no-resolve
+  
+  # 2. 绕过大陆网站
+  - GEOSITE,cn,DIRECT
+  
+  # 3. 绕过大陆 IP
+  - GEOIP,cn,DIRECT
+  
+  # 4. 其他所有流量走代理组
+  - MATCH,PROXIES
+```
+
+导入软件后选择连接即可。
