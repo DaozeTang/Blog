@@ -39,6 +39,7 @@ const {
 } = Astro.props;
 const className = Astro.props.class;
 
+// 处理随机图：如果image为"api"，则从配置的API获取随机图
 const processedImage = processCoverImageSync(image, entry.id);
 const hasCover =
 	processedImage !== undefined &&
@@ -66,7 +67,7 @@ const { remarkPluginFrontmatter } = await render(entry);
       },
     ]}
   >
-
+    <!-- pinned icon -->
     {
       pinned && (
         <div class="flex items-center gap-0.5 mb-2 md:absolute md:top-2 md:left-3 md:z-10 md:mb-0">
@@ -91,7 +92,16 @@ const { remarkPluginFrontmatter } = await render(entry);
         before:transition-all before:duration-300
         hover:before:h-7 hover:before:-translate-y-1"
     >
-
+      <!--       {
+        pinned && (
+          <>
+            <Icon
+              name="mdi:pin"
+              class="inline text-[var(--primary)] text-2xl mr-2 -translate-y-0.5"
+            />
+          </>
+        )
+      } -->
       {title}
       <Icon
         class="inline text-[2rem] text-[var(--primary)] md:hidden translate-y-0.5 absolute"
@@ -103,7 +113,7 @@ const { remarkPluginFrontmatter } = await render(entry);
       />
     </a>
 
-
+    <!-- metadata -->
     <PostMetadata
       published={published}
       updated={updated}
@@ -117,7 +127,7 @@ const { remarkPluginFrontmatter } = await render(entry);
       className="mb-4 post-meta"
     />
 
-
+    <!-- description -->
     <div
       class:list={[
         "transition text-75 mb-3.5 pr-4 description flex-grow",
@@ -127,7 +137,7 @@ const { remarkPluginFrontmatter } = await render(entry);
       {description || remarkPluginFrontmatter.excerpt}
     </div>
 
-
+    <!-- tags -->
     <div
       class="text-sm text-black/30 dark:text-white/30 flex flex-wrap gap-2 transition stats mt-auto"
     >

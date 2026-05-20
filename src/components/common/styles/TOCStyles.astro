@@ -1,12 +1,19 @@
 ---
+/**
+ * TOC 共享样式组件
+ * 用于 SidebarTOC 和 FloatingTOC
+ */
+---
 
 <style lang="stylus" is:global>
+/* TOC 滚动容器 */
 .toc-scroll-container
 	overflow-y: auto
 	overflow-x: hidden
 	-webkit-overflow-scrolling: touch
 	scroll-behavior: smooth
 
+/* TOC 内容容器 */
 .toc-content
 	display: flex
 	flex-direction: column
@@ -19,6 +26,7 @@
 	contain: layout
 	align-items: flex-start
 
+/* TOC 链接样式 */
 .toc-content a
 	display: flex
 	align-items: center
@@ -37,6 +45,7 @@
 	&:hover
 		background: var(--toc-btn-hover)
 
+/* 文本内容防溢出 */
 .toc-content a div:last-child
 	overflow: hidden
 	text-overflow: ellipsis
@@ -46,11 +55,13 @@
 	max-width: calc(100% - 2rem)
 	box-sizing: border-box
 
+/* 徽章容器固定宽度 */
 .toc-content a div:first-child
 	flex-shrink: 0
 	width: 1.25rem
 	height: 1.25rem
 
+/* 活动指示器基础样式 */
 .toc-active-indicator
 	position: absolute
 	left: 0
@@ -60,6 +71,7 @@
 	transition: all 0.2s ease
 	z-index: -1
 
+/* 滚动条样式 - Webkit */
 .toc-scroll-container::-webkit-scrollbar
 	width: 6px
 
@@ -80,6 +92,7 @@
 .toc-scroll-container::-webkit-scrollbar-thumb:active
 	background: linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.4) 100%)
 
+/* 暗色主题滚动条 - Webkit */
 :global(.dark) .toc-scroll-container::-webkit-scrollbar-thumb
 	background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.2) 100%)
 	border: 1px solid rgba(0, 0, 0, 0.1)
@@ -91,6 +104,7 @@
 :global(.dark) .toc-scroll-container::-webkit-scrollbar-thumb:active
 	background: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.4) 100%)
 
+/* 滚动条样式 - Firefox */
 .toc-scroll-container
 	scrollbar-width: thin
 	scrollbar-color: rgba(0, 0, 0, 0.2) transparent

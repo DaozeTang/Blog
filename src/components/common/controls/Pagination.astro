@@ -18,6 +18,7 @@ const className = Astro.props.class;
 const ADJ_DIST = 2;
 const VISIBLE = ADJ_DIST * 2 + 1;
 
+// for test
 let count = 1;
 let l = page.currentPage;
 let r = page.currentPage;
@@ -51,7 +52,18 @@ const getPageUrl = (p: number) => {
 ---
 
 <div class:list={[className, "flex flex-col gap-4 items-center"]} style={style}>
+  <!-- 分页信息 - 已禁用 -->
+  <!--
+  {
+    page.lastPage > 1 && (
+      <div class="text-sm text-[var(--text-secondary)] text-center">
+        第 {page.currentPage} 页，共 {page.lastPage} 页
+      </div>
+    )
+  }
+  -->
 
+  <!-- 分页控件 -->
   <div class="flex flex-row gap-3 justify-center">
     <a
       href={page.url.prev || ""}

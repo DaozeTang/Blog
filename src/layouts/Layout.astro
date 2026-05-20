@@ -35,12 +35,19 @@ interface Props {
 let { title, banner, description, lang, setOGTypeArticle, postSlug } =
 	Astro.props;
 
+// apply a class to the body element to decide the height of the banner, only used for initial page load
+// Swup can update the body for each page visit, but it's after the page transition, causing a delay for banner height change
+// so use Swup hooks instead to change the height immediately when a link is clicked
 const isHomePageCheck = isHomePage(Astro.url.pathname);
 
+// defines global css variables
+// why doing this in Layout instead of GlobalStyles: https://github.com/withastro/astro/issues/6728#issuecomment-1502203757
 const configHue = siteConfig.themeColor.hue;
 
+// 获取导航栏透明模式配置
 const navbarTransparentMode =
 	siteConfig.backgroundWallpaper?.banner?.navbar?.transparentMode || "semi";
+// 判断是否应该显示顶部高光效果（只在full和semifull模式下显示）
 const shouldShowTopHighlight =
 	navbarTransparentMode === "full" || navbarTransparentMode === "semifull";
 
@@ -48,6 +55,7 @@ if (!banner || typeof banner !== "string" || banner.trim() === "") {
 	banner = getDefaultBackground();
 }
 
+// TODO don't use post cover as banner for now
 banner = getDefaultBackground();
 
 const enableBanner = siteConfig.backgroundWallpaper.mode === "banner";
@@ -69,18 +77,20 @@ if (siteConfig.generateOgImages && postSlug) {
 const favicons: Favicon[] =
 	siteConfig.favicon.length > 0 ? siteConfig.favicon : defaultFavicons;
 
+// const siteLang = siteConfig.lang.replace('_', '-')
 if (!lang) {
 	lang = `${siteConfig.lang}`;
 }
 const siteLang = lang.replace("_", "-");
 
+// 使用固定的banner偏移量，position配置用于图片定位
 const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
 ---
 
 <!doctype html>
 <html lang={siteLang} class="bg-[var(--page-bg)] text-[14px] md:text-[16px]">
   <head>
-
+    <!-- Google Tag Manager -->
     <script is:inline data-swup-ignore-script>
       (function (w, d, s, l, i) {
         w[l] = w[l] || [];
@@ -93,8 +103,8 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
         f.parentNode.insertBefore(j, f);
       })(window, document, "script", "dataLayer", "GTM-P53R3M9S");
     </script>
-
-
+    <!-- End Google Tag Manager -->
+    <!-- Microsoft Clarity -->
     <script is:inline data-swup-ignore-script type="text/javascript">
       (function (c, l, a, r, i, t, y) {
         c[a] =
@@ -109,7 +119,7 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
         y.parentNode.insertBefore(t, y);
       })(window, document, "clarity", "script", "tx9equrgr6");
     </script>
-
+    <!-- End Microsoft Clarity -->
 
     <title>{pageTitle}</title>
 
@@ -162,7 +172,7 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
       ))
     }
 
-
+    <!-- Set the theme before the page is rendered to avoid a flash -->
     <script
       is:inline
       define:vars={{
@@ -177,18 +187,22 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
         lightTheme: expressiveCodeConfig.lightTheme,
       }}
     >
+      // 主题初始化 - 与setting-utils.ts保持一致
       const LIGHT_MODE = "light";
       const DARK_MODE = "dark";
       const SYSTEM_MODE = "system";
 
+      // 获取存储的主题，如果没有则使用默认值
       const theme = localStorage.getItem("theme") || defaultMode;
 
+      // 获取系统主题
       function getSystemTheme() {
         return window.matchMedia("(prefers-color-scheme: dark)").matches
           ? DARK_MODE
           : LIGHT_MODE;
       }
 
+      // 解析主题（如果是system模式，则获取系统主题）
       function resolveTheme(themeValue) {
         if (themeValue === SYSTEM_MODE) {
           return getSystemTheme();
@@ -199,20 +213,25 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
       const resolvedTheme = resolveTheme(theme);
       const isDark = resolvedTheme === DARK_MODE;
 
+      // 应用主题
       if (isDark) {
         document.documentElement.classList.add("dark");
       } else {
         document.documentElement.classList.remove("dark");
       }
 
+      // Set the theme for Expressive Code
       document.documentElement.setAttribute(
         "data-theme",
         isDark ? darkTheme : lightTheme
       );
 
+      // Load the hue from local storage
       const hue = localStorage.getItem("hue") || configHue;
       document.documentElement.style.setProperty("--hue", hue);
 
+      // calculate the --banner-height-extend, which needs to be a multiple of 4 to avoid blurry text
+      // 使用更准确的窗口高度计算
       function calculateBannerHeightExtend() {
         let offset = Math.floor(
           window.innerHeight * (BANNER_HEIGHT_EXTEND / 100)
@@ -224,8 +243,10 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
         );
       }
 
+      // 立即设置初始值
       calculateBannerHeightExtend();
 
+      // 在下一帧重新计算精确值（仅在值变化时更新，避免闪烁）
       requestAnimationFrame(() => {
         const oldValue = parseInt(
           document.documentElement.style.getPropertyValue(
@@ -238,11 +259,14 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
             "--banner-height-extend"
           )
         );
+        // 如果值变化了，再更新一次确保准确
         if (Math.abs(oldValue - newValue) > 4) {
+          // 如果有明显变化，延迟一帧再更新，避免闪烁
           requestAnimationFrame(calculateBannerHeightExtend);
         }
       });
 
+      // 初始化壁纸模式 - 在页面渲染前应用
       const WALLPAPER_BANNER = "banner";
       const WALLPAPER_OVERLAY = "overlay";
       const WALLPAPER_NONE = "none";
@@ -250,17 +274,22 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
         ? localStorage.getItem("wallpaperMode") || defaultWallpaperMode
         : defaultWallpaperMode;
 
+      // 设置data-wallpaper-mode属性
       document.documentElement.setAttribute(
         "data-wallpaper-mode",
         wallpaperMode
       );
 
+      // 立即执行函数来处理DOM
       (function applyWallpaperMode() {
+        // 使用 requestAnimationFrame 确保在下一帧之前执行
         requestAnimationFrame(function () {
+          // 根据模式隐藏显示对应元素
           if (
             wallpaperMode === WALLPAPER_NONE ||
             wallpaperMode === WALLPAPER_OVERLAY
           ) {
+            // 隐藏横幅
             if (document.body) {
               document.body.classList.remove("enable-banner");
               document.body.classList.add("no-banner-layout");
@@ -272,6 +301,7 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
             }
           }
 
+          // 全屏壁纸模式
           if (wallpaperMode === WALLPAPER_OVERLAY) {
             if (document.body) {
               document.body.classList.add("wallpaper-transparent");
@@ -282,15 +312,18 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
             }
           }
 
+          // 处理banner和fullscreen wallpaper的显示
           const bannerWrapper = document.getElementById("banner-wrapper");
           const fullscreenWallpaper = document.querySelector(
             "[data-fullscreen-wallpaper]"
           );
 
+          // 检查当前是否为首页
           const isHomePage =
             window.location.pathname === "/" || window.location.pathname === "";
 
           if (wallpaperMode === WALLPAPER_OVERLAY) {
+            // 全屏壁纸模式：显示全屏壁纸，隐藏banner
             if (bannerWrapper) {
               bannerWrapper.style.display = "none";
             }
@@ -300,6 +333,7 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
               fullscreenWallpaper.classList.add("opacity-100");
             }
           } else if (wallpaperMode === WALLPAPER_NONE) {
+            // 纯色背景：隐藏所有壁纸
             if (bannerWrapper) {
               bannerWrapper.style.display = "none";
             }
@@ -308,8 +342,11 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
               fullscreenWallpaper.classList.add("hidden", "opacity-0");
             }
           } else {
+            // banner模式：显示banner，隐藏全屏壁纸
             if (bannerWrapper) {
               const isMobile = window.innerWidth < 1024;
+              // 移动端非首页时隐藏banner（初始状态直接隐藏，不需要动画）
+              // 桌面端始终显示banner
               if (isMobile && !isHomePage) {
                 bannerWrapper.style.display = "none";
                 bannerWrapper.classList.add("mobile-hide-banner");
@@ -324,11 +361,13 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
             }
           }
 
+          // 处理主内容区域位置
           const mainContentWrapper = document.querySelector(
             ".absolute.w-full.z-30"
           );
           if (mainContentWrapper) {
             const isMobile = window.innerWidth < 1024;
+            // 只在移动端非首页时调整主内容位置
             if (isMobile && !isHomePage) {
               mainContentWrapper.classList.add("mobile-main-no-banner");
             } else {
@@ -336,6 +375,7 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
             }
           }
 
+          // 处理credit元素
           const creditDesktop = document.getElementById(
             "banner-credit-desktop"
           );
@@ -351,6 +391,7 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
             if (creditMobile) creditMobile.style.display = "";
           }
 
+          // 处理banner homeText元素
           const bannerTextOverlay = document.querySelector(
             ".banner-text-overlay"
           );
@@ -373,7 +414,7 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
         "page-width": `${PAGE_WIDTH}rem`,
       }}
     ></style>
-
+    <!-- defines global css variables. This will be applied to <html> <body> and some other elements idk why -->
 
     <slot name="head" />
 
@@ -384,7 +425,7 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
       href={`${Astro.site}rss.xml`}
     />
 
-
+    <!-- Font Manager -->
     <FontManager />
   </head>
   <body
@@ -407,21 +448,21 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
         style="display:none;visibility:hidden"></iframe></noscript
     >
 
-
+    <!-- 页面顶部渐变高光效果 - 只在full和semifull模式下显示 -->
     {shouldShowTopHighlight && <div class="top-gradient-highlight" />}
     <ConfigCarrier />
     <slot />
 
-
+    <!-- Music Player -->
     <MusicPlayer />
 
-
+    <!-- increase the page height during page transition to prevent the scrolling animation from jumping -->
     <div id="page-height-extend" class="hidden h-[300vh]"></div>
 
-
+    <!-- Sakura Effect -->
     <SakuraEffect />
 
-
+    <!-- Fancybox Manager -->
     <FancyboxManager />
   </body>
 </html>
@@ -476,15 +517,53 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
     BANNER_HEIGHT,
     BANNER_HEIGHT_HOME,
     BANNER_HEIGHT_EXTEND,
+    // MAIN_PANEL_OVERLAPS_BANNER_HEIGHT,
   } from "@/constants/constants";
   import { siteConfig, expressiveCodeConfig } from "@/config";
 
+  /* Preload fonts */
+  // (async function() {
+  // 	try {
+  // 		await Promise.all([
+  // 			document.fonts.load("400 1em Roboto"),
+  // 			document.fonts.load("700 1em Roboto"),
+  // 		]);
+  // 		document.body.classList.remove("hidden");
+  // 	} catch (error) {
+  // 		console.log("Failed to load fonts:", error);
+  // 	}
+  // })();
 
+  /* TODO This is a temporary solution for style flicker issue when the transition is activated */
+  /* issue link: https://github.com/withastro/astro/issues/8711, the solution get from here too */
+  /* update: fixed in Astro 3.2.4 */
+  /*
+function disableAnimation() {
+	const css = document.createElement('style')
+	css.appendChild(
+		document.createTextNode(
+			`*{
+              -webkit-transition:none!important;
+              -moz-transition:none!important;
+              -o-transition:none!important;
+              -ms-transition:none!important;
+              transition:none!important
+              }`
+		)
+	)
+	document.head.appendChild(css)
 
+	return () => {
+		// Force restyle
+		;(() => window.getComputedStyle(document.body))()
 
-
-
-
+		// Wait for next tick before removing
+		setTimeout(() => {
+			document.head.removeChild(css)
+		}, 1)
+	}
+}
+*/
 
   const bannerEnabled = !!document.getElementById("banner-wrapper");
 
@@ -492,7 +571,7 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
     document.addEventListener("click", (event) => {
       let panelDom = document.getElementById(panel);
       let tDom = event.target;
-      if (!(tDom instanceof Node)) return;
+      if (!(tDom instanceof Node)) return; // Ensure the event target is an HTML Node
       for (let ig of ignores) {
         let ie = document.getElementById(ig);
         if (ie == tDom || ie?.contains(tDom)) {
@@ -525,6 +604,7 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
   ]);
 
   function initCustomScrollbar() {
+    // 只处理katex元素的滚动条，使用浏览器原生滚动条
     const katexElements = document.querySelectorAll(
       ".katex-display:not([data-scrollbar-initialized])"
     ) as NodeListOf<HTMLElement>;
@@ -536,6 +616,7 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
       element.parentNode.insertBefore(container, element);
       container.appendChild(element);
 
+      // 使用浏览器原生滚动条，无自定义样式
       container.style.cssText = `
 			overflow-x: auto;
 		`;
@@ -548,16 +629,20 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
     const isBannerMode = siteConfig.backgroundWallpaper.mode === "banner";
     if (!isBannerMode) return;
 
+    // 使用requestAnimationFrame优化DOM操作
     requestAnimationFrame(() => {
+      // Handle single image banner (desktop)
       const banner = document.getElementById("banner");
       if (banner) {
         banner.classList.remove("opacity-0", "scale-105");
       }
 
+      // Handle mobile single image banner - 使用与电脑端相同的逻辑
       const mobileBanner = document.querySelector(
         '.block.lg\\:hidden[alt="Mobile banner image of the blog"]'
       );
       if (mobileBanner) {
+        // 移动端使用与电脑端相同的初始化逻辑
         mobileBanner.classList.remove("opacity-0", "scale-105");
         mobileBanner.classList.add("opacity-100");
       }
@@ -565,12 +650,26 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
   }
 
   const setup = () => {
-
+    // TODO: temp solution to change the height of the banner
+    /*
+	window.swup.hooks.on('animation:out:start', () => {
+		const path = window.location.pathname
+		const body = document.querySelector('body')
+		if (path[path.length - 1] === '/' && !body.classList.contains('is-home')) {
+			body.classList.add('is-home')
+		} else if (path[path.length - 1] !== '/' && body.classList.contains('is-home')) {
+			body.classList.remove('is-home')
+		}
+	})
+*/
     window.swup.hooks.on("link:click", () => {
+      // Remove the delay for the first time page load
       document.documentElement.style.setProperty("--content-delay", "0ms");
 
+      // 添加页面切换保护，防止导航栏闪烁
       document.documentElement.classList.add("is-page-transitioning");
 
+      // 简化navbar处理逻辑
       if (bannerEnabled) {
         const navbar = document.getElementById("navbar-wrapper");
         if (navbar && document.body.classList.contains("lg:is-home")) {
@@ -582,15 +681,19 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
       }
     });
     window.swup.hooks.on("content:replace", () => {
+      // 只处理katex元素的容器，使用浏览器原生滚动条
       initCustomScrollbar();
-
+      
+      // 重新初始化图标加载器
       import("@/utils/icon-loader").then(({ initIconLoader }) => {
         initIconLoader();
       });
 
+      // 检查当前页面是否为文章页面（有TOC元素）
       const tocWrapper = document.getElementById("toc-wrapper");
       const isArticlePage = tocWrapper !== null;
 
+      // 只在文章页面重新初始化桌面端 TOC 组件
       if (isArticlePage) {
         const tocElement = document.querySelector("table-of-contents");
         if (tocElement && typeof (tocElement as any).init === "function") {
@@ -600,11 +703,13 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
         }
       }
 
+      // 重新初始化semifull模式的滚动检测
       const navbar = document.getElementById("navbar");
       if (navbar) {
         const transparentMode = navbar.getAttribute("data-transparent-mode");
 
         if (transparentMode === "semifull") {
+          // 重新调用初始化函数来重新绑定滚动事件
           if (
             typeof (window as any).initSemifullScrollDetection === "function"
           ) {
@@ -613,12 +718,14 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
         }
       }
 
+      // 在页面切换后恢复布局状态（支持文章详情页的布局切换）
       setTimeout(() => {
         const savedLayout = localStorage.getItem("postListLayout");
         if (savedLayout) {
           const rightSidebar = document.getElementById("right-sidebar");
           const mainGrid = document.getElementById("main-grid");
-
+          
+          // 根据保存的布局状态调整侧边栏显示
           if (savedLayout === "grid") {
             if (rightSidebar) {
               rightSidebar.style.display = "none";
@@ -638,6 +745,7 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
       }, 50);
     });
     window.swup.hooks.on("visit:start", (visit: { to: { url: string } }) => {
+      // change banner height immediately when a link is clicked
       const bodyElement = document.querySelector("body");
       const isHomePage = pathsEqual(visit.to.url, url("/"));
 
@@ -647,6 +755,7 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
         bodyElement!.classList.remove("lg:is-home");
       }
 
+      // Control banner text visibility based on page
       const bannerTextOverlay = document.querySelector(".banner-text-overlay");
       if (bannerTextOverlay) {
         if (isHomePage) {
@@ -656,12 +765,15 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
         }
       }
 
+      // Control navbar transparency based on page
       const navbar = document.getElementById("navbar");
       if (navbar) {
         navbar.setAttribute("data-is-home", isHomePage.toString());
 
+        // 重新初始化semifull模式的滚动检测
         const transparentMode = navbar.getAttribute("data-transparent-mode");
         if (transparentMode === "semifull") {
+          // 重新调用初始化函数来重新绑定滚动事件
           if (
             typeof (window as any).initSemifullScrollDetection === "function"
           ) {
@@ -670,8 +782,11 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
         }
       }
 
+      // Control mobile banner visibility based on page with improved staging animation
+      // 只在移动端（1024px以下）处理banner隐藏
       const isMobile = window.innerWidth < 1024;
-
+      
+      // 在移动端禁用文章列表容器的过渡动画，防止与主内容区位置变化冲突
       if (isMobile) {
         const postListContainer = document.getElementById("post-list-container");
         if (postListContainer) {
@@ -686,25 +801,31 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
 
       if (isMobile && bannerWrapper && mainContentWrapper) {
         if (isHomePage) {
+          // 首页：禁用主内容区域的过渡动画，防止文章列表下移
           mainContentWrapper.style.transition = "none";
-
+          
+          // 先显示banner，然后移除隐藏类让其优雅出现
           bannerWrapper.style.display = "";
           setTimeout(() => {
             bannerWrapper.classList.remove("mobile-hide-banner");
           }, 100);
           setTimeout(() => {
             mainContentWrapper.classList.remove("mobile-main-no-banner");
+            // 在移除类之后立即恢复过渡动画（下次导航时使用）
             setTimeout(() => {
               mainContentWrapper.style.transition = "";
             }, 50);
           }, 150);
         } else {
+          // 非首页：分阶段隐藏，先隐藏banner，再移动内容
           bannerWrapper.classList.add("mobile-hide-banner");
+          // 延迟移动内容，让banner先完全消失
           setTimeout(() => {
             mainContentWrapper.classList.add("mobile-main-no-banner");
           }, 100);
         }
       } else if (!isMobile && bannerWrapper) {
+        // 桌面端：确保banner正常显示
         bannerWrapper.style.display = "";
         bannerWrapper.classList.remove("mobile-hide-banner");
         if (mainContentWrapper) {
@@ -712,27 +833,32 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
         }
       }
 
+      // increase the page height during page transition to prevent the scrolling animation from jumping
       const heightExtend = document.getElementById("page-height-extend");
       if (heightExtend) {
         heightExtend.classList.remove("hidden");
       }
 
+      // Hide the TOC while scrolling back to top
       let toc = document.getElementById("toc-wrapper");
       if (toc) {
         toc.classList.add("toc-not-ready");
       }
     });
     window.swup.hooks.on("page:view", () => {
+      // hide the temp high element when the transition is done
       const heightExtend = document.getElementById("page-height-extend");
       if (heightExtend) {
         heightExtend.classList.remove("hidden");
       }
 
+      // 确保页面滚动到顶部，使用平滑滚动避免侧边栏闪烁
       window.scrollTo({
         top: 0,
         behavior: "smooth",
       });
 
+      // 在移动端恢复文章列表容器的过渡动画（在主内容区位置动画完成后）
       const isMobile = window.innerWidth < 1024;
       if (isMobile) {
         setTimeout(() => {
@@ -740,29 +866,34 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
           if (postListContainer) {
             postListContainer.style.transition = "";
           }
-        }, 600);
+        }, 600); // 等待主内容区动画完成（0.4s + 0.1s delay + 100ms buffer）
       }
 
+      // 同步主题状态 - 解决从首页进入文章页面时代码块渲染问题
       const storedTheme = localStorage.getItem("theme") || "light";
       let isDark = false;
-
+      
+      // 处理 system 模式
       if (storedTheme === "system") {
         isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       } else {
         isDark = storedTheme === "dark";
       }
-
+      
       const expectedTheme = isDark
         ? expressiveCodeConfig.darkTheme
         : expressiveCodeConfig.lightTheme;
       const currentTheme = document.documentElement.getAttribute("data-theme");
 
+      // 如果主题不匹配，静默更新（不触发事件，避免重新加载效果）
       if (currentTheme !== expectedTheme) {
         document.documentElement.setAttribute("data-theme", expectedTheme);
       }
 
+      // 检查当前页面是否为文章页面，如果是则触发自定义事件用于初始化评论系统
       setTimeout(() => {
         if (document.getElementById("tcomment")) {
+          // 触发自定义事件，通知评论系统页面已完全加载
           const pageLoadedEvent = new CustomEvent("firefly:page:loaded", {
             detail: {
               path: window.location.pathname,
@@ -784,38 +915,45 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
           heightExtend.classList.add("hidden");
         }
 
+        // Just make the transition looks better
         const toc = document.getElementById("toc-wrapper");
         if (toc) {
           toc.classList.remove("toc-not-ready");
         }
 
+        // 移除页面切换保护，恢复过渡动画
         document.documentElement.classList.remove("is-page-transitioning");
       }, 200);
     });
 
+    // 全局布局切换监听器 - 支持在任何页面（包括文章详情页）切换布局
     window.addEventListener("layoutChange", (event: CustomEvent) => {
       const newLayout = event.detail.layout;
       const rightSidebar = document.getElementById("right-sidebar");
       const mainGrid = document.getElementById("main-grid");
       const postContainer = document.getElementById("post-container");
       const swupContainer = document.getElementById("swup-container");
-
+      
+      // 为文章详情页容器添加切换动画
       if (postContainer) {
         postContainer.classList.add("layout-switching");
         setTimeout(() => {
           postContainer.classList.remove("layout-switching");
         }, 400);
       }
-
+      
+      // 为主内容区添加切换动画
       if (swupContainer) {
         swupContainer.classList.add("layout-transitioning");
         setTimeout(() => {
           swupContainer.classList.remove("layout-transitioning");
         }, 500);
       }
-
+      
+      // 根据新布局状态调整侧边栏显示
       if (newLayout === "grid") {
         if (rightSidebar) {
+          // 简洁的淡出动画
           rightSidebar.style.transition = "opacity 0.35s ease-in-out, transform 0.35s ease-in-out";
           rightSidebar.style.opacity = "0";
           rightSidebar.style.transform = "translateX(15px)";
@@ -830,6 +968,7 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
         }
       } else {
         if (rightSidebar) {
+          // 简洁的淡入动画
           rightSidebar.style.display = "";
           rightSidebar.style.transition = "opacity 0.35s ease-in-out, transform 0.35s ease-in-out";
           rightSidebar.style.opacity = "0";
@@ -858,10 +997,12 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
   let toc = document.getElementById("toc-wrapper");
   let navbar = document.getElementById("navbar-wrapper");
 
+  // 优化的滚动处理函数
   function scrollFunction() {
     const scrollTop = document.documentElement.scrollTop;
     const bannerHeight = window.innerHeight * (BANNER_HEIGHT / 100);
 
+    // 使用批量DOM操作优化性能
     const operations: (() => void)[] = [];
 
     if (backToTopBtn) {
@@ -900,6 +1041,7 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
       });
     }
 
+    // 批量执行DOM操作
     if (operations.length > 0) {
       requestAnimationFrame(() => {
         operations.forEach((op) => op());
@@ -907,6 +1049,7 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
     }
   }
 
+  // 使用优化的滚动性能处理
   let scrollTimeout: number;
   window.addEventListener(
     "scroll",
@@ -920,6 +1063,7 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
   );
 
   window.onresize = () => {
+    // calculate the --banner-height-extend, which needs to be a multiple of 4 to avoid blurry text
     let offset = Math.floor(window.innerHeight * (BANNER_HEIGHT_EXTEND / 100));
     offset = offset - (offset % 4);
     document.documentElement.style.setProperty(
@@ -928,6 +1072,7 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
     );
   };
 
+  // 页面加载完成后初始化banner和katex容器
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => {
       showBanner();
@@ -938,6 +1083,7 @@ const bannerOffset = `${BANNER_HEIGHT_EXTEND / 2}vh`;
     initCustomScrollbar();
   }
 
+  // Initialize wallpaper mode
   import { initWallpaperMode, initThemeListener } from "@/utils/setting-utils";
   import { initIconLoader } from "@/utils/icon-loader";
   if (document.readyState === "loading") {

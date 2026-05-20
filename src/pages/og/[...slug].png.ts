@@ -5,9 +5,12 @@ import type { APIContext, GetStaticPaths } from "astro";
 import satori from "satori";
 import sharp from "sharp";
 import { removeFileExtension } from "@/utils/url-utils";
+
 import { profileConfig } from "../../config/profileConfig";
 import { siteConfig } from "../../config/siteConfig";
+
 type Weight = 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
+
 type FontStyle = "normal" | "italic";
 interface FontOptions {
 	data: Buffer | ArrayBuffer;
@@ -17,13 +20,17 @@ interface FontOptions {
 	lang?: string;
 }
 export const prerender = true;
+
 export const getStaticPaths: GetStaticPaths = async () => {
 	if (!siteConfig.generateOgImages) {
 		return [];
 	}
+
 	const allPosts = await getCollection("posts");
 	const publishedPosts = allPosts.filter((post) => !post.data.draft);
+
 	return publishedPosts.map((post) => {
+		// 将 id 转换为 slug（移除扩展名）以匹配路由参数
 		const slug = removeFileExtension(post.id);
 		return {
 			params: { slug },
@@ -31,7 +38,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
 		};
 	});
 };
+
 let fontCache: { regular: Buffer | null; bold: Buffer | null } | null = null;
+
 async function fetchNotoSansSCFonts() {
 	if (fontCache) return fontCache;
 	try {
@@ -40,6 +49,7 @@ async function fetchNotoSansSCFonts() {
 		);
 		if (!cssResp.ok) throw new Error("Failed to fetch Google Fonts CSS");
 		const cssText = await cssResp.text();
+
 		const getUrlForWeight = (weight: number) => {
 			const blockRe = new RegExp(
 				`@font-face\\s*{[^}]*font-weight:\\s*${weight}[^}]*}`,
@@ -50,8 +60,10 @@ async function fetchNotoSansSCFonts() {
 			const urlMatch = match[0].match(/url\((https:[^)]+)\)/);
 			return urlMatch ? urlMatch[1] : null;
 		};
+
 		const regularUrl = getUrlForWeight(400);
 		const boldUrl = getUrlForWeight(700);
+
 		if (!regularUrl || !boldUrl) {
 			console.warn(
 				"Could not find font urls in Google Fonts CSS; falling back to no fonts.",
@@ -59,6 +71,7 @@ async function fetchNotoSansSCFonts() {
 			fontCache = { regular: null, bold: null };
 			return { regular: null, bold: null };
 		}
+
 		const [rResp, bResp] = await Promise.all([
 			fetch(regularUrl),
 			fetch(boldUrl),
@@ -70,6 +83,7 @@ async function fetchNotoSansSCFonts() {
 			fontCache = { regular: null, bold: null };
 			return { regular: null, bold: null };
 		}
+
 		const rBuf = Buffer.from(await rResp.arrayBuffer());
 		const bBuf = Buffer.from(await bResp.arrayBuffer());
 		fontCache = { regular: rBuf, bold: bBuf };
@@ -80,38 +94,53 @@ async function fetchNotoSansSCFonts() {
 		return { regular: null, bold: null };
 	}
 }
+
 export async function GET({
 	props,
 }: APIContext<{ post: CollectionEntry<"posts"> }>) {
 	const { post } = props;
+
+	// Try to fetch fonts from Google Fonts (woff2) at runtime.
 	const { regular: fontRegular, bold: fontBold } = await fetchNotoSansSCFonts();
+
+	// Avatar + icon: still read from disk (small assets)
 	let avatarBase64: string;
+
+	// 检查头像是否为 URL
 	if (profileConfig.avatar?.startsWith("http")) {
+		// 如果是 URL，直接使用
 		avatarBase64 = profileConfig.avatar;
 	} else {
+		// 如果是本地路径，从 public 目录读取
 		const avatarPath = profileConfig.avatar?.startsWith("/")
 			? `./public${profileConfig.avatar}`
 			: `./src/${profileConfig.avatar}`;
 		const avatarBuffer = fs.readFileSync(avatarPath);
 		avatarBase64 = `data:image/png;base64,${avatarBuffer.toString("base64")}`;
 	}
+
 	let iconPath = "./public/favicon/favicon-dark-192.png";
 	if (siteConfig.favicon.length > 0) {
 		iconPath = `./public${siteConfig.favicon[0].src}`;
 	}
 	const iconBuffer = fs.readFileSync(iconPath);
 	const iconBase64 = `data:image/png;base64,${iconBuffer.toString("base64")}`;
+
 	const hue = siteConfig.themeColor.hue;
 	const primaryColor = `hsl(${hue}, 90%, 65%)`;
 	const textColor = "hsl(0, 0%, 95%)";
+
 	const subtleTextColor = `hsl(${hue}, 10%, 75%)`;
 	const backgroundColor = `hsl(${hue}, 15%, 12%)`;
+
 	const pubDate = post.data.published.toLocaleDateString("en-US", {
 		year: "numeric",
 		month: "short",
 		day: "numeric",
 	});
+
 	const description = post.data.description;
+
 	const template = {
 		type: "div",
 		props: {
@@ -159,6 +188,7 @@ export async function GET({
 						],
 					},
 				},
+
 				{
 					type: "div",
 					props: {
@@ -288,6 +318,7 @@ export async function GET({
 			],
 		},
 	};
+
 	const fonts: FontOptions[] = [];
 	if (fontRegular) {
 		fonts.push({
@@ -305,12 +336,15 @@ export async function GET({
 			style: "normal",
 		});
 	}
+
 	const svg = await satori(template, {
 		width: 1200,
 		height: 630,
 		fonts,
 	});
+
 	const png = await sharp(Buffer.from(svg)).png().toBuffer();
+
 	return new Response(new Uint8Array(png), {
 		headers: {
 			"Content-Type": "image/png",
