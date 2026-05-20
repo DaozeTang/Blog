@@ -1,7 +1,6 @@
 ---
 import type { MarkdownHeading } from "astro";
 import Profile from "@/components/content/Profile.astro";
-import Advertisement from "@/components/widget/Advertisement.astro";
 import Announcement from "@/components/widget/Announcement.astro";
 import Calendar from "@/components/widget/Calendar.astro";
 import Categories from "@/components/widget/Categories.astro";
@@ -41,7 +40,6 @@ const componentTypeToId = {
 	announcement: "announcement",
 	categories: "categories",
 	tags: "tags",
-	advertisement: "advertisement",
 };
 
 // 提取客户端需要的数据
@@ -83,7 +81,6 @@ const componentMap = {
 	categories: Categories,
 	tags: Tags,
 	sidebarToc: SidebarTOC,
-	advertisement: Advertisement,
 	stats: SiteStats,
 	calendar: Calendar,
 };
@@ -113,7 +110,6 @@ function renderComponent(
 			class: componentClass,
 			style: componentStyle,
 			headings: headings ?? [],
-			configId: component.configId, // 传递configId给Advertisement组件
 			...component.customProps,
 		},
 	};

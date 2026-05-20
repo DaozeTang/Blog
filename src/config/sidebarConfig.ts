@@ -45,15 +45,6 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 				collapseThreshold: 20,
 			},
 		},
-		{
-			type: "advertisement",
-			enable: false,
-			order: 5,
-			position: "sticky",
-			class: "onload-animation",
-			animationDelay: 300,
-			configId: "ad1",
-		},
 	],
 
 	rightComponents: [
@@ -83,16 +74,6 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 			showOnPostPage: true,
 			class: "onload-animation",
 			animationDelay: 250,
-		},
-		{
-			type: "advertisement",
-			enable: false,
-			order: 4,
-			position: "sticky",
-			showOnPostPage: true,
-			class: "onload-animation",
-			animationDelay: 350,
-			configId: "ad2",
 		},
 	],
 

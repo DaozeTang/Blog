@@ -14,7 +14,6 @@ export const WIDGET_COMPONENT_MAP = {
 	categories: "../components/widget/Categories.astro",
 	tags: "../components/widget/Tags.astro",
 	sidebarToc: "../components/widget/SidebarTOC.astro",
-	advertisement: "../components/widget/Advertisement.astro",
 	stats: "../components/widget/SiteStats.astro",
 	calendar: "../components/widget/Calendar.astro",
 	custom: null, // 自定义组件需要在配置中指定路径

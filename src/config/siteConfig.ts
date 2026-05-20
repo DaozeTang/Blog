@@ -47,23 +47,13 @@ export const siteConfig: SiteConfig = {
 
 	siteStartDate: "2022-09-01",
 
-	bangumi: {
-		userId: "",
-	},
-
 	showLastModified: true,
 
 	// 开启后构建时间较长，不建议本地调试时开启
 	generateOgImages: true,
 
-	// 设为 false 返回 404；bangumi 数据为编译时获取，非实时
 	pages: {
 		onlyabout: true,
-		links: false,
-		friends: false,
-		sponsor: false,
-		guestbook: false,
-		bangumi: false,
 	},
 
 	// "list" | "grid"（双侧边栏模式下 grid 不可用）

@@ -1,7 +1,6 @@
 import type { CommentConfig } from "../types/config";
 
 export const commentConfig: CommentConfig = {
-	// 可选: none, twikoo, waline, giscus, disqus, artalk
 	type: "giscus",
 
 	giscus: {
