@@ -4,26 +4,6 @@ export const commentConfig: CommentConfig = {
 	// 可选: none, twikoo, waline, giscus, disqus, artalk
 	type: "giscus",
 
-	twikoo: {
-		envId: "https://twikoo.vercel.app",
-		lang: "zh-CN",
-		visitorCount: true,
-	},
-
-	waline: {
-		serverURL: "https://waline.vercel.app",
-		lang: "zh-CN",
-		// 'enable' | 'force' | 'disable'
-		login: "enable",
-		visitorCount: true,
-	},
-
-	artalk: {
-		server: "https://artalk.example.com/",
-		locale: "zh-CN",
-		visitorCount: true,
-	},
-
 	giscus: {
 		repo: "DaozeTang/Blog",
 		repoId: "R_kgDOQkCvvA",
@@ -39,7 +19,4 @@ export const commentConfig: CommentConfig = {
 		loading: "lazy",
 	},
 
-	disqus: {
-		shortname: "firefly",
-	},
 };

@@ -7,40 +7,7 @@ export const sponsorConfig: SponsorConfig = {
 	showSponsorsList: true,
 	showButtonInPost: true,
 
-	methods: [
-		{
-			name: "支付宝",
-			icon: "fa6-brands:alipay",
-			qrCode: "/assets/images/sponsor/alipay.jpg",
-			link: "",
-			description: "使用 支付宝 扫码赞助",
-			enabled: true,
-		},
-		{
-			name: "微信",
-			icon: "fa6-brands:weixin",
-			qrCode: "/assets/images/sponsor/wechat.jpg",
-			link: "",
-			description: "使用 微信 扫码赞助",
-			enabled: true,
-		},
-		{
-			name: "爱发电",
-			icon: "simple-icons:afdian",
-			qrCode: "",
-			link: "https://afdian.com/a/cuteleaf",
-			description: "通过 爱发电 进行赞助",
-			enabled: false,
-		},
-		{
-			name: "Github",
-			icon: "fa6-brands:github",
-			qrCode: "",
-			link: "https://github.com/DaozeTang",
-			description: "点个Star就是最大的支持",
-			enabled: false,
-		},
-	],
+	methods: [],
 
 	sponsors: [
 		{
