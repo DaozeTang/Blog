@@ -21,21 +21,25 @@
 
     a:not(.no-styling) {
         @apply relative bg-none font-medium text-[var(--primary)]
-        underline decoration-[var(--link-underline)] decoration-1 decoration-dashed underline-offset-4;
+        underline decoration-[var(--link-underline)] decoration-2 decoration-dashed underline-offset-[0.25em];
         box-decoration-break: clone;
         -webkit-box-decoration-break: clone;
-    
+        transition: background-color 180ms var(--ease-standard),
+                    color 180ms var(--ease-standard),
+                    text-decoration-color 180ms var(--ease-standard);
+        padding: 0 0.15em;
+        border-radius: 0.25rem;
+
         &:hover, &:active {
             @apply decoration-transparent;
-            background: var(--btn-plain-bg-hover);
-            border-bottom: 1px dashed var(--link-hover);
+            background: color-mix(in oklch, var(--primary) 12%, transparent);
+            color: var(--primary);
             text-decoration: none;
         }
     }
 
     code {
-        @apply bg-[var(--inline-code-bg)] text-[var(--inline-code-color)] px-1 py-0.5 rounded-md overflow-hidden;
-
+        @apply bg-[var(--inline-code-bg)] text-[var(--inline-code-color)] px-[0.4em] py-[0.15em] rounded-md overflow-hidden;
         font-family: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
         &:before {
             content:none;
@@ -105,12 +109,26 @@
         }
     }
 
-    blockquote {
+    blockquote:not(.admonition) {
         @apply not-italic border-transparent relative;
         font-weight: inherit;
+        background: color-mix(in oklch, var(--primary) 5%, transparent);
+        border-radius: var(--radius-xl);
+        padding: 1rem 1.25rem 1rem 1.5rem;
+        margin: 1.25em 0;
+        color: var(--text-secondary);
 
         &:before {
-            @apply content-[''] absolute -left-1 block transition bg-[var(--btn-regular-bg)] h-full w-1 rounded-full;
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.75rem;
+            bottom: 0.75rem;
+            width: 3px;
+            background: linear-gradient(180deg,
+                var(--primary),
+                color-mix(in oklch, var(--primary) 60%, transparent));
+            border-radius: var(--radius-full);
         }
 
         /* Remove the double quotes from default styles */
@@ -118,6 +136,17 @@
             @apply content-none;
         }
 
+        p {
+            margin: 0.5em 0;
+        }
+        p:first-child { margin-top: 0; }
+        p:last-child { margin-bottom: 0; }
+    }
+
+    /* 保留 admonition 自身的设计语言 */
+    blockquote.admonition {
+        @apply not-italic relative;
+        p:before, p:after { @apply content-none; }
     }
 
     .katex-display-container {
@@ -135,16 +164,179 @@
 }
 
 /* 修复表格对齐问题 */
-.custom-md {  
-    table {  
-        th[align="left"], td[align="left"] {  
-            text-align: left;  
-        }  
-        th[align="center"], td[align="center"] {  
-            text-align: center;  
-        }  
-        th[align="right"], td[align="right"] {  
-            text-align: right;  
-        }  
-    }  
+.custom-md {
+    table {
+        th[align="left"], td[align="left"] {
+            text-align: left;
+        }
+        th[align="center"], td[align="center"] {
+            text-align: center;
+        }
+        th[align="right"], td[align="right"] {
+            text-align: right;
+        }
+    }
+}
+
+/* ============================================================
+   现代化排版优化 - Modern Typography Polish
+   ============================================================ */
+
+/* 标题字距 & 行高优化 */
+.custom-md h1,
+.custom-md h2,
+.custom-md h3,
+.custom-md h4 {
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+    scroll-margin-top: 6rem;
+}
+
+/* H2 增加视觉权重 - 顶部分隔线 */
+.custom-md h2 {
+    padding-top: 0.5rem;
+    margin-top: 2.5em !important;
+    position: relative;
+}
+.custom-md h2::before {
+    content: '';
+    position: absolute;
+    top: -0.5rem;
+    left: 0;
+    width: 2.5rem;
+    height: 3px;
+    background: linear-gradient(90deg,
+        var(--primary),
+        color-mix(in oklch, var(--primary) 30%, transparent));
+    border-radius: var(--radius-full);
+}
+
+/* 段落 & 列表 - 更舒适的阅读节奏 */
+.custom-md p {
+    line-height: 1.75;
+}
+.custom-md ul,
+.custom-md ol {
+    line-height: 1.75;
+}
+.custom-md li + li {
+    margin-top: 0.3em;
+}
+
+/* 表格 - 现代化外观 */
+.custom-md table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    border: 1px solid var(--line-divider);
+    margin: 1.5em 0;
+    width: 100%;
+}
+.custom-md thead {
+    background: var(--btn-regular-bg);
+}
+.custom-md th {
+    font-weight: 600;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--line-divider);
+}
+.custom-md td {
+    padding: 0.65rem 1rem;
+    border-bottom: 1px solid var(--line-divider);
+}
+.custom-md tr:last-child td {
+    border-bottom: none;
+}
+.custom-md tbody tr {
+    transition: background-color 150ms var(--ease-standard);
+}
+.custom-md tbody tr:hover {
+    background: color-mix(in oklch, var(--primary) 4%, transparent);
+}
+
+/* 水平线 - 更优雅 */
+.custom-md hr {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg,
+        transparent,
+        var(--line-color) 20%,
+        var(--line-color) 80%,
+        transparent);
+    margin: 2.5em 0;
+}
+
+/* Anchor link (#) - 更优雅的浮现 */
+.custom-md h1 .anchor,
+.custom-md h2 .anchor,
+.custom-md h3 .anchor,
+.custom-md h4 .anchor,
+.custom-md h5 .anchor,
+.custom-md h6 .anchor {
+    color: var(--primary);
+    font-weight: 400;
+    opacity: 0;
+    transition: opacity 200ms var(--ease-standard);
+}
+
+/* 图片 - 圆角与微阴影 */
+.custom-md img:not([class*="emoji"]):not([class*="icon"]) {
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    transition: transform 300ms var(--ease-standard),
+                box-shadow 300ms var(--ease-standard);
+}
+.custom-md img:not([class*="emoji"]):not([class*="icon"]):hover {
+    box-shadow: var(--shadow-lg);
+}
+
+/* 列表标记 - 更细腻 */
+.custom-md ul > li::marker {
+    color: var(--primary);
+}
+.custom-md ol > li::marker {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+/* 强调文本 */
+.custom-md strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+.custom-md em {
+    color: var(--text-primary);
+}
+
+/* 行内代码 - 现代化 (仅作用于段落、列表等中的 <code>，避免影响代码块) */
+.custom-md :not(pre) > code {
+    border: 1px solid var(--line-divider);
+    font-size: 0.88em;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+}
+
+/* kbd - 键盘按键样式 */
+.custom-md kbd {
+    display: inline-block;
+    padding: 0.15em 0.5em;
+    font-family: 'JetBrains Mono Variable', ui-monospace, monospace;
+    font-size: 0.85em;
+    line-height: 1.4;
+    color: var(--text-primary);
+    background: var(--card-bg);
+    border: 1px solid var(--line-color);
+    border-bottom-width: 2px;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+/* 减少动画偏好支持 */
+@media (prefers-reduced-motion: reduce) {
+    .custom-md img:not([class*="emoji"]):not([class*="icon"]):hover {
+        transform: none !important;
+    }
 }
