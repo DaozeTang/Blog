@@ -11,16 +11,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 现代 CSS 函数变量 (放在纯 CSS 中以避免 Stylus 解析现代 CSS 函数语法报错) */
-:root {
-    --shadow-primary: 0 4px 14px color-mix(in oklch, var(--primary) 25%, transparent);
-    --focus-ring: 0 0 0 3px color-mix(in oklch, var(--primary) 35%, transparent);
-}
-:root.dark {
-    --shadow-primary: 0 4px 14px color-mix(in oklch, var(--primary) 30%, transparent);
-    --focus-ring: 0 0 0 3px color-mix(in oklch, var(--primary) 45%, transparent);
-}
-
 /* 确保平滑滚动 */
 html {
     scroll-behavior: smooth;
