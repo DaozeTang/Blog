@@ -10,7 +10,6 @@ import type {
  */
 export const WIDGET_COMPONENT_MAP = {
 	profile: "../components/content/Profile.astro",
-	announcement: "../components/widget/Announcement.astro",
 	categories: "../components/widget/Categories.astro",
 	tags: "../components/widget/Tags.astro",
 	sidebarToc: "../components/widget/SidebarTOC.astro",

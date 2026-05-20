@@ -1,7 +1,6 @@
 ---
 import type { MarkdownHeading } from "astro";
 import Profile from "@/components/content/Profile.astro";
-import Announcement from "@/components/widget/Announcement.astro";
 import Calendar from "@/components/widget/Calendar.astro";
 import Categories from "@/components/widget/Categories.astro";
 import SidebarTOC from "@/components/widget/SidebarTOC.astro";
@@ -37,7 +36,6 @@ const componentTypeToId = {
 	calendar: "calendar-widget",
 	sidebarToc: "sidebar-toc",
 	profile: "profile",
-	announcement: "announcement",
 	categories: "categories",
 	tags: "tags",
 };
@@ -77,7 +75,6 @@ const componentsConfig = (() => {
 // 组件映射表
 const componentMap = {
 	profile: Profile,
-	announcement: Announcement,
 	categories: Categories,
 	tags: Tags,
 	sidebarToc: SidebarTOC,

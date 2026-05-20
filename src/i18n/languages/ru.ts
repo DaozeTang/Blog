@@ -14,10 +14,6 @@ export const ru: Translation = {
 	[Key.postList]: "Список постов",
 	[Key.tableOfContents]: "Содержание",
 
-	// Объявление
-	[Key.announcement]: "Объявление",
-	[Key.announcementClose]: "Закрыть",
-
 	[Key.comments]: "Комментарии",
 	[Key.commentSection]: "Комментарии",
 	[Key.commentSubtitle]: "Поделитесь своими мыслями и обсудите с остальными",

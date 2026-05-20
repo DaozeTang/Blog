@@ -1,5 +1,4 @@
 export type {
-	AnnouncementConfig,
 	CommentConfig,
 	ExpressiveCodeConfig,
 	FooterConfig,
@@ -11,7 +10,6 @@ export type {
 	WidgetComponentConfig,
 	WidgetComponentType,
 } from "../types/config";
-export { announcementConfig } from "./announcementConfig";
 export { commentConfig } from "./commentConfig";
 export { expressiveCodeConfig } from "./expressiveCodeConfig";
 export { fontConfig } from "./fontConfig";

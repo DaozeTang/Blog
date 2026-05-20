@@ -14,10 +14,6 @@ export const zh_TW: Translation = {
 	[Key.postList]: "文章列表",
 	[Key.tableOfContents]: "目錄",
 
-	// 公告欄
-	[Key.announcement]: "公告",
-	[Key.announcementClose]: "關閉",
-
 	[Key.comments]: "評論",
 	[Key.commentSection]: "評論區",
 	[Key.commentSubtitle]: "分享你的想法，與大家交流討論",

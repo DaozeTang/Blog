@@ -14,10 +14,6 @@ export const ja: Translation = {
 	[Key.postList]: "投稿リスト",
 	[Key.tableOfContents]: "目次",
 
-	// お知らせ
-	[Key.announcement]: "お知らせ",
-	[Key.announcementClose]: "閉じる",
-
 	[Key.comments]: "コメント",
 	[Key.commentSection]: "コメント欄",
 	[Key.commentSubtitle]: "あなたの考えを共有し、みんなと議論しましょう",

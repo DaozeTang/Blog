@@ -16,14 +16,6 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 			animationDelay: 0,
 		},
 		{
-			type: "announcement",
-			enable: true,
-			order: 2,
-			position: "top",
-			class: "onload-animation",
-			animationDelay: 50,
-		},
-		{
 			type: "categories",
 			enable: true,
 			order: 3,

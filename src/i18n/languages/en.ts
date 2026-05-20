@@ -14,9 +14,7 @@ export const en: Translation = {
 	[Key.postList]: "Post List",
 	[Key.tableOfContents]: "Table of Contents",
 
-	// Announcement
-	[Key.announcement]: "Announcement",
-	[Key.announcementClose]: "Close",
+
 
 	[Key.comments]: "Comments",
 	[Key.commentSection]: "Comments",
