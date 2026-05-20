@@ -12,14 +12,12 @@ interface Props {
 
 let { headings: _ = [] } = Astro.props;
 
-// 检查侧边栏目录组件是否启用
 const sidebarTocComponent = sidebarLayoutConfig.rightComponents?.find(
 	(c) => c.type === "sidebarToc",
 );
 const isSidebarTocEnabled = sidebarTocComponent?.enable ?? false;
 ---
 
-<!-- 悬浮TOC按钮 -->
 <div class="floating-toc-wrapper" data-is-sidebar-toc-enabled={String(isSidebarTocEnabled)}>
   <div
     id="floating-toc-btn"
@@ -35,7 +33,6 @@ const isSidebarTocEnabled = sidebarTocComponent?.enable ?? false;
   </div>
 </div>
 
-<!-- 悬浮TOC面板 -->
 <div
   id="floating-toc-panel"
   class="floating-toc-panel hide fixed w-80 max-h-[24rem] overflow-hidden rounded-2xl shadow-2xl backdrop-blur-lg border border-white/20 bg-white/60 dark:bg-black/60 dark:border-white/10 z-50 md:w-80 w-[calc(100vw-2rem)] md:max-h-[24rem] max-h-[calc(100vh-8rem)]"
@@ -67,7 +64,6 @@ const isSidebarTocEnabled = sidebarTocComponent?.enable ?? false;
       id="floating-toc-content"
       style="width: 100%; max-width: 100%;"
     >
-      <!-- TOC内容将由JavaScript动态生成 -->
     </div>
   </div>
 </div>

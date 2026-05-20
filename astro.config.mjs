@@ -41,9 +41,8 @@ export default defineConfig({
 		}),
 		swup({
 			theme: false,
-			animationClass: "transition-swup-", // see https://swup.js.org/options/#animationselector
-			// the default value `transition-` cause transition delay
-			// when the Tailwind class `transition-all` is used
+			// 默认值 `transition-` 会导致 Tailwind `transition-all` 类延迟
+			animationClass: "transition-swup-",
 			containers: ["main"],
 			smoothScrolling: false,
 			cache: true,
@@ -52,11 +51,9 @@ export default defineConfig({
 			updateHead: true,
 			updateBodyClass: false,
 			globalInstance: true,
-			// 滚动相关配置优化
 			resolveUrl: (url) => url,
 			animateHistoryBrowsing: false,
 			skipPopStateHandling: (event) => {
-				// 跳过锚点链接的处理，让浏览器原生处理
 				return event.state && event.state.url && event.state.url.includes("#");
 			},
 		}),
@@ -106,7 +103,6 @@ export default defineConfig({
 		svelte(),
 		sitemap({
 			filter: (page) => {
-				// 根据页面开关配置过滤sitemap
 				const url = new URL(page);
 				const pathname = url.pathname;
 
@@ -142,7 +138,8 @@ export default defineConfig({
 			rehypeSlug,
 			rehypeMermaid,
 			rehypeFigure,
-			[rehypeEmailProtection, { method: "base64" }], // 邮箱保护插件，支持 'base64' 或 'rot13'
+			// method: 'base64' | 'rot13'
+			[rehypeEmailProtection, { method: "base64" }],
 			[
 				rehypeComponents,
 				{
