@@ -17,24 +17,19 @@ interface Props {
 
 const { class: className, style } = Astro.props;
 
-// 从配置中获取站点开始日期
 const siteStartDate = siteConfig.siteStartDate || "2025-01-01";
 
-// 获取所有文章
 const posts = await getSortedPosts();
 const categories = await getCategoryList();
 const tags = await getTagList();
 
-// 计算总字数
 let totalWords = 0;
 for (const post of posts) {
 	if (post.body) {
-		// 移除 Markdown 空白字符后计算字数
 		const text = post.body
-			.replace(/\s+/g, " ") // 合并空白
+			.replace(/\s+/g, " ")
 			.trim();
 
-		// 分别计算中文字符和英文单词
 		const chineseChars = text.match(/[\u4e00-\u9fa5]/g) || [];
 		const englishWords = text.match(/[a-zA-Z]+/g) || [];
 
@@ -42,12 +37,10 @@ for (const post of posts) {
 	}
 }
 
-// 格式化数字（添加千位分隔符）
 function formatNumber(num: number): string {
 	return num.toLocaleString();
 }
 
-// 获取最新文章日期（用于客户端计算）
 const latestPost = posts.reduce((latest, post) => {
 	if (!latest) return post;
 	return post.data.published > latest.data.published ? post : latest;
@@ -82,7 +75,7 @@ const stats = [
 	{
 		icon: "material-symbols:calendar-clock-outline",
 		label: i18n(I18nKey.siteStatsRunningDays),
-		value: 0, // 将由客户端更新
+		value: 0,
 		suffix: i18n(I18nKey.siteStatsDays).replace("{days}", ""),
 		dynamic: true,
 		id: "running-days",
@@ -90,7 +83,7 @@ const stats = [
 	{
 		icon: "material-symbols:ecg-heart-outline",
 		label: i18n(I18nKey.siteStatsLastUpdate),
-		value: 0, // 将由客户端更新
+		value: 0,
 		suffix: i18n(I18nKey.siteStatsDaysAgo).replace("{days}", ""),
 		dynamic: true,
 		id: "last-update",
@@ -111,7 +104,7 @@ const stats = [
           </span>
         </div>
         <div class="flex items-center">
-          <span 
+          <span
             class="text-base font-bold text-neutral-900 dark:text-neutral-100"
             data-stat-id={stat.id}
           >
@@ -131,23 +124,21 @@ const stats = [
 <script is:inline define:vars={{ siteStartDate, lastPostDate }}>
   function updateDynamicStats() {
     const today = new Date();
-    
-    // 更新运行天数
+
     const startDate = new Date(siteStartDate);
     const diffTime = Math.abs(today.getTime() - startDate.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
+
     const runningDaysElement = document.querySelector('[data-stat-id="running-days"]');
     if (runningDaysElement) {
       runningDaysElement.textContent = diffDays.toString();
     }
-    
-    // 更新最后活动时间
+
     if (lastPostDate) {
       const lastPost = new Date(lastPostDate);
       const timeSinceLastPost = Math.abs(today.getTime() - lastPost.getTime());
       const daysSinceLastUpdate = Math.floor(timeSinceLastPost / (1000 * 60 * 60 * 24));
-      
+
       const lastUpdateElement = document.querySelector('[data-stat-id="last-update"]');
       if (lastUpdateElement) {
         lastUpdateElement.textContent = daysSinceLastUpdate.toString();
@@ -155,13 +146,10 @@ const stats = [
     }
   }
 
-  // 页面加载时更新
   updateDynamicStats();
-  
-  // 每小时更新一次（可选，因为天数变化较慢）
+
   setInterval(updateDynamicStats, 60 * 60 * 1000);
 
-  // 页面切换时重新更新
   document.addEventListener("swup:contentReplaced", () => {
     setTimeout(updateDynamicStats, 100);
   });

@@ -27,7 +27,6 @@ import { url } from "@/utils/url-utils";
 export async function getStaticPaths() {
 	const blogEntries = await getSortedPosts();
 	return blogEntries.map((entry) => {
-		// 将 id 转换为 slug（移除扩展名）以匹配路由参数
 		const slug = removeFileExtension(entry.id);
 		return {
 			params: { slug },
@@ -41,10 +40,7 @@ const { Content, headings } = await render(entry);
 
 const { remarkPluginFrontmatter } = await render(entry);
 
-// 处理随机图：如果image为"api"，则从配置的API获取随机图
 const processedImage = processCoverImageSync(entry.data.image, entry.id);
-
-// ...existing code...
 
 dayjs.extend(utc);
 
@@ -63,7 +59,6 @@ const jsonLd = {
 	inLanguage: entry.data.lang
 		? entry.data.lang.replace("_", "-")
 		: siteConfig.lang.replace("_", "-"),
-	// TODO include cover image here
 };
 ---
 
@@ -92,7 +87,7 @@ const jsonLd = {
         {},
       ]}
     >
-      <!-- word count and reading time -->
+
       <div
         class="flex flex-row text-black/30 dark:text-white/30 gap-5 mb-3 transition onload-animation"
       >
@@ -127,7 +122,7 @@ const jsonLd = {
         </div>
       </div>
 
-      <!-- title -->
+
       <div class="relative onload-animation">
         <h1
           data-pagefind-body
@@ -143,7 +138,7 @@ const jsonLd = {
         </h1>
       </div>
 
-      <!-- metadata -->
+
       <div class="onload-animation">
         <PostMetadata
           className="mb-5"
@@ -160,7 +155,7 @@ const jsonLd = {
         }
       </div>
 
-      <!-- always show cover as long as it has one -->
+
 
       {
         processedImage && (
@@ -181,7 +176,7 @@ const jsonLd = {
         <Content />
       </Markdown>
 
-      {/* 赞助按钮 */}
+
       {
         sponsorConfig.showButtonInPost && siteConfig.pages.sponsor && (
           <div class="mb-6 rounded-xl onload-animation">
@@ -230,7 +225,7 @@ const jsonLd = {
     </div>
   </div>
 
-  <!-- 上次编辑时间 -->
+
   {
     siteConfig.showLastModified && (
       <div class="card-base p-6 mb-4">
@@ -273,7 +268,7 @@ const jsonLd = {
     )
   }
 
-  <!-- 评论 -->
+
   <Comment post={entry} />
 
   <div

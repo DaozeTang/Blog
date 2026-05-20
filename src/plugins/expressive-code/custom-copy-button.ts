@@ -1,6 +1,5 @@
 import { definePlugin } from "@expressive-code/core";
 import type { Element } from "hast";
-
 export function pluginCustomCopyButton() {
 	return definePlugin({
 		name: "Custom Copy Button",
@@ -17,7 +16,6 @@ export function pluginCustomCopyButton() {
 						}
 					}
 				}
-
 				function processCodeBlock(node: Element) {
 					const copyButton = {
 						type: "element" as const,
@@ -76,13 +74,11 @@ export function pluginCustomCopyButton() {
 							},
 						],
 					} as Element;
-
 					if (!node.children) {
 						node.children = [];
 					}
 					node.children.push(copyButton);
 				}
-
 				traverse(context.renderData.blockAst);
 			},
 		},

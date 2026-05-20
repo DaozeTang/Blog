@@ -1,23 +1,18 @@
 import Key from "../i18nKey";
 import type { Translation } from "../translation";
-
 export const zh_TW: Translation = {
 	[Key.home]: "首頁",
 	[Key.about]: "關於我",
 	[Key.archive]: "歸檔",
 	[Key.search]: "搜尋",
 	[Key.other]: "其他",
-
 	[Key.tags]: "標籤",
 	[Key.categories]: "分類",
 	[Key.recentPosts]: "最新文章",
 	[Key.postList]: "文章列表",
 	[Key.tableOfContents]: "目錄",
-
-	// 公告欄
 	[Key.announcement]: "公告",
 	[Key.announcementClose]: "關閉",
-
 	[Key.comments]: "評論",
 	[Key.commentSection]: "評論區",
 	[Key.commentSubtitle]: "分享你的想法，與大家交流討論",
@@ -31,32 +26,23 @@ export const zh_TW: Translation = {
 	[Key.untitled]: "無標題",
 	[Key.uncategorized]: "未分類",
 	[Key.noTags]: "無標籤",
-
 	[Key.wordCount]: "字",
 	[Key.wordsCount]: "字",
 	[Key.minuteCount]: "分鐘",
 	[Key.minutesCount]: "分鐘",
 	[Key.postCount]: "篇文章",
 	[Key.postsCount]: "篇文章",
-
 	[Key.themeColor]: "主題色",
-
 	[Key.lightMode]: "亮色",
 	[Key.darkMode]: "暗色",
 	[Key.systemMode]: "跟隨系統",
-
 	[Key.more]: "更多",
-
 	[Key.author]: "作者",
 	[Key.publishedAt]: "發布於",
 	[Key.license]: "許可協議",
 	[Key.bangumi]: "番組計劃",
-
-	// 番組計劃
 	[Key.bangumiTitle]: "我的番組計劃",
 	[Key.bangumiSubtitle]: "記錄我的二次元之旅",
-
-	// 番組計劃篩選和狀態文本
 	[Key.bangumiFilterAll]: "全部",
 	[Key.bangumiFilterWatched]: "看過",
 	[Key.bangumiFilterWatching]: "在看",
@@ -81,20 +67,14 @@ export const zh_TW: Translation = {
 	[Key.bangumiCurrentPage]: "第",
 	[Key.bangumiTotalPages]: "頁，共",
 	[Key.bangumiPage]: "頁",
-
-	// 番組分類
 	[Key.bangumiCategoryBook]: "書籍",
 	[Key.bangumiCategoryAnime]: "動畫",
 	[Key.bangumiCategoryMusic]: "音樂",
 	[Key.bangumiCategoryGame]: "遊戲",
 	[Key.bangumiCategoryReal]: "三次元",
-
-	// 番組數據更新
 	[Key.bangumiLastUpdated]: "數據更新於",
 	[Key.bangumiUpdatedAt]: "構建時間",
 	[Key.bangumiDataStatic]: "靜態數據",
-
-	// 分頁
 	[Key.paginationFirst]: "首頁",
 	[Key.paginationPrev]: "上一頁",
 	[Key.paginationNext]: "下一頁",
@@ -103,14 +83,10 @@ export const zh_TW: Translation = {
 	[Key.paginationOf]: "頁，共",
 	[Key.paginationTotal]: "頁，總計",
 	[Key.paginationRecords]: "條記錄",
-
-	// 404頁面
 	[Key.notFound]: "404",
 	[Key.notFoundTitle]: "頁面未找到",
 	[Key.notFoundDescription]: "抱歉，您訪問的頁面不存在或已被移動。",
 	[Key.backToHome]: "返回首頁",
-
-	// RSS頁面
 	[Key.rss]: "RSS 訂閱",
 	[Key.rssDescription]: "訂閱獲取最新更新",
 	[Key.rssSubtitle]: "通過 RSS 訂閱，第一時間獲取最新文章和動態",
@@ -128,8 +104,6 @@ export const zh_TW: Translation = {
 	[Key.rssHowToUse]: "推薦使用 Feedly、Inoreader 或其他 RSS 閱讀器來訂閱本站。",
 	[Key.rssCopied]: "RSS 鏈接已複製到剪貼板！",
 	[Key.rssCopyFailed]: "複製失敗，請手動複製鏈接",
-
-	//最後編輯時間卡片
 	[Key.lastModifiedPrefix]: "最後更新於 ",
 	[Key.lastModifiedOutdated]: "部分內容可能已過時",
 	[Key.lastModifiedDaysAgo]: "距今已過 {days} 天",
@@ -139,22 +113,14 @@ export const zh_TW: Translation = {
 	[Key.hour]: "時",
 	[Key.minute]: "分",
 	[Key.second]: "秒",
-
-	// 訪問量統計
 	[Key.pageViews]: "瀏覽量",
 	[Key.pageViewsLoading]: "載入中...",
 	[Key.pageViewsError]: "統計不可用",
-
-	// 置頂
 	[Key.pinned]: "置頂",
-
-	// 壁紙模式
 	[Key.wallpaperMode]: "壁紙模式",
 	[Key.wallpaperBannerMode]: "橫幅壁紙",
 	[Key.wallpaperOverlayMode]: "全屏壁紙",
 	[Key.wallpaperNoneMode]: "純色背景",
-
-	// 贊助頁面
 	[Key.sponsor]: "贊助",
 	[Key.sponsorTitle]: "贊助支持",
 	[Key.sponsorDescription]:
@@ -170,8 +136,6 @@ export const zh_TW: Translation = {
 	[Key.sponsorGoTo]: "前往贊助",
 	[Key.sponsorButton]: "贊助支持",
 	[Key.sponsorButtonText]: "如果這篇文章對你有幫助，歡迎贊助支持！",
-
-	// 站點統計
 	[Key.siteStats]: "站點統計",
 	[Key.siteStatsPostCount]: "文章",
 	[Key.siteStatsCategoryCount]: "分類",
@@ -181,8 +145,6 @@ export const zh_TW: Translation = {
 	[Key.siteStatsLastUpdate]: "最後活動",
 	[Key.siteStatsDaysAgo]: "{days} 天前",
 	[Key.siteStatsDays]: "{days} 天",
-
-	// 日曆組件
 	[Key.calendarSunday]: "日",
 	[Key.calendarMonday]: "一",
 	[Key.calendarTuesday]: "二",

@@ -4,13 +4,10 @@ declare global {
 			init?: () => void;
 		};
 	}
-
 	interface Window {
-		// biome-ignore lint/suspicious/noExplicitAny: External library
 		swup: any;
 		live2dModelInitialized?: boolean;
 		spineModelInitialized?: boolean;
-		// biome-ignore lint/suspicious/noExplicitAny: External library
 		spinePlayerInstance?: any;
 		pagefind: {
 			search: (query: string) => Promise<{
@@ -20,13 +17,11 @@ declare global {
 			}>;
 		};
 	}
-
 	interface MediaQueryList {
 		addListener(listener: (e: MediaQueryListEvent) => void): void;
 		removeListener(listener: (e: MediaQueryListEvent) => void): void;
 	}
 }
-
 interface SearchResult {
 	url: string;
 	meta: {
@@ -52,5 +47,4 @@ interface SearchResult {
 	raw_url?: string;
 	sub_results?: SearchResult[];
 }
-
 export type { SearchResult };

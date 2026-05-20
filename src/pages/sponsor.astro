@@ -6,7 +6,6 @@ import { i18n } from "@/i18n/translation";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
 import { url } from "@/utils/url-utils";
 
-// 检查页面是否启用
 if (!siteConfig.pages.sponsor) {
 	return Astro.redirect("/404/");
 }
@@ -22,7 +21,7 @@ const showSponsorsList = sponsorConfig.showSponsorsList !== false;
 <MainGridLayout title={title} description={description}>
   <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
     <div class="card-base z-10 px-9 py-6 relative w-full">
-      <!-- 页面标题和描述 -->
+
       <div class="mb-8">
         <div class="flex items-center gap-3 mb-3">
             <div class="h-8 w-8 rounded-lg bg-[var(--primary)] flex items-center justify-center text-white dark:text-black/70">
@@ -50,12 +49,12 @@ const showSponsorsList = sponsorConfig.showSponsorsList !== false;
         )}
       </div>
 
-      <!-- 赞助方式 -->
+
       <div class="mb-8">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     {enabledMethods.map((method) => (
                       <div class="flex flex-col items-center p-6 rounded-lg bg-neutral-50 dark:bg-neutral-900/50 border border-neutral-200 dark:border-neutral-800 hover:border-[var(--primary)] transition-colors">
-                        <!-- 图标和名称 -->
+
                         <div class="flex items-center gap-3 mb-4">
                           {method.icon && (
                             <Icon icon={method.icon} size="2xl" class="text-neutral-900 dark:text-neutral-100 transition-colors" />
@@ -64,15 +63,15 @@ const showSponsorsList = sponsorConfig.showSponsorsList !== false;
                             {method.name}
                           </h3>
                         </div>
-          
-                        <!-- 描述 -->
+
+
                         {method.description && (
                           <p class="text-sm text-neutral-600 dark:text-neutral-400 mb-4 text-center">
                             {method.description}
                           </p>
                         )}
-          
-                        <!-- 二维码或链接 -->
+
+
                         {method.qrCode && (
                           <div class="relative w-full max-w-[200px] aspect-square bg-white rounded-lg p-4 shadow-md mb-4">
                             <img
@@ -83,7 +82,7 @@ const showSponsorsList = sponsorConfig.showSponsorsList !== false;
                             />
                           </div>
                         )}
-                        
+
                         {method.link && (
                           <a
                             href={method.link}
@@ -101,7 +100,6 @@ const showSponsorsList = sponsorConfig.showSponsorsList !== false;
       </div>
 
 
-      <!-- 赞助者列表 -->
       {showSponsorsList && (
         <div>
           <div class="flex items-center gap-3 mb-6">
@@ -114,9 +112,9 @@ const showSponsorsList = sponsorConfig.showSponsorsList !== false;
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {sponsors.map((sponsor) => (
                 <div class="relative p-5 rounded-lg bg-neutral-50 dark:bg-neutral-900/50 border border-neutral-200 dark:border-neutral-800 hover:border-[var(--primary)] transition-all duration-200 hover:shadow-md">
-                  <!-- 内容 -->
+
                   <div class="flex flex-col h-full">
-                    <!-- 头部：姓名和金额 -->
+
                     <div class="flex items-center justify-between mb-3">
                       <span class="font-semibold text-lg text-neutral-900 dark:text-neutral-100">
                         {sponsor.name}
@@ -128,14 +126,14 @@ const showSponsorsList = sponsorConfig.showSponsorsList !== false;
                       )}
                     </div>
 
-                    <!-- 留言 -->
+
                     {sponsor.message && (
                       <p class="text-sm text-neutral-600 dark:text-neutral-400 mb-3 leading-relaxed flex-1">
                         {sponsor.message}
                       </p>
                     )}
 
-                    <!-- 底部：日期 -->
+
                     {sponsor.date && (
                       <div class="flex items-center gap-1.5 mt-auto pt-3 border-t border-neutral-200 dark:border-neutral-800">
                         <svg
@@ -173,11 +171,11 @@ const showSponsorsList = sponsorConfig.showSponsorsList !== false;
 </MainGridLayout>
 
 <style>
-  /* 透明模式下使用半透明背景 */
+
   :global(body.wallpaper-transparent .usage-info-box) {
     background-color: rgba(var(--primary-rgb, 70, 130, 180), 0.15) !important;
   }
-  
+
   :global(:root.dark body.wallpaper-transparent .usage-info-box) {
     background-color: oklch(from var(--primary) l c h / 0.15) !important;
   }

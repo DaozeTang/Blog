@@ -1,23 +1,18 @@
 import Key from "../i18nKey";
 import type { Translation } from "../translation";
-
 export const ja: Translation = {
 	[Key.home]: "ホーム",
 	[Key.about]: "について",
 	[Key.archive]: "アーカイブ",
 	[Key.search]: "検索",
 	[Key.other]: "その他",
-
 	[Key.tags]: "タグ",
 	[Key.categories]: "カテゴリ",
 	[Key.recentPosts]: "最近の投稿",
 	[Key.postList]: "投稿リスト",
 	[Key.tableOfContents]: "目次",
-
-	// お知らせ
 	[Key.announcement]: "お知らせ",
 	[Key.announcementClose]: "閉じる",
-
 	[Key.comments]: "コメント",
 	[Key.commentSection]: "コメント欄",
 	[Key.commentSubtitle]: "あなたの考えを共有し、みんなと議論しましょう",
@@ -33,28 +28,21 @@ export const ja: Translation = {
 	[Key.untitled]: "無題",
 	[Key.uncategorized]: "未分類",
 	[Key.noTags]: "タグなし",
-
 	[Key.wordCount]: "語",
 	[Key.wordsCount]: "語",
 	[Key.minuteCount]: "分",
 	[Key.minutesCount]: "分",
 	[Key.postCount]: "投稿",
 	[Key.postsCount]: "投稿",
-
 	[Key.themeColor]: "テーマカラー",
-
 	[Key.lightMode]: "ライト",
 	[Key.darkMode]: "ダーク",
 	[Key.systemMode]: "システム",
-
 	[Key.more]: "もっと",
-
 	[Key.author]: "著者",
 	[Key.publishedAt]: "公開日",
 	[Key.license]: "ライセンス",
 	[Key.bangumi]: "バングミ",
-
-	// バングミフィルターと状態文本
 	[Key.bangumiTitle]: "私のバングミ",
 	[Key.bangumiSubtitle]: "私の二次元の旅を記録する",
 	[Key.bangumiFilterAll]: "すべて",
@@ -83,20 +71,14 @@ export const ja: Translation = {
 	[Key.bangumiCurrentPage]: "ページ",
 	[Key.bangumiTotalPages]: "の",
 	[Key.bangumiPage]: "ページ",
-
-	// バングミカテゴリ
 	[Key.bangumiCategoryBook]: "本",
 	[Key.bangumiCategoryAnime]: "アニメ",
 	[Key.bangumiCategoryMusic]: "音楽",
 	[Key.bangumiCategoryGame]: "ゲーム",
 	[Key.bangumiCategoryReal]: "実写",
-
-	// バングミデータ更新
 	[Key.bangumiLastUpdated]: "データ更新",
 	[Key.bangumiUpdatedAt]: "ビルド時間",
 	[Key.bangumiDataStatic]: "静的データ",
-
-	// ページネーション
 	[Key.paginationFirst]: "最初",
 	[Key.paginationPrev]: "前へ",
 	[Key.paginationNext]: "次へ",
@@ -105,15 +87,11 @@ export const ja: Translation = {
 	[Key.paginationOf]: "ページ、全",
 	[Key.paginationTotal]: "ページ、合計",
 	[Key.paginationRecords]: "件",
-
-	// 404ページ
 	[Key.notFound]: "404",
 	[Key.notFoundTitle]: "ページが見つかりません",
 	[Key.notFoundDescription]:
 		"申し訳ありませんが、アクセスしたページは存在しないか、移動されています。",
 	[Key.backToHome]: "ホームに戻る",
-
-	// RSSページ
 	[Key.rss]: "RSSフィード",
 	[Key.rssDescription]: "最新の更新を購読する",
 	[Key.rssSubtitle]: "RSSで購読して、最新の記事と更新を第一时间で取得する",
@@ -133,8 +111,6 @@ export const ja: Translation = {
 		"Feedly、Inoreaderまたは他のRSSリーダーを使用してこのサイトを購読することを推奨します。",
 	[Key.rssCopied]: "RSSリンクがクリップボードにコピーされました！",
 	[Key.rssCopyFailed]: "コピーに失敗しました。手動でリンクをコピーしてください",
-
-	// 最終更新時間カード
 	[Key.lastModifiedPrefix]: "最終更新日：",
 	[Key.lastModifiedOutdated]: "一部の内容が古くなっている可能性があります",
 	[Key.lastModifiedDaysAgo]: "{days}日前",
@@ -144,22 +120,14 @@ export const ja: Translation = {
 	[Key.hour]: "時",
 	[Key.minute]: "分",
 	[Key.second]: "秒",
-
-	// ページビュー統計
 	[Key.pageViews]: "閲覧数",
 	[Key.pageViewsLoading]: "読み込み中...",
 	[Key.pageViewsError]: "統計利用不可",
-
-	// ピン留め
 	[Key.pinned]: "ピン留め",
-
-	// 壁紙モード
 	[Key.wallpaperMode]: "壁紙モード",
 	[Key.wallpaperBannerMode]: "バナー壁紙",
 	[Key.wallpaperOverlayMode]: "全画面壁紙",
 	[Key.wallpaperNoneMode]: "単色背景",
-
-	// スポンサーページ
 	[Key.sponsor]: "スポンサー",
 	[Key.sponsorTitle]: "サポート",
 	[Key.sponsorDescription]:
@@ -175,8 +143,6 @@ export const ja: Translation = {
 	[Key.sponsorGoTo]: "スポンサーへ",
 	[Key.sponsorButton]: "サポート",
 	[Key.sponsorButtonText]: "この記事が役に立ったなら、サポートをお願いします！",
-
-	// サイト統計
 	[Key.siteStats]: "サイト統計",
 	[Key.siteStatsPostCount]: "記事",
 	[Key.siteStatsCategoryCount]: "カテゴリー",
@@ -186,8 +152,6 @@ export const ja: Translation = {
 	[Key.siteStatsLastUpdate]: "最終活動",
 	[Key.siteStatsDaysAgo]: "{days} 日前",
 	[Key.siteStatsDays]: "{days} 日",
-
-	// カレンダーコンポーネント
 	[Key.calendarSunday]: "日",
 	[Key.calendarMonday]: "月",
 	[Key.calendarTuesday]: "火",

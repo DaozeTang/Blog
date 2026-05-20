@@ -1,23 +1,18 @@
 import Key from "../i18nKey";
 import type { Translation } from "../translation";
-
 export const en: Translation = {
 	[Key.home]: "Home",
 	[Key.about]: "About",
 	[Key.archive]: "Archive",
 	[Key.search]: "Search",
 	[Key.other]: "Other",
-
 	[Key.tags]: "Tags",
 	[Key.categories]: "Categories",
 	[Key.recentPosts]: "Recent Posts",
 	[Key.postList]: "Post List",
 	[Key.tableOfContents]: "Table of Contents",
-
-	// Announcement
 	[Key.announcement]: "Announcement",
 	[Key.announcementClose]: "Close",
-
 	[Key.comments]: "Comments",
 	[Key.commentSection]: "Comments",
 	[Key.commentSubtitle]: "Share your thoughts and discuss with everyone",
@@ -33,28 +28,21 @@ export const en: Translation = {
 	[Key.untitled]: "Untitled",
 	[Key.uncategorized]: "Uncategorized",
 	[Key.noTags]: "No Tags",
-
 	[Key.wordCount]: "word",
 	[Key.wordsCount]: "words",
 	[Key.minuteCount]: "minute",
 	[Key.minutesCount]: "minutes",
 	[Key.postCount]: "post",
 	[Key.postsCount]: "posts",
-
 	[Key.themeColor]: "Theme Color",
-
 	[Key.lightMode]: "Light",
 	[Key.darkMode]: "Dark",
 	[Key.systemMode]: "System",
-
 	[Key.more]: "More",
-
 	[Key.author]: "Author",
 	[Key.publishedAt]: "Published at",
 	[Key.license]: "License",
 	[Key.bangumi]: "Bangumi",
-
-	// Bangumi Filter and Status Text
 	[Key.bangumiTitle]: "My Bangumi",
 	[Key.bangumiSubtitle]: "Record my ACG journey",
 	[Key.bangumiFilterAll]: "All",
@@ -83,20 +71,14 @@ export const en: Translation = {
 	[Key.bangumiCurrentPage]: "Page",
 	[Key.bangumiTotalPages]: "of",
 	[Key.bangumiPage]: "page",
-
-	// Bangumi Categories
 	[Key.bangumiCategoryBook]: "Book",
 	[Key.bangumiCategoryAnime]: "Anime",
 	[Key.bangumiCategoryMusic]: "Music",
 	[Key.bangumiCategoryGame]: "Game",
 	[Key.bangumiCategoryReal]: "Real",
-
-	// Bangumi Data Update
 	[Key.bangumiLastUpdated]: "Data updated at",
 	[Key.bangumiUpdatedAt]: "Build time",
 	[Key.bangumiDataStatic]: "Static data",
-
-	// Pagination
 	[Key.paginationFirst]: "First",
 	[Key.paginationPrev]: "Previous",
 	[Key.paginationNext]: "Next",
@@ -105,15 +87,11 @@ export const en: Translation = {
 	[Key.paginationOf]: "of",
 	[Key.paginationTotal]: ", Total",
 	[Key.paginationRecords]: " records",
-
-	// 404 Page
 	[Key.notFound]: "404",
 	[Key.notFoundTitle]: "Page Not Found",
 	[Key.notFoundDescription]:
 		"Sorry, the page you visited does not exist or has been moved.",
 	[Key.backToHome]: "Back to Home",
-
-	// RSS Page
 	[Key.rss]: "RSS Feed",
 	[Key.rssDescription]: "Subscribe to get latest updates",
 	[Key.rssSubtitle]:
@@ -134,8 +112,6 @@ export const en: Translation = {
 		"It is recommended to use Feedly, Inoreader or other RSS readers to subscribe to this site.",
 	[Key.rssCopied]: "RSS link copied to clipboard!",
 	[Key.rssCopyFailed]: "Copy failed, please copy the link manually",
-
-	// Last Modified Time Card
 	[Key.lastModifiedPrefix]: "Last updated on ",
 	[Key.lastModifiedOutdated]: "Some content may be outdated",
 	[Key.lastModifiedDaysAgo]: "{days} days ago",
@@ -145,22 +121,14 @@ export const en: Translation = {
 	[Key.hour]: "hour",
 	[Key.minute]: "minute",
 	[Key.second]: "second",
-
-	// Page Views Statistics
 	[Key.pageViews]: "Views",
 	[Key.pageViewsLoading]: "Loading...",
 	[Key.pageViewsError]: "Stats unavailable",
-
-	// Pinned
 	[Key.pinned]: "Pinned",
-
-	// Wallpaper Mode
 	[Key.wallpaperMode]: "Wallpaper Mode",
 	[Key.wallpaperBannerMode]: "Banner Wallpaper",
 	[Key.wallpaperOverlayMode]: "Full Screen Wallpaper",
 	[Key.wallpaperNoneMode]: "Solid Color Background",
-
-	// Sponsor Page
 	[Key.sponsor]: "Sponsor",
 	[Key.sponsorTitle]: "Support Me",
 	[Key.sponsorDescription]:
@@ -176,8 +144,6 @@ export const en: Translation = {
 	[Key.sponsorGoTo]: "Go to Sponsor",
 	[Key.sponsorButton]: "Support",
 	[Key.sponsorButtonText]: "If this article helped you, welcome to support!",
-
-	// Site Statistics
 	[Key.siteStats]: "Site Statistics",
 	[Key.siteStatsPostCount]: "Posts",
 	[Key.siteStatsCategoryCount]: "Categories",
@@ -187,8 +153,6 @@ export const en: Translation = {
 	[Key.siteStatsLastUpdate]: "Last Activity",
 	[Key.siteStatsDaysAgo]: "{days} days ago",
 	[Key.siteStatsDays]: "{days} days",
-
-	// Calendar Component
 	[Key.calendarSunday]: "Sun",
 	[Key.calendarMonday]: "Mon",
 	[Key.calendarTuesday]: "Tue",

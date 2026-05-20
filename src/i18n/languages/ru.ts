@@ -1,23 +1,18 @@
 import Key from "../i18nKey";
 import type { Translation } from "../translation";
-
 export const ru: Translation = {
 	[Key.home]: "Главная",
 	[Key.about]: "О нас",
 	[Key.archive]: "Архив",
 	[Key.search]: "Поиск",
 	[Key.other]: "Прочее",
-
 	[Key.tags]: "Теги",
 	[Key.categories]: "Категории",
 	[Key.recentPosts]: "Последние посты",
 	[Key.postList]: "Список постов",
 	[Key.tableOfContents]: "Содержание",
-
-	// Объявление
 	[Key.announcement]: "Объявление",
 	[Key.announcementClose]: "Закрыть",
-
 	[Key.comments]: "Комментарии",
 	[Key.commentSection]: "Комментарии",
 	[Key.commentSubtitle]: "Поделитесь своими мыслями и обсудите с остальными",
@@ -33,28 +28,21 @@ export const ru: Translation = {
 	[Key.untitled]: "Без названия",
 	[Key.uncategorized]: "Без категории",
 	[Key.noTags]: "Нет тегов",
-
 	[Key.wordCount]: "слово",
 	[Key.wordsCount]: "слова",
 	[Key.minuteCount]: "минута",
 	[Key.minutesCount]: "минуты",
 	[Key.postCount]: "пост",
 	[Key.postsCount]: "постов",
-
 	[Key.themeColor]: "Цвет темы",
-
 	[Key.lightMode]: "Светлая",
 	[Key.darkMode]: "Тёмная",
 	[Key.systemMode]: "Система",
-
 	[Key.more]: "Ещё",
-
 	[Key.author]: "Автор",
 	[Key.publishedAt]: "Опубликовано",
 	[Key.license]: "Лицензия",
 	[Key.bangumi]: "Бангуми",
-
-	// Фильтр и статус Бангуми текст
 	[Key.bangumiTitle]: "Мой план группы",
 	[Key.bangumiSubtitle]: "Запись моего аниме путешествия",
 	[Key.bangumiFilterAll]: "Все",
@@ -83,20 +71,14 @@ export const ru: Translation = {
 	[Key.bangumiCurrentPage]: "Страница",
 	[Key.bangumiTotalPages]: "из",
 	[Key.bangumiPage]: "страница",
-
-	// Категории Бангуми
 	[Key.bangumiCategoryBook]: "Книга",
 	[Key.bangumiCategoryAnime]: "Аниме",
 	[Key.bangumiCategoryMusic]: "Музыка",
 	[Key.bangumiCategoryGame]: "Игра",
 	[Key.bangumiCategoryReal]: "Реальный",
-
-	// Обновление данных Бангуми
 	[Key.bangumiLastUpdated]: "Данные обновлены",
 	[Key.bangumiUpdatedAt]: "Время сборки",
 	[Key.bangumiDataStatic]: "Статические данные",
-
-	// Пагинация
 	[Key.paginationFirst]: "Первая",
 	[Key.paginationPrev]: "Предыдущая",
 	[Key.paginationNext]: "Следующая",
@@ -105,15 +87,11 @@ export const ru: Translation = {
 	[Key.paginationOf]: "из",
 	[Key.paginationTotal]: ", всего",
 	[Key.paginationRecords]: " записей",
-
-	// 404 Страница
 	[Key.notFound]: "404",
 	[Key.notFoundTitle]: "Страница не найдена",
 	[Key.notFoundDescription]:
 		"Извините, страница, которую вы посетили, не существует или была перемещена.",
 	[Key.backToHome]: "Вернуться на главную",
-
-	// RSS Страница
 	[Key.rss]: "RSS лента",
 	[Key.rssDescription]: "Подпишитесь, чтобы получать последние обновления",
 	[Key.rssSubtitle]:
@@ -135,8 +113,6 @@ export const ru: Translation = {
 	[Key.rssCopied]: "RSS ссылка скопирована в буфер обмена!",
 	[Key.rssCopyFailed]:
 		"Ошибка копирования, пожалуйста, скопируйте ссылку вручную",
-
-	// Последнее изменение
 	[Key.lastModifiedPrefix]: "Последнее обновление: ",
 	[Key.lastModifiedOutdated]: "Некоторый контент может быть устаревшим",
 	[Key.lastModifiedDaysAgo]: "{days} дней назад",
@@ -146,22 +122,14 @@ export const ru: Translation = {
 	[Key.hour]: "час",
 	[Key.minute]: "минута",
 	[Key.second]: "секунда",
-
-	// Статистика просмотров
 	[Key.pageViews]: "Просмотры",
 	[Key.pageViewsLoading]: "Загрузка...",
 	[Key.pageViewsError]: "Статистика недоступна",
-
-	// Закреплено
 	[Key.pinned]: "Закреплено",
-
-	// Режим обоев
 	[Key.wallpaperMode]: "Режим обоев",
 	[Key.wallpaperBannerMode]: "Баннер обои",
 	[Key.wallpaperOverlayMode]: "Обои на весь экран",
 	[Key.wallpaperNoneMode]: "Однотонный фон",
-
-	// Страница спонсоров
 	[Key.sponsor]: "Спонсор",
 	[Key.sponsorTitle]: "Поддержать меня",
 	[Key.sponsorDescription]:
@@ -178,8 +146,6 @@ export const ru: Translation = {
 	[Key.sponsorButton]: "Поддержка",
 	[Key.sponsorButtonText]:
 		"Если эта статья вам помогла, добро пожаловать поддержать!",
-
-	// Статистика сайта
 	[Key.siteStats]: "Статистика сайта",
 	[Key.siteStatsPostCount]: "Статьи",
 	[Key.siteStatsCategoryCount]: "Категории",
@@ -189,8 +155,6 @@ export const ru: Translation = {
 	[Key.siteStatsLastUpdate]: "Последняя активность",
 	[Key.siteStatsDaysAgo]: "{days} дней назад",
 	[Key.siteStatsDays]: "{days} дней",
-
-	// Компонент календаря
 	[Key.calendarSunday]: "Вс",
 	[Key.calendarMonday]: "Пн",
 	[Key.calendarTuesday]: "Вт",
