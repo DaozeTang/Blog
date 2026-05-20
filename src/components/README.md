@@ -11,6 +11,7 @@
 - `Navbar.astro` - 导航栏组件
 - `PostPage.astro` - 文章页面布局组件
 - `ConfigCarrier.astro` - 配置载体组件
+- `GlobalStyles.astro` - 全局样式组件
 - `SideBar.astro` - 侧边栏组件（响应式布局）
 - `LeftSideBar.astro` - 左侧边栏组件
 - `RightSideBar.astro` - 右侧边栏组件
@@ -123,3 +124,4 @@ Bangumi 番组追踪页面的相关组件，用于展示和管理用户的动漫
 8. **pages/** - 页面特定组件
 9. **effects/** - 页面特效和动画
 ---
+

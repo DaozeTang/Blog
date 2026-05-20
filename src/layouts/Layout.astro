@@ -18,7 +18,10 @@ import { getDefaultBackground, isHomePage } from "@/utils/layout-utils";
 import { url } from "@/utils/url-utils";
 
 import "katex/dist/katex.css";
-import "@/styles/main.css";
+import "@/styles/navbar.css";
+import "@/styles/fancybox-custom.css";
+import "@/styles/layout-styles.css";
+import "@/styles/waves.css";
 
 interface Props {
 	title?: string;
@@ -37,7 +40,8 @@ let { title, banner, description, lang, setOGTypeArticle, postSlug } =
 // so use Swup hooks instead to change the height immediately when a link is clicked
 const isHomePageCheck = isHomePage(Astro.url.pathname);
 
-// defines global css variables in the root layout
+// defines global css variables
+// why doing this in Layout instead of GlobalStyles: https://github.com/withastro/astro/issues/6728#issuecomment-1502203757
 const configHue = siteConfig.themeColor.hue;
 
 // 获取导航栏透明模式配置

@@ -252,8 +252,7 @@ html.dark {
 /* by @SirTamago
 Make the emoji component display correctly when there are too many emoji packs
 */
-#tcomment .card-base,
-.twikoo .card-base {
+.card-base {
   overflow: visible;
 }
 
@@ -294,4 +293,5 @@ Make the emoji component display correctly when there are too many emoji packs
   justify-content: center !important;
 
 }
+
 
