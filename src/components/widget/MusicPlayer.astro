@@ -19,7 +19,7 @@ const processedLocalPlaylist =
 	config.mode === "local" && config.local?.playlist
 		? config.local.playlist.map((song) => {
 				const isFullUrl = (path: string): boolean => {
-					return /^https?:\/\//.test(path);
+					return /^https?:\/\
 				};
 
 				return {
