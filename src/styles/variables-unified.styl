@@ -34,19 +34,10 @@
   --deep-text: oklch(0.25 0.02 var(--hue));
   --title-active: oklch(0.6 0.1 var(--hue));
   
-  --line-divider: rgba(15, 23, 42, 0.06);
-  --line-color: rgba(15, 23, 42, 0.08);
-  --line-color-hover: rgba(15, 23, 42, 0.14);
-  --meta-divider: rgba(15, 23, 42, 0.18);
-  --content-meta: rgba(15, 23, 42, 0.7);
-
-  /* 文本辅助 */
-  --text-primary: oklch(0.20 0.02 var(--hue));
-  --text-secondary: rgba(15, 23, 42, 0.65);
-  --text-tertiary: rgba(15, 23, 42, 0.45);
-
-  /* 焦点环 */
-  --focus-ring: 0 0 0 3px oklch(0.70 0.14 var(--hue) / 0.35);
+  --line-divider: rgba(0, 0, 0, 0.08);
+  --line-color: rgba(0, 0, 0, 0.1);
+  --meta-divider: rgba(0, 0, 0, 0.2);
+  --content-meta: rgba(0, 0, 0, 0.7);
   
   --inline-code-bg: var(--btn-regular-bg);
   --inline-code-color: var(--btn-content);
@@ -127,17 +118,10 @@
   --btn-card-bg-hover: oklch(0.3 0.03 var(--hue));
   --btn-card-bg-active: oklch(0.35 0.035 var(--hue));
   
-  --line-divider: rgba(255, 255, 255, 0.07);
-  --line-color: rgba(255, 255, 255, 0.10);
-  --line-color-hover: rgba(255, 255, 255, 0.18);
-  --meta-divider: rgba(255, 255, 255, 0.18);
+  --line-divider: rgba(255, 255, 255, 0.08);
+  --line-color: rgba(255, 255, 255, 0.1);
+  --meta-divider: rgba(255, 255, 255, 0.2);
   --content-meta: rgba(255, 255, 255, 0.6);
-
-  --text-primary: oklch(0.92 0.01 var(--hue));
-  --text-secondary: rgba(255, 255, 255, 0.62);
-  --text-tertiary: rgba(255, 255, 255, 0.40);
-
-  --focus-ring: 0 0 0 3px oklch(0.75 0.14 var(--hue) / 0.45);
   
   --selection-bg: oklch(0.40 0.08 var(--hue));
   --codeblock-bg: oklch(0.17 0.015 var(--hue));
@@ -256,38 +240,18 @@
 
 /* ===== 阴影变量 ===== */
 :root {
-  /* 基础阴影 - 现代化多层柔和阴影 */
-  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
-  --shadow-md: 0 2px 4px rgba(15, 23, 42, 0.04), 0 4px 8px rgba(15, 23, 42, 0.04);
-  --shadow-lg: 0 4px 10px rgba(15, 23, 42, 0.05), 0 8px 24px rgba(15, 23, 42, 0.06);
-  --shadow-xl: 0 8px 16px rgba(15, 23, 42, 0.06), 0 16px 40px rgba(15, 23, 42, 0.08);
-  --shadow-2xl: 0 12px 24px rgba(15, 23, 42, 0.08), 0 24px 60px rgba(15, 23, 42, 0.10);
-
-  /* 卡片层级阴影 */
-  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 6px rgba(15, 23, 42, 0.04);
-  --shadow-card-hover: 0 4px 8px rgba(15, 23, 42, 0.06), 0 12px 28px rgba(15, 23, 42, 0.08);
-
+  /* 基础阴影 */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.25);
+  
   /* 特殊阴影 */
-  --shadow-navbar: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 16px rgba(15, 23, 42, 0.06);
-  --shadow-navbar-dark: 0 1px 2px rgba(0, 0, 0, 0.2), 0 4px 16px rgba(0, 0, 0, 0.18);
-  --shadow-button: 0 2px 6px rgba(15, 23, 42, 0.10), 0 6px 14px rgba(15, 23, 42, 0.06);
-  --shadow-button-dark: 0 2px 6px rgba(0, 0, 0, 0.30), 0 6px 14px rgba(0, 0, 0, 0.20);
-
-  /* 主题色阴影 (用于按钮强调态) */
-  --shadow-primary: 0 4px 14px oklch(0.70 0.14 var(--hue) / 0.25);
-}
-
-/* 暗色主题阴影覆写 */
-:root.dark {
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.30);
-  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.30), 0 4px 8px rgba(0, 0, 0, 0.25);
-  --shadow-lg: 0 4px 10px rgba(0, 0, 0, 0.35), 0 8px 24px rgba(0, 0, 0, 0.30);
-  --shadow-xl: 0 8px 16px rgba(0, 0, 0, 0.40), 0 16px 40px rgba(0, 0, 0, 0.35);
-  --shadow-2xl: 0 12px 24px rgba(0, 0, 0, 0.45), 0 24px 60px rgba(0, 0, 0, 0.40);
-
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.25), 0 1px 6px rgba(0, 0, 0, 0.20);
-  --shadow-card-hover: 0 4px 8px rgba(0, 0, 0, 0.35), 0 12px 28px rgba(0, 0, 0, 0.30);
-  --shadow-primary: 0 4px 14px oklch(0.75 0.14 var(--hue) / 0.30);
+  --shadow-navbar: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --shadow-navbar-dark: 0 4px 16px rgba(0, 0, 0, 0.2);
+  --shadow-button: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-button-dark: 0 4px 12px rgba(255, 255, 255, 0.1);
 }
 
 /* ===== 边框半径变量 ===== */

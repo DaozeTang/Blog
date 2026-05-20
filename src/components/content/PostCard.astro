@@ -84,13 +84,11 @@ const { remarkPluginFrontmatter } = await render(entry);
 
     <a
       href={url}
-      class="transition group w-full block font-bold mb-3 text-3xl text-90 tracking-tight leading-tight
+      class="transition group w-full block font-bold mb-3 text-3xl text-90
         hover:text-[var(--primary)] dark:hover:text-[var(--primary)]
         active:text-[var(--title-active)] dark:active:text-[var(--title-active)]
-        before:w-1 before:h-5 before:rounded-full before:bg-[var(--primary)]
-        before:absolute before:top-[35px] before:left-[18px] before:hidden md:before:block
-        before:transition-all before:duration-300
-        hover:before:h-7 hover:before:-translate-y-1"
+        before:w-1 before:h-5 before:rounded-md before:bg-[var(--primary)]
+        before:absolute before:top-[35px] before:left-[18px] before:hidden md:before:block"
     >
       <!--       {
         pinned && (
@@ -176,23 +174,21 @@ const { remarkPluginFrontmatter } = await render(entry);
           "md:w-[var(--coverWidth)] relative md:absolute md:top-3 md:bottom-3 md:right-3 rounded-xl overflow-hidden active:scale-95",
         ]}
       >
-        <div class="absolute pointer-events-none z-10 w-full h-full group-hover:bg-black/40 group-active:bg-black/55 transition-colors duration-300" />
+        <div class="absolute pointer-events-none z-10 w-full h-full group-hover:bg-black/30 group-active:bg-black/50 transition" />
         <div class="absolute pointer-events-none z-20 w-full h-full flex items-center justify-center ">
           <Icon
             name="material-symbols:chevron-right-rounded"
-            class="transition-all duration-300 opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 text-white text-5xl drop-shadow-lg"
+            class="transition opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 text-white text-5xl"
           />
         </div>
-        <div class="w-full h-full overflow-hidden">
-          <RandomCoverImage
-            src={processedImage}
-            basePath={getFileDirFromPath(entry.filePath || '')}
-            alt="Cover Image of the Post"
-            class="w-full h-full transition-transform duration-500 ease-out group-hover:scale-110"
-            seed={entry.id}
-            preview={true}
-          />
-        </div>
+        <RandomCoverImage
+          src={processedImage}
+          basePath={getFileDirFromPath(entry.filePath || '')}
+          alt="Cover Image of the Post"
+          class="w-full h-full"
+          seed={entry.id}
+          preview={true}
+        />
       </a>
     )
   }
