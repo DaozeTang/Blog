@@ -5,6 +5,8 @@
 @import './transition.css';
 /* 导入统一导航栏样式 */
 @import './navbar.css';
+/* 视觉增强层 */
+@import './visual-enhancements.css';
 
 
 @tailwind base;

@@ -53,7 +53,7 @@ const { remarkPluginFrontmatter } = await render(entry);
 
 <div
   class:list={[
-    "card-base flex flex-col-reverse md:flex-col w-full rounded-[var(--radius-large)] overflow-hidden relative",
+    "post-card-container card-base flex flex-col-reverse md:flex-col w-full rounded-[var(--radius-large)] overflow-hidden relative",
     className,
   ]}
   style={style}
@@ -84,7 +84,7 @@ const { remarkPluginFrontmatter } = await render(entry);
 
     <a
       href={url}
-      class="transition group w-full block font-bold mb-3 text-3xl text-90
+      class="post-title-link transition group w-full block font-bold mb-3 text-3xl text-90
         hover:text-[var(--primary)] dark:hover:text-[var(--primary)]
         active:text-[var(--title-active)] dark:active:text-[var(--title-active)]
         before:w-1 before:h-5 before:rounded-md before:bg-[var(--primary)]
@@ -146,7 +146,7 @@ const { remarkPluginFrontmatter } = await render(entry);
             <a
               href={getTagUrl(tag)}
               aria-label={`View all posts with the ${tag.trim()} tag`}
-              class="btn-regular h-6 text-xs px-2 py-1 rounded-md border border-[var(--line-divider)]
+              class="post-tag-pill btn-regular h-6 text-xs px-2 py-1 rounded-md border border-[var(--line-divider)]
                     transition-all duration-200 hover:scale-105 active:scale-95"
             >
               #{tag.trim()}
