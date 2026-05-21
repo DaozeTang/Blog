@@ -102,22 +102,7 @@ export default defineConfig({
 		}),
 		svelte(),
 		sitemap({
-			filter: (page) => {
-				const url = new URL(page);
-				const pathname = url.pathname;
-
-				if (pathname === "/sponsor/" && !siteConfig.pages.sponsor) {
-					return false;
-				}
-				if (pathname === "/guestbook/" && !siteConfig.pages.guestbook) {
-					return false;
-				}
-				if (pathname === "/bangumi/" && !siteConfig.pages.bangumi) {
-					return false;
-				}
-
-				return true;
-			},
+			filter: () => true,
 		}),
 		searchIndexer(),
 		mdx(),
