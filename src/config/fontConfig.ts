@@ -1,7 +1,7 @@
 export const fontConfig = {
 	enable: true,
 	preload: true,
-	selected: ["inter"],
+	selected: ["system"],
 	fonts: {
 		system: {
 			id: "system",
