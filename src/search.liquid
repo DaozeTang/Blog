@@ -1,0 +1,37 @@
+---
+layout: base.liquid
+title: Search
+permalink: /search/
+eleventyExcludeFromCollections: true
+---
+
+<header class="page-header">
+    <p class="page-header-kicker kicker">Full-text search</p>
+    <h1 class="page-header-title">Search<span class="title-dot">.</span></h1>
+    <p class="page-header-subtitle">Search every post on this blog. The index is built at deploy time by
+        Pagefind — no third-party service involved.</p>
+</header>
+
+<section class="section search-section">
+    <link href="/pagefind/pagefind-ui.css" rel="stylesheet">
+    <div id="search" class="pagefind-box"></div>
+    <script src="/pagefind/pagefind-ui.js"></script>
+    <script>
+        window.addEventListener("DOMContentLoaded", function () {
+            if (typeof PagefindUI === "undefined") {
+                document.getElementById("search").innerHTML =
+                    '<p class="search-unavailable">Search index not available in this build. Run <code>npm run build</code> to generate it.</p>';
+                return;
+            }
+            new PagefindUI({
+                element: "#search",
+                showSubResults: true,
+                showImages: false,
+                autofocus: true,
+                translations: {
+                    placeholder: "Search posts…"
+                }
+            });
+        });
+    </script>
+</section>

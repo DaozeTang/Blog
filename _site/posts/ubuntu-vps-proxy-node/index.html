@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Ubuntu VPS自建代理节点。">
+<meta name="keywords" content="Blog, Deep Learning, Artificial Intelligence, Computer Vision, Object Detection">
+<meta name="author" content="Daoze Tang">
+<title>Ubuntu VPS自建代理节点 - Blog - Daoze Tang</title>
+
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="apple-touch-icon" href="../../assets/favicon.png">
+<link rel="canonical" href="https://blog.dztang.net/posts/ubuntu-vps-proxy-node/">
+<link rel="alternate" type="application/rss+xml" title="Blog - Daoze Tang" href="https://blog.dztang.net/rss.xml">
+<link rel="sitemap" href="../../sitemap.xml">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Blog - Daoze Tang">
+<meta property="og:title" content="Ubuntu VPS自建代理节点 - Blog - Daoze Tang">
+<meta property="og:description" content="Ubuntu VPS自建代理节点。">
+<meta property="og:url" content="https://blog.dztang.net/posts/ubuntu-vps-proxy-node/">
+<meta property="og:image" content="https://blog.dztang.net/assets/avatar.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" id="meta-theme-color" content="#f7f4ec">
+
+<script>
+    (function () {
+        var mode = "system";
+        try {
+            var stored = localStorage.getItem("theme");
+            if (stored === "light" || stored === "dark" || stored === "system") mode = stored;
+        } catch (e) {}
+        var theme = mode === "system"
+            ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+            : mode;
+        var root = document.documentElement;
+        root.setAttribute("data-theme", theme);
+        root.setAttribute("data-theme-mode", mode);
+        var meta = document.getElementById("meta-theme-color");
+        if (meta) meta.setAttribute("content", theme === "dark" ? "#14120e" : "#f7f4ec");
+    })();
+</script>
+
+
+
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500..900;1,9..144,500..900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..600&display=swap" rel="stylesheet">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous">
+
+
+<link rel="stylesheet" href="../../styles/site.css">
+
+</head>
+<body>
+    
+
+    <div class="canvas-glow" aria-hidden="true"></div>
+    <div class="canvas-grain" aria-hidden="true"></div>
+
+    <header class="site-header" id="site-header">
+    <div class="shell">
+        <nav class="topbar" id="topbar" aria-label="Main navigation">
+            <a class="brand" href="../../index.html">
+                <span class="brand-seal" aria-hidden="true">DT</span>
+                <span class="brand-name">Daoze Tang</span>
+            </a>
+
+            <div class="nav-links" id="site-nav">
+                
+                <a class="nav-link " href="../../index.html">Posts</a>
+                
+                <a class="nav-link " href="../../archive/index.html">Archive</a>
+                
+                
+                <a class="nav-link nav-link-ext" href="https://dztang.net/" target="_blank" rel="noopener">Homepage<i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+                
+            </div>
+
+            <div class="nav-actions">
+                <a class="theme-toggle nav-search-btn" id="nav-search-btn" href="../../search/index.html" aria-label="Search posts">
+                    <i class="fas fa-magnifying-glass" aria-hidden="true"></i>
+                </a>
+                <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Toggle dark mode" aria-pressed="false">
+                    <i class="fas fa-moon" aria-hidden="true"></i>
+                </button>
+                <button class="nav-burger" type="button" id="nav-burger" aria-label="Toggle navigation" aria-expanded="false" aria-controls="site-nav">
+                    <i class="fas fa-bars" aria-hidden="true"></i>
+                </button>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<dialog class="search-dialog" id="search-dialog">
+    <button class="dialog-close" type="button" data-dialog-close aria-label="Close search">&times;</button>
+    <div class="pagefind-box" id="navbar-search"></div>
+</dialog>
+
+
+    <main class="page-main">
+        <div class="shell">
+            <article class="post" data-pagefind-body>
+    <header class="page-header post-header">
+        
+        <p class="page-header-kicker kicker"><a href="../../categories/linux-运维/index.html" data-pagefind-ignore>Linux 运维</a></p>
+        
+        <h1 class="page-header-title post-title">Ubuntu VPS自建代理节点</h1>
+        <div class="page-header-meta" data-pagefind-ignore>
+            <span class="page-header-stat"><i class="far fa-calendar" aria-hidden="true"></i> 2026-04-10</span>
+            
+            <span class="page-header-stat"><i class="far fa-clock" aria-hidden="true"></i> 5 min read</span>
+            <span class="page-header-stat"><i class="far fa-file-lines" aria-hidden="true"></i> 1,338 chars</span>
+            
+        </div>
+        
+        <div class="post-tags" data-pagefind-ignore>
+            
+            <a class="post-chip" href="../../tags/vps/index.html"><span class="post-chip-hash">#</span>VPS</a>
+            
+            <a class="post-chip" href="../../tags/代理节点/index.html"><span class="post-chip-hash">#</span>代理节点</a>
+            
+            <a class="post-chip" href="../../tags/ubuntu/index.html"><span class="post-chip-hash">#</span>Ubuntu</a>
+            
+        </div>
+        
+    </header>
+
+    
+    <div class="post-body no-toc">
+        <div class="prose">
+            <ol>
+<li>更新系统并安装基础组件</li>
+</ol>
+<p>进入服务器终端，依次执行以下命令：</p>
+<pre><code>sudo -i
+apt update &amp;&amp; apt upgrade -y
+apt install curl wget -y
+</code></pre>
+<ol start="2">
+<li>一键安装 3x-ui 面板</li>
+</ol>
+<p>运行官方推荐的一键安装脚本：</p>
+<pre><code>bash &lt;(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
+</code></pre>
+<p>安装过程中，脚本会暂停并提示设置面板的访问端口（建议设置一个大于10000的不常用端口，设置好后需要在防火墙放行端口）。</p>
+<p>安装完成后，会显示随机生成的用户名、密码、以及后台管理网站入口。</p>
+<ol start="3">
+<li>配置选项</li>
+</ol>
+<p>在服务器终端中，输入以下命令呼出 3x-ui 管理菜单：</p>
+<pre><code>x-ui
+</code></pre>
+<p>输入对应选项，对默认随机生成的账户密码进行修改并启动BBR加速。</p>
+<ol start="4">
+<li>登录面板并创建节点</li>
+</ol>
+<p>打开浏览器，访问后台管理入口，登陆账户。</p>
+<p>点击左侧菜单的“入站列表 (Inbounds)”，然后点击“添加入站”。</p>
+<p>推荐的防阻断配置：</p>
+<pre><code>协议 (Protocol)：vless
+传输配置 (Network)：tcp
+安全性 (Security)：reality （安全性设置中点击“Get New Cert”）
+</code></pre>
+<p>上述配置设置完成后，其余选项保持默认，直接点击“创建”。</p>
+<p>在列表中找到刚创建的节点，点击操作栏的“查看”，然后复制节点分享链接（以 vless:// 开头的一长串字符）。将这串链接直接导入本地的客户端软件（V2rayN）中即可使用。</p>
+<ol start="5">
+<li>使用 Clash Verge 连接 Vless 节点</li>
+</ol>
+<p>Clash Verge 连接 Vless 节点需要使用 [.yaml] 配置文件，文件名任意。按照如下模板将 vless 链接中的参数手动填入模板中或使用 Gemini 等 AI 帮忙转换填写。</p>
+<pre><code>mode: rule
+log-level: info
+allow-lan: false
+
+# 代理节点配置区域
+proxies:
+  - name: &quot;My-VLESS-Node&quot;          # [自定义] 节点名称，可以随便改（如 &quot;US-Node-1&quot;）
+    type: vless
+    server: YOUR_SERVER_IP         # [必填] 替换为服务器 IP 或域名
+    port: YOUR_PORT                # [必填] 替换为节点端口 (纯数字，如 443)
+    uuid: YOUR_UUID                # [必填] 替换为 UUID
+    network: tcp                   # 传输协议，通常为 tcp, ws 或 grpc
+    tls: true
+    udp: true
+    servername: YOUR_SNI           # [必填] 替换为伪装域名 (SNI，如 aws.amazon.com)
+    client-fingerprint: chrome     # 客户端指纹，建议保留 chrome 或 safari
+    reality-opts:                  # Reality 专属配置 (如果新节点不是 Reality 协议，删除这两行)
+      public-key: YOUR_PUBLIC_KEY  # [必填] 替换为 Public Key (pbk)
+      short-id: YOUR_SHORT_ID      # [选填] 替换为 Short Id (sid)，如果没有则删除此行
+
+# 代理组配置区域
+proxy-groups:
+  - name: &quot;PROXIES&quot;
+    type: select
+    proxies:
+      - &quot;My-VLESS-Node&quot;            # [注意] 这里的名字必须和上面 proxies 里的 name 一模一样
+
+# 路由规则区域 (已配置绕过大陆)
+rules:
+  # 1. 局域网及本地流量直连 (防止影响本地打印机、NAS 等)
+  - GEOSITE,private,DIRECT
+  - GEOIP,lan,DIRECT,no-resolve
+  
+  # 2. 绕过大陆网站
+  - GEOSITE,cn,DIRECT
+  
+  # 3. 绕过大陆 IP
+  - GEOIP,cn,DIRECT
+  
+  # 4. 其他所有流量走代理组
+  - MATCH,PROXIES
+</code></pre>
+<p>填写好配置文件后，将配置文件直接拖入 Clash Verge 的 [订阅] UI 页面中，选中后即可同其他订阅链接般正常使用。</p>
+<p>实测，Cloudflare WARP 的 IP 无法解锁服务。如果需要访问流媒体或AI，需要选择原生纯净 IP 的 VPS 或使用 DNS解锁 / 静态ISP代理 等方式。</p>
+<ol start="6">
+<li>补充 Hysteria 2 UDP 链接快速部署方案</li>
+</ol>
+<p>使用一键安装脚本跟随引导部署：</p>
+<pre><code>bash &lt;(curl -fsSL https://raw.githubusercontent.com/Misaka-blog/hysteria-install/main/hy2/hysteria.sh)
+</code></pre>
+<p>在VPS防火墙上将对应端口的 TCP、UDP 协议放行。</p>
+<p>在配置文件中添加节点的对应信息。</p>
+<pre><code>mode: rule
+log-level: info
+allow-lan: false
+
+# 代理节点配置区域
+proxies:
+  # ---------------- 节点 1：原来的 VLESS-Reality 节点 ----------------
+  - name: &quot;My-VLESS-Node&quot;          # [自定义] 节点名称，可以随便改（如 &quot;US-Node-1&quot;）
+    type: vless
+    server: YOUR_SERVER_IP         # [必填] 替换为服务器 IP 或域名
+    port: YOUR_PORT                # [必填] 替换为节点端口 (纯数字，如 443)
+    uuid: YOUR_UUID                # [必填] 替换为 UUID
+    network: tcp                   # 传输协议，通常为 tcp, ws 或 grpc
+    tls: true
+    udp: true
+    servername: YOUR_SNI           # [必填] 替换为伪装域名 (SNI，如 aws.amazon.com)
+    client-fingerprint: chrome     # 客户端指纹，建议保留 chrome 或 safari
+    reality-opts:                  # Reality 专属配置 (如果新节点不是 Reality 协议，删除这两行)
+      public-key: YOUR_PUBLIC_KEY  # [必填] 替换为 Public Key (pbk)
+      short-id: YOUR_SHORT_ID      # [选填] 替换为 Short Id (sid)，如果没有则删除此行
+
+  # ---------------- 节点 2：新增的 Hysteria 2 节点 ----------------
+  - name: &quot;My-Hysteria-2-Node&quot;     # [自定义] 节点名称，可以随便改（如 &quot;US-Node-1&quot;）
+    type: hysteria2
+    server: YOUR_SERVER_IP         # [必填] 替换为服务器 IP 或域名
+    port: YOUR_PORT                # [必填] 替换为节点端口 (纯数字，如 443)
+    password: &quot;YOUR_PASSWORD&quot;      # [必填] 替换为节点密码
+    sni: YOUR_SNI                  # [必填] 替换为伪装域名 (SNI，如 aws.amazon.com)
+    skip-cert-verify: true         # 对应 insecure=1 (允许自签证书)
+    # Hysteria 建议配置上下行带宽(Mbps)，可以根据你的实际宽带调整，这里默认填宽带500M
+    up: 100
+    down: 500
+
+# 代理组配置区域
+proxy-groups:
+  - name: &quot;PROXIES&quot;
+    type: select
+    proxies:
+      - &quot;My-Hysteria-2-Node&quot;       # 把 Hysteria2 加进来 (放第一位方便优先选)
+      - &quot;My-VLESS-Node&quot;            # [注意] 这里的名字必须和上面 proxies 里的 name 一模一样
+
+# 路由规则区域 (已配置绕过大陆)
+rules:
+  # 1. 局域网及本地流量直连 (防止影响本地打印机、NAS 等)
+  - GEOSITE,private,DIRECT
+  - GEOIP,lan,DIRECT,no-resolve
+  
+  # 2. 绕过大陆网站
+  - GEOSITE,cn,DIRECT
+  
+  # 3. 绕过大陆 IP
+  - GEOIP,cn,DIRECT
+  
+  # 4. 其他所有流量走代理组
+  - MATCH,PROXIES
+</code></pre>
+<p>导入软件后选择连接即可。</p>
+
+        </div>
+        
+    </div>
+
+    <footer class="post-footer" data-pagefind-ignore>
+        
+        
+        
+        <nav class="post-nav" aria-label="Adjacent posts">
+            
+            <a class="post-nav-card panel" href="../../posts/ubuntu-vps-enable-bbr/index.html">
+                <span class="post-nav-label"><i class="fas fa-arrow-left" aria-hidden="true"></i> Newer</span>
+                <span class="post-nav-title">Ubuntu VPS开启BBR加速</span>
+            </a>
+            
+            
+            <a class="post-nav-card panel post-nav-next" href="../../posts/systemctl-user-daemon-reload-error/index.html">
+                <span class="post-nav-label">Older <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+                <span class="post-nav-title">systemctl --user daemon-reload报错</span>
+            </a>
+            
+        </nav>
+        
+    </footer>
+</article>
+
+<section class="post-comments" id="comments" data-pagefind-ignore>
+    <div class="section-head">
+        <h2 class="section-title">Comments<span class="title-dot">.</span></h2>
+        <span class="section-rule" aria-hidden="true"></span>
+    </div>
+    <div id="giscus-container"></div>
+    <script>
+        (function () {
+            var container = document.getElementById("giscus-container");
+            if (!container) return;
+            var isDark = document.documentElement.getAttribute("data-theme") === "dark";
+            var s = document.createElement("script");
+            var attrs = {
+                "src": "https://giscus.app/client.js",
+                "data-repo": "DaozeTang/Blog",
+                "data-repo-id": "R_kgDOQkCvvA",
+                "data-category": "Announcements",
+                "data-category-id": "DIC_kwDOQkCvvM4Czis6",
+                "data-mapping": "pathname",
+                "data-strict": "0",
+                "data-reactions-enabled": "1",
+                "data-emit-metadata": "1",
+                "data-input-position": "top",
+                "data-theme": isDark ? "noborder_dark" : "noborder_light",
+                "data-lang": "en",
+                "data-loading": "lazy",
+                "crossorigin": "anonymous"
+            };
+            for (var key in attrs) s.setAttribute(key, attrs[key]);
+            s.async = true;
+            container.appendChild(s);
+        })();
+    </script>
+</section>
+
+        </div>
+    </main>
+
+    <footer class="site-footer">
+    <div class="shell">
+        <div class="footer-base">
+            <div class="footer-note"><code>assert os.getenv("Smoking", "False") != "True", "Cigarettes are a drug, not a feature."</code></div>
+            <div class="footer-meta">
+                <span>&copy; 2022&ndash;2026 Daoze Tang</span>
+                <span class="sep" aria-hidden="true">&#10038;</span>
+                <a href="../../rss.xml">RSS</a>
+                <span class="sep" aria-hidden="true">&#10038;</span>
+                <a href="../../sitemap.xml">Sitemap</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <script src="../../scripts/site.js" defer></script>
+</body>
+</html>

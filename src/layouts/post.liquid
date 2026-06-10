@@ -1,0 +1,107 @@
+---
+layout: base.liquid
+ogType: article
+---
+<article class="post" data-pagefind-body>
+    <header class="page-header post-header">
+        {% if category and category != "" %}
+        <p class="page-header-kicker kicker"><a href="/categories/{{ category | ghSlug }}/" data-pagefind-ignore>{{ category }}</a></p>
+        {% endif %}
+        <h1 class="page-header-title post-title">{{ title }}</h1>
+        <div class="page-header-meta" data-pagefind-ignore>
+            <span class="page-header-stat"><i class="far fa-calendar" aria-hidden="true"></i> {{ published | readableDate }}</span>
+            {% if updated %}
+            <span class="page-header-stat"><i class="fas fa-rotate" aria-hidden="true"></i> Updated {{ updated | readableDate }}</span>
+            {% endif %}
+            <span class="page-header-stat"><i class="far fa-clock" aria-hidden="true"></i> {{ content | readingTime }}</span>
+            <span class="page-header-stat"><i class="far fa-file-lines" aria-hidden="true"></i> {{ content | wordCount }} chars</span>
+            {% if pinned %}
+            <span class="page-header-stat"><i class="fas fa-thumbtack" aria-hidden="true"></i> Pinned</span>
+            {% endif %}
+        </div>
+        {% if tags.size > 0 %}
+        <div class="post-tags" data-pagefind-ignore>
+            {% for tag in tags %}
+            <a class="post-chip" href="/tags/{{ tag | ghSlug }}/"><span class="post-chip-hash">#</span>{{ tag }}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </header>
+
+    {% capture tocHtml %}{{ content | tocList }}{% endcapture %}
+    <div class="post-body{% if tocHtml == '' %} no-toc{% endif %}">
+        <div class="prose">
+            {{ content }}
+        </div>
+        {% if tocHtml != '' %}
+        <aside class="post-toc" aria-label="Table of contents" data-pagefind-ignore>
+            <nav class="toc-panel">
+                <div class="toc-label">Contents</div>
+                <ol class="toc-list" id="toc-list">
+                    {{ tocHtml }}
+                </ol>
+            </nav>
+        </aside>
+        {% endif %}
+    </div>
+
+    <footer class="post-footer" data-pagefind-ignore>
+        {% assign newerPost = collections.posts | getPreviousCollectionItem %}
+        {% assign olderPost = collections.posts | getNextCollectionItem %}
+        {% if newerPost or olderPost %}
+        <nav class="post-nav" aria-label="Adjacent posts">
+            {% if newerPost %}
+            <a class="post-nav-card panel" href="{{ newerPost.url }}">
+                <span class="post-nav-label"><i class="fas fa-arrow-left" aria-hidden="true"></i> Newer</span>
+                <span class="post-nav-title">{{ newerPost.data.title }}</span>
+            </a>
+            {% else %}
+            <span class="post-nav-card empty" aria-hidden="true"></span>
+            {% endif %}
+            {% if olderPost %}
+            <a class="post-nav-card panel post-nav-next" href="{{ olderPost.url }}">
+                <span class="post-nav-label">Older <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+                <span class="post-nav-title">{{ olderPost.data.title }}</span>
+            </a>
+            {% else %}
+            <span class="post-nav-card empty" aria-hidden="true"></span>
+            {% endif %}
+        </nav>
+        {% endif %}
+    </footer>
+</article>
+
+<section class="post-comments" id="comments" data-pagefind-ignore>
+    <div class="section-head">
+        <h2 class="section-title">Comments<span class="title-dot">.</span></h2>
+        <span class="section-rule" aria-hidden="true"></span>
+    </div>
+    <div id="giscus-container"></div>
+    <script>
+        (function () {
+            var container = document.getElementById("giscus-container");
+            if (!container) return;
+            var isDark = document.documentElement.getAttribute("data-theme") === "dark";
+            var s = document.createElement("script");
+            var attrs = {
+                "src": "https://giscus.app/client.js",
+                "data-repo": "{{ site.giscus.repo }}",
+                "data-repo-id": "{{ site.giscus.repo_id }}",
+                "data-category": "{{ site.giscus.category }}",
+                "data-category-id": "{{ site.giscus.category_id }}",
+                "data-mapping": "{{ site.giscus.mapping }}",
+                "data-strict": "{{ site.giscus.strict }}",
+                "data-reactions-enabled": "{{ site.giscus.reactions_enabled }}",
+                "data-emit-metadata": "{{ site.giscus.emit_metadata }}",
+                "data-input-position": "{{ site.giscus.input_position }}",
+                "data-theme": isDark ? "noborder_dark" : "noborder_light",
+                "data-lang": "{{ site.giscus.lang }}",
+                "data-loading": "{{ site.giscus.loading }}",
+                "crossorigin": "anonymous"
+            };
+            for (var key in attrs) s.setAttribute(key, attrs[key]);
+            s.async = true;
+            container.appendChild(s);
+        })();
+    </script>
+</section>

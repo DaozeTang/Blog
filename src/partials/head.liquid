@@ -1,0 +1,81 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="{% if description %}{{ description | strip_html | strip_newlines | truncatewords: 40 }}{% else %}{{ site.description }}{% endif %}">
+<meta name="keywords" content="{{ site.keywords }}">
+<meta name="author" content="{{ site.author.name }}">
+<title>{% if title %}{{ title }} - {% endif %}{{ site.title }}</title>
+
+<link rel="icon" type="image/png" href="/assets/favicon.png">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+<link rel="canonical" href="{{ page.url | encodeUri | prepend: site.url }}">
+<link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ site.url }}/rss.xml">
+<link rel="sitemap" href="/sitemap.xml">
+
+<meta property="og:type" content="{% if ogType %}{{ ogType }}{% else %}website{% endif %}">
+<meta property="og:site_name" content="{{ site.title }}">
+<meta property="og:title" content="{% if title %}{{ title }} - {% endif %}{{ site.title }}">
+<meta property="og:description" content="{% if description %}{{ description | strip_html | strip_newlines | truncatewords: 40 }}{% else %}{{ site.description }}{% endif %}">
+<meta property="og:url" content="{{ page.url | encodeUri | prepend: site.url }}">
+<meta property="og:image" content="{{ site.url }}/assets/avatar.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" id="meta-theme-color" content="#f7f4ec">
+
+<script>
+    (function () {
+        var mode = "system";
+        try {
+            var stored = localStorage.getItem("theme");
+            if (stored === "light" || stored === "dark" || stored === "system") mode = stored;
+        } catch (e) {}
+        var theme = mode === "system"
+            ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+            : mode;
+        var root = document.documentElement;
+        root.setAttribute("data-theme", theme);
+        root.setAttribute("data-theme-mode", mode);
+        var meta = document.getElementById("meta-theme-color");
+        if (meta) meta.setAttribute("content", theme === "dark" ? "#14120e" : "#f7f4ec");
+    })();
+</script>
+
+<!-- Google Tag Manager -->
+<script>
+    (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s),
+            dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+    })(window, document, "script", "dataLayer", "{{ site.analytics.gtm_head_id }}");
+</script>
+<!-- End Google Tag Manager -->
+
+<!-- Microsoft Clarity -->
+<script type="text/javascript">
+    (function (c, l, a, r, i, t, y) {
+        c[a] =
+            c[a] ||
+            function () {
+                (c[a].q = c[a].q || []).push(arguments);
+            };
+        t = l.createElement(r);
+        t.async = 1;
+        t.src = "https://www.clarity.ms/tag/" + i;
+        y = l.getElementsByTagName(r)[0];
+        y.parentNode.insertBefore(t, y);
+    })(window, document, "clarity", "script", "{{ site.analytics.clarity_id }}");
+</script>
+<!-- End Microsoft Clarity -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500..900;1,9..144,500..900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..600&display=swap" rel="stylesheet">
+
+{% unless headMinimal %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous">
+{% endunless %}
+
+<link rel="stylesheet" href="/styles/site.css">

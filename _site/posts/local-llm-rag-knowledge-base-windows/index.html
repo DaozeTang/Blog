@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="本地大语言模型部署及RAG知识库问答系统搭建——以windows系统为例。">
+<meta name="keywords" content="Blog, Deep Learning, Artificial Intelligence, Computer Vision, Object Detection">
+<meta name="author" content="Daoze Tang">
+<title>本地大语言模型部署及RAG知识库问答系统搭建——以windows系统为例 - Blog - Daoze Tang</title>
+
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="apple-touch-icon" href="../../assets/favicon.png">
+<link rel="canonical" href="https://blog.dztang.net/posts/local-llm-rag-knowledge-base-windows/">
+<link rel="alternate" type="application/rss+xml" title="Blog - Daoze Tang" href="https://blog.dztang.net/rss.xml">
+<link rel="sitemap" href="../../sitemap.xml">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Blog - Daoze Tang">
+<meta property="og:title" content="本地大语言模型部署及RAG知识库问答系统搭建——以windows系统为例 - Blog - Daoze Tang">
+<meta property="og:description" content="本地大语言模型部署及RAG知识库问答系统搭建——以windows系统为例。">
+<meta property="og:url" content="https://blog.dztang.net/posts/local-llm-rag-knowledge-base-windows/">
+<meta property="og:image" content="https://blog.dztang.net/assets/avatar.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" id="meta-theme-color" content="#f7f4ec">
+
+<script>
+    (function () {
+        var mode = "system";
+        try {
+            var stored = localStorage.getItem("theme");
+            if (stored === "light" || stored === "dark" || stored === "system") mode = stored;
+        } catch (e) {}
+        var theme = mode === "system"
+            ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+            : mode;
+        var root = document.documentElement;
+        root.setAttribute("data-theme", theme);
+        root.setAttribute("data-theme-mode", mode);
+        var meta = document.getElementById("meta-theme-color");
+        if (meta) meta.setAttribute("content", theme === "dark" ? "#14120e" : "#f7f4ec");
+    })();
+</script>
+
+
+
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500..900;1,9..144,500..900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..600&display=swap" rel="stylesheet">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous">
+
+
+<link rel="stylesheet" href="../../styles/site.css">
+
+</head>
+<body>
+    
+
+    <div class="canvas-glow" aria-hidden="true"></div>
+    <div class="canvas-grain" aria-hidden="true"></div>
+
+    <header class="site-header" id="site-header">
+    <div class="shell">
+        <nav class="topbar" id="topbar" aria-label="Main navigation">
+            <a class="brand" href="../../index.html">
+                <span class="brand-seal" aria-hidden="true">DT</span>
+                <span class="brand-name">Daoze Tang</span>
+            </a>
+
+            <div class="nav-links" id="site-nav">
+                
+                <a class="nav-link " href="../../index.html">Posts</a>
+                
+                <a class="nav-link " href="../../archive/index.html">Archive</a>
+                
+                
+                <a class="nav-link nav-link-ext" href="https://dztang.net/" target="_blank" rel="noopener">Homepage<i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+                
+            </div>
+
+            <div class="nav-actions">
+                <a class="theme-toggle nav-search-btn" id="nav-search-btn" href="../../search/index.html" aria-label="Search posts">
+                    <i class="fas fa-magnifying-glass" aria-hidden="true"></i>
+                </a>
+                <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Toggle dark mode" aria-pressed="false">
+                    <i class="fas fa-moon" aria-hidden="true"></i>
+                </button>
+                <button class="nav-burger" type="button" id="nav-burger" aria-label="Toggle navigation" aria-expanded="false" aria-controls="site-nav">
+                    <i class="fas fa-bars" aria-hidden="true"></i>
+                </button>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<dialog class="search-dialog" id="search-dialog">
+    <button class="dialog-close" type="button" data-dialog-close aria-label="Close search">&times;</button>
+    <div class="pagefind-box" id="navbar-search"></div>
+</dialog>
+
+
+    <main class="page-main">
+        <div class="shell">
+            <article class="post" data-pagefind-body>
+    <header class="page-header post-header">
+        
+        <p class="page-header-kicker kicker"><a href="../../categories/大模型/index.html" data-pagefind-ignore>大模型</a></p>
+        
+        <h1 class="page-header-title post-title">本地大语言模型部署及RAG知识库问答系统搭建——以windows系统为例</h1>
+        <div class="page-header-meta" data-pagefind-ignore>
+            <span class="page-header-stat"><i class="far fa-calendar" aria-hidden="true"></i> 2024-10-07</span>
+            
+            <span class="page-header-stat"><i class="far fa-clock" aria-hidden="true"></i> 6 min read</span>
+            <span class="page-header-stat"><i class="far fa-file-lines" aria-hidden="true"></i> 1,673 chars</span>
+            
+        </div>
+        
+        <div class="post-tags" data-pagefind-ignore>
+            
+            <a class="post-chip" href="../../tags/深度学习/index.html"><span class="post-chip-hash">#</span>深度学习</a>
+            
+            <a class="post-chip" href="../../tags/llm/index.html"><span class="post-chip-hash">#</span>LLM</a>
+            
+            <a class="post-chip" href="../../tags/rag/index.html"><span class="post-chip-hash">#</span>RAG</a>
+            
+        </div>
+        
+    </header>
+
+    
+    <div class="post-body">
+        <div class="prose">
+            <h3 id="1安装大语言模型部署运行工具ollama" tabindex="-1">1.安装大语言模型部署运行工具Ollama <a class="heading-anchor" href="#1安装大语言模型部署运行工具ollama" aria-hidden="true">#</a></h3>
+<p>访问Ollama官网「<a href="https://ollama.com/">https://ollama.com/</a>」点击屏幕中心的「Download」按钮，进入下载界面。</p>
+<p><img src="../../posts/images/local-llm-rag/Download.png" alt="Download"></p>
+<p>在下载界面中，选择对应操作系统的安装方式。以Windows为例，我们点击「Download for Windows (preview)」按钮下载Windows安装包。</p>
+<p><img src="../../posts/images/local-llm-rag/Windows.png" alt="Windows"></p>
+<p>由于Ollma的服务器在国外，这一步可能会比较慢。经过耐心的等待，我们可以得到大小约为663MB的「OllamaSetup.exe」文件。</p>
+<p><img src="../../posts/images/local-llm-rag/Size.png" alt="Size"></p>
+<p>双击「OllamaSetup.exe」文件运行，并单击「Install」开始安装。</p>
+<p><img src="../../posts/images/local-llm-rag/Install.png" alt="Install"></p>
+<p>安装完成后，Ollma会自动运行在系统后台中。我们在任务栏中找到Ollama图标，鼠标右击选择「Quit Ollama」按钮将其退出，进行下一步的配置。</p>
+<p><img src="../../posts/images/local-llm-rag/Quit.png" alt="Quit Ollama"></p>
+<h3 id="2配置ollama-on-windows" tabindex="-1">2.配置Ollama on Windows <a class="heading-anchor" href="#2配置ollama-on-windows" aria-hidden="true">#</a></h3>
+<p>Ollama默认将随Windows启动而自动启动，可以在文件资源管理器的地址栏中输入「%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup」并按下回车进入启动运行路径。在该路径中删除其中的「Ollama.lnk」快捷方式文件，即可阻止Ollama随系统启动而自动启动。也可复制该快捷方式文件至其他位置，方便在需要时快速运行Ollama。</p>
+<p><img src="../../posts/images/local-llm-rag/Startup.png" alt="Stop Startup"></p>
+<p>Ollama 的默认模型存储路径为「C:\Users%username%.ollama\models」,为了防止模型文件大量占用系统盘空间，我们可以通过修改环境变量的方式修改Ollama的模型存储路径。</p>
+<p>按下「Windows + R」快捷键打开「运行」对话框，输入「C:\Windows\system32\rundll32.exe sysdm.cpl, EditEnvironmentVariables」命令后按下「Ctrl + Shift + Enter」快捷键以管理员权限打开「环境变量」窗口。</p>
+<p><img src="../../posts/images/local-llm-rag/Environment.png" alt="Edit Environment"></p>
+<p>在「环境变量」窗口中选择「新建」一个「用户变量」，变量名设置为「OLLAMA_MODELS」，变量值则为我们想要存储Ollama的模型的路径，这里以「D:\Ollama\Models」路径为例。输入好后，依次单击两个「确定」按钮逐级保存并关闭窗口。</p>
+<p>Ollama API 的默认侦听端口为「11434」，并且只监听来自「127.0.0.1」或「localhost」的请求。如果有其他的访问需求，则需要开放跨域限制，可以使用相同的方式添加一个名为「OLLAMA_HOST」的用户变量，并将变量值设置为「0.0.0.0:」+「需要修改的端口」，我们以「0.0.0.0:11435」为例。</p>
+<p><img src="../../posts/images/local-llm-rag/Host.png" alt="Ollama Host"></p>
+<p>设置好的用户变量如下。</p>
+<p><img src="../../posts/images/local-llm-rag/User.png" alt="User"></p>
+<p>全部设置好后，我们按下「Windows + R」快捷键打开「运行」对话框，输入「cmd」命令后按下「确定」按钮打开「命令提示符」窗口。在「命令提示符」窗口中分别输入「echo %OLLAMA_MODELS%」、「echo %OLLAMA_HOST%」检查新配制的环境变量是否生效。</p>
+<p><img src="../../posts/images/local-llm-rag/Check.png" alt="Check"></p>
+<p>检查无误后，通过前面保存的快捷方式重新运行Ollama。打开浏览器访问「<a href="http://127.0.0.1:11435/%E3%80%8D%E7%9C%8B%E5%88%B0%E3%80%8COllama">http://127.0.0.1:11435/」看到「Ollama</a> is running」则说明Ollama配置成功。</p>
+<p><img src="../../posts/images/local-llm-rag/Running.png" alt="Running"></p>
+<h3 id="3通过ollama获取并运行大语言模型" tabindex="-1">3.通过Ollama获取并运行大语言模型 <a class="heading-anchor" href="#3通过ollama获取并运行大语言模型" aria-hidden="true">#</a></h3>
+<p>访问Ollama的官方模型库「<a href="https://ollama.com/library%E3%80%8D%E9%80%89%E6%8B%A9%E4%B8%80%E4%B8%AA%E5%90%88%E9%80%82%E8%87%AA%E5%B7%B1%E9%9C%80%E6%B1%82%E7%9A%84%E6%A8%A1%E5%9E%8B%E4%BB%A5%E5%8F%8A%E5%90%88%E9%80%82%E7%9A%84%E6%A8%A1%E5%9E%8B%E5%A4%A7%E5%B0%8F%EF%BC%8C%E4%BF%9D%E5%AD%98%E5%85%B6%E5%AF%B9%E5%BA%94%E7%9A%84%E8%BF%90%E8%A1%8C%E6%8C%87%E4%BB%A4%E3%80%82">https://ollama.com/library」选择一个合适自己需求的模型以及合适的模型大小，保存其对应的运行指令。</a></p>
+<p><img src="../../posts/images/local-llm-rag/Model1.png" alt="Model1"></p>
+<p><img src="../../posts/images/local-llm-rag/Model2.png" alt="Model2"></p>
+<p>这里我们以3B大小的Qwen2.5模型为例，它对应的指令为「ollama run qwen2.5:3b」。我们按照之前的方法打开「命令提示符」窗口，输入刚才得到的指令并按下回车键，将会自动开始下载模型文件，并将在下载好后自动运行模型。</p>
+<p><img src="../../posts/images/local-llm-rag/Qwen2.5Download.png" alt="Qwen2.5 Download"></p>
+<p>看到「success」和「Send a message」字样则说明模型下载并运行成功，此时输入信息并按下回车就可以和模型进行对话了。</p>
+<p><img src="../../posts/images/local-llm-rag/Qwen2.5.png" alt="Qwen2.5"></p>
+<p>成功得到模型回复，说明模型已顺利运行。</p>
+<h3 id="4在docker容器中部署作为rag知识库问答系统的maxkb" tabindex="-1">4.在Docker容器中部署作为RAG知识库问答系统的MaxKB <a class="heading-anchor" href="#4在docker容器中部署作为rag知识库问答系统的maxkb" aria-hidden="true">#</a></h3>
+<p>首先，我们参照教程「<a href="https://docker-practice.github.io/zh-cn/install/windows.html">https://docker-practice.github.io/zh-cn/install/windows.html</a>」完成Docker的安装。注意，这里并不推荐设置国内镜像加速。</p>
+<p>安装好Docker后，按照之前的方法打开「命令提示符」窗口，输入命令「docker run -d --name=maxkb --restart=always -p 8080:8080 -v D:/MaxKB:/var/lib/postgresql/data -v D:/MaxKB/python-packages:/opt/maxkb/app/sandbox/python-packages <a href="http://cr2.fit2cloud.com/1panel/maxkb%E3%80%8D%E5%B0%86%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2MaxKB%E8%87%B3Docker%E5%AE%B9%E5%99%A8%E4%B8%AD%E3%80%82">cr2.fit2cloud.com/1panel/maxkb」将自动部署MaxKB至Docker容器中。</a></p>
+<p>上述命令中「8080:8080」表明容器与物理机的端口映射，「D:/ MaxKB」与「D:/ MaxKB/python-packages」分别对应MaxKB的数据存储地址以及python包的存储地址，可以根据实际情况自行修改。出现如下字样则表明容器部署完成。</p>
+<p><img src="../../posts/images/local-llm-rag/Docker.png" alt="Docker"></p>
+<p>此时，在浏览器中访问「<a href="http://localhost:8080/%E3%80%8D%E5%8D%B3%E5%8F%AF%E8%BF%9B%E5%85%A5MaxKB%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%90%8E%E5%8F%B0%EF%BC%8C%E5%88%9D%E5%A7%8B%E7%AE%A1%E7%90%86%E5%91%98%E8%B4%A6%E6%88%B7%E7%9A%84%E7%94%A8%E6%88%B7%E5%90%8D%E4%B8%8E%E5%AF%86%E7%A0%81%E5%88%86%E5%88%AB%E4%B8%BA%E3%80%8Cadmin%E3%80%8D%E4%B8%8E%E3%80%8CMaxKB@123">http://localhost:8080/」即可进入MaxKB的系统后台，初始管理员账户的用户名与密码分别为「admin」与「MaxKB@123</a>..」。</p>
+<p>依次选择「系统管理」、「模型设置」进入模型设置界面，点击「添加模型」按钮将我们刚才通过Ollama部署的本地大预言模型添加进后台当中。</p>
+<p><img src="../../posts/images/local-llm-rag/MaxKB.png" alt="MaxKB"></p>
+<p>在选择供应商界面，我们选择「Ollama」。</p>
+<p><img src="../../posts/images/local-llm-rag/Choose.png" alt="Choose"></p>
+<p>模型名称与权限根据需要自行设置，模型类型选择「大语言模型」。</p>
+<p>基础模型项则需输入部署模型命令中的模型名称，以我们本次部署的模型为例，部署模型使用的命令是「ollama run qwen2.5:3b」，所以我们在这里填写「qwen2.5:3b」。</p>
+<p>由于MaxKB被我们部署在Docker容器中，无法直接访问物理机的资源，所以API域名项中我们需要填写「<a href="http://host.docker.internal:11435">http://host.docker.internal:11435</a>」，其中「11435」则为我们之前自行设置的Ollama端口。</p>
+<p>API Key项随意填写一些内容即可。</p>
+<p><img src="../../posts/images/local-llm-rag/API.png" alt="API Key"></p>
+<p>如果我们自行添加的模型没有报错，成功出现在全部模型中，则说明所有的信息与配置填写正确。如果提示无法访问API等错误信息，请检查Ollama是否部署正确、服务是否能够正常访问，并检查信息是否填写正确。</p>
+<p><img src="../../posts/images/local-llm-rag/Finish.png" alt="Finish"></p>
+<p>完成模型添加后我们返回「应用」面板并点击「创建应用」按钮，创建我们的大语言模型应用。这里的「应用名称」、「应用描述」、「应用类型」则根据需要自行设置。</p>
+<p><img src="../../posts/images/local-llm-rag/APP.png" alt="APP"></p>
+<p>创建完应用后，在设置中为我们的应用对话选择刚才添加好的模型。点击右上角「发布」按钮完成应用发布后返回。</p>
+<p><img src="../../posts/images/local-llm-rag/Apply.png" alt="Apply"></p>
+<p>使用浏览器访问「公开访问链接」或点击「演示」按钮，即可进入部署好的大预言模型对话界面。</p>
+<p><img src="../../posts/images/local-llm-rag/Demo1.png" alt="Demo1"></p>
+<p><img src="../../posts/images/local-llm-rag/Demo2.png" alt="Demo2"></p>
+<p>模型的对话预设与提示词等内容，则可以在应用设置中进行进一步的修改。</p>
+<p>至此，我们完成了大语言模型的本地部署以及RAG知识库问答系统的搭建。</p>
+
+        </div>
+        
+        <aside class="post-toc" aria-label="Table of contents" data-pagefind-ignore>
+            <nav class="toc-panel">
+                <div class="toc-label">Contents</div>
+                <ol class="toc-list" id="toc-list">
+                    <li class="toc-item toc-l1"><a class="toc-link" href="#1%E5%AE%89%E8%A3%85%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E8%BF%90%E8%A1%8C%E5%B7%A5%E5%85%B7ollama">1.安装大语言模型部署运行工具Ollama</a></li>
+<li class="toc-item toc-l1"><a class="toc-link" href="#2%E9%85%8D%E7%BD%AEollama-on-windows">2.配置Ollama on Windows</a></li>
+<li class="toc-item toc-l1"><a class="toc-link" href="#3%E9%80%9A%E8%BF%87ollama%E8%8E%B7%E5%8F%96%E5%B9%B6%E8%BF%90%E8%A1%8C%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B">3.通过Ollama获取并运行大语言模型</a></li>
+<li class="toc-item toc-l1"><a class="toc-link" href="#4%E5%9C%A8docker%E5%AE%B9%E5%99%A8%E4%B8%AD%E9%83%A8%E7%BD%B2%E4%BD%9C%E4%B8%BArag%E7%9F%A5%E8%AF%86%E5%BA%93%E9%97%AE%E7%AD%94%E7%B3%BB%E7%BB%9F%E7%9A%84maxkb">4.在Docker容器中部署作为RAG知识库问答系统的MaxKB</a></li>
+                </ol>
+            </nav>
+        </aside>
+        
+    </div>
+
+    <footer class="post-footer" data-pagefind-ignore>
+        
+        
+        
+        <nav class="post-nav" aria-label="Adjacent posts">
+            
+            <a class="post-nav-card panel" href="../../posts/count-dataset-label-objects/index.html">
+                <span class="post-nav-label"><i class="fas fa-arrow-left" aria-hidden="true"></i> Newer</span>
+                <span class="post-nav-title">统计数据集标签中目标数量</span>
+            </a>
+            
+            
+            <a class="post-nav-card panel post-nav-next" href="../../posts/python-pkgutil-impimporter-error/index.html">
+                <span class="post-nav-label">Older <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+                <span class="post-nav-title">Python 报错 module 'pkgutil' has no attribute 'ImpImporter'. Did you mean 'zipimporter' 的解决方法</span>
+            </a>
+            
+        </nav>
+        
+    </footer>
+</article>
+
+<section class="post-comments" id="comments" data-pagefind-ignore>
+    <div class="section-head">
+        <h2 class="section-title">Comments<span class="title-dot">.</span></h2>
+        <span class="section-rule" aria-hidden="true"></span>
+    </div>
+    <div id="giscus-container"></div>
+    <script>
+        (function () {
+            var container = document.getElementById("giscus-container");
+            if (!container) return;
+            var isDark = document.documentElement.getAttribute("data-theme") === "dark";
+            var s = document.createElement("script");
+            var attrs = {
+                "src": "https://giscus.app/client.js",
+                "data-repo": "DaozeTang/Blog",
+                "data-repo-id": "R_kgDOQkCvvA",
+                "data-category": "Announcements",
+                "data-category-id": "DIC_kwDOQkCvvM4Czis6",
+                "data-mapping": "pathname",
+                "data-strict": "0",
+                "data-reactions-enabled": "1",
+                "data-emit-metadata": "1",
+                "data-input-position": "top",
+                "data-theme": isDark ? "noborder_dark" : "noborder_light",
+                "data-lang": "en",
+                "data-loading": "lazy",
+                "crossorigin": "anonymous"
+            };
+            for (var key in attrs) s.setAttribute(key, attrs[key]);
+            s.async = true;
+            container.appendChild(s);
+        })();
+    </script>
+</section>
+
+        </div>
+    </main>
+
+    <footer class="site-footer">
+    <div class="shell">
+        <div class="footer-base">
+            <div class="footer-note"><code>assert os.getenv("Smoking", "False") != "True", "Cigarettes are a drug, not a feature."</code></div>
+            <div class="footer-meta">
+                <span>&copy; 2022&ndash;2026 Daoze Tang</span>
+                <span class="sep" aria-hidden="true">&#10038;</span>
+                <a href="../../rss.xml">RSS</a>
+                <span class="sep" aria-hidden="true">&#10038;</span>
+                <a href="../../sitemap.xml">Sitemap</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <script src="../../scripts/site.js" defer></script>
+</body>
+</html>

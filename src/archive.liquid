@@ -1,0 +1,71 @@
+---
+layout: base.liquid
+title: Archive
+navTitle: Archive
+permalink: /archive/
+---
+
+<header class="page-header">
+    <p class="page-header-kicker kicker">Every post, by year</p>
+    <h1 class="page-header-title">Archive<span class="title-dot">.</span></h1>
+    <div class="page-header-meta">
+        <span class="page-header-stat"><i class="far fa-file-lines" aria-hidden="true"></i> {{ collections.posts.size }} posts</span>
+        {% for group in collections.postsByYear %}
+        <a class="page-header-stat" href="#year-{{ group.year }}">{{ group.year }} &middot; {{ group.items.size }}</a>
+        {% endfor %}
+    </div>
+</header>
+
+<section class="section">
+    <div class="section-head">
+        <span class="section-index" aria-hidden="true"></span>
+        <h2 class="section-title">Categories<span class="title-dot">.</span></h2>
+        <span class="section-rule" aria-hidden="true"></span>
+    </div>
+    <div class="term-cloud">
+        {% for term in collections.categories %}
+        <a class="term-chip" href="/categories/{{ term.slug }}/">{{ term.name }}<span class="term-count">{{ term.items.size }}</span></a>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-head">
+        <span class="section-index" aria-hidden="true"></span>
+        <h2 class="section-title">Tags<span class="title-dot">.</span></h2>
+        <span class="section-rule" aria-hidden="true"></span>
+    </div>
+    <div class="term-cloud">
+        {% for term in collections.tagList %}
+        <a class="term-chip" href="/tags/{{ term.slug }}/"><span class="post-chip-hash">#</span>{{ term.name }}<span class="term-count">{{ term.items.size }}</span></a>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-head">
+        <span class="section-index" aria-hidden="true"></span>
+        <h2 class="section-title">Timeline<span class="title-dot">.</span></h2>
+        <span class="section-rule" aria-hidden="true"></span>
+    </div>
+
+    <ol class="archive-list">
+        {% for group in collections.postsByYear %}
+        <li class="archive-year-marker" id="year-{{ group.year }}">
+            <span class="archive-year-label">{{ group.year }}</span>
+        </li>
+        {% for post in group.items %}
+        <li class="archive-item">
+            <span class="archive-date mono">{{ post.data.published | monthDay }}</span>
+            <span class="archive-node" aria-hidden="true"></span>
+            <span class="archive-text">
+                <a class="archive-link" href="{{ post.url }}">{{ post.data.title }}</a>
+                {% if post.data.category and post.data.category != "" %}
+                <a class="archive-cat" href="/categories/{{ post.data.category | ghSlug }}/">{{ post.data.category }}</a>
+                {% endif %}
+            </span>
+        </li>
+        {% endfor %}
+        {% endfor %}
+    </ol>
+</section>

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>https://blog.dztang.net/posts/mamba-yolo-is-cuda-error/</loc>
+    <lastmod>2024-07-11T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/posts/ubuntu-install-miniconda/</loc>
+    <lastmod>2025-12-17T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/posts/ubuntu-dual-boot-grub-install-error/</loc>
+    <lastmod>2026-04-29T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/posts/word-merge-citations/</loc>
+    <lastmod>2026-05-13T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/posts/change-docker-data-root/</loc>
+    <lastmod>2025-12-13T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/posts/normalize-pdf-page-size/</loc>
+    <lastmod>2025-05-19T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/posts/python-pkgutil-impimporter-error/</loc>
+    <lastmod>2024-07-13T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/posts/query-github-account-info/</loc>
+    <lastmod>2025-06-04T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/posts/systemctl-user-daemon-reload-error/</loc>
+    <lastmod>2026-04-08T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/posts/ubuntu-rootless-tailscale-networking/</loc>
+    <lastmod>2026-01-10T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/posts/macos-multi-instance-wechat/</loc>
+    <lastmod>2026-05-30T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/posts/ubuntu-reinstall-nvidia-driver/</loc>
+    <lastmod>2025-12-31T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/posts/ubuntu-system-monitoring/</loc>
+    <lastmod>2025-12-16T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/posts/ubuntu-vps-enable-bbr/</loc>
+    <lastmod>2026-04-10T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/posts/ubuntu-vps-proxy-node/</loc>
+    <lastmod>2026-04-10T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/posts/wgcloud-server-startup-failure/</loc>
+    <lastmod>2024-06-27T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/posts/count-dataset-label-objects/</loc>
+    <lastmod>2025-05-12T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/posts/fix-explorer-file-association/</loc>
+    <lastmod>2025-12-13T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/posts/jupyterlab-permanently-delete-files/</loc>
+    <lastmod>2025-12-17T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/posts/overleaf-gbt7714-bibliography/</loc>
+    <lastmod>2026-03-01T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/posts/chrome-edge-parallel-downloading/</loc>
+    <lastmod>2025-12-11T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/posts/local-llm-rag-knowledge-base-windows/</loc>
+    <lastmod>2024-10-07T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/posts/merge-non-adjacent-disk-partitions/</loc>
+    <lastmod>2024-06-26T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/posts/ubuntu-rootless-screen/</loc>
+    <lastmod>2025-12-17T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/posts/deploy-jupyterlab-on-ubuntu/</loc>
+    <lastmod>2025-12-17T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/posts/lan-device-scanning/</loc>
+    <lastmod>2025-12-31T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/styles/_navbar.css</loc>
+    
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/styles/_postlist.css</loc>
+    
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/styles/_animations.css</loc>
+    
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/styles/_layout.css</loc>
+    
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/styles/_tokens.css</loc>
+    
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/styles/_archive.css</loc>
+    
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/styles/_buttons.css</loc>
+    
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/styles/_responsive.css</loc>
+    
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/styles/_base.css</loc>
+    
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/styles/_cards.css</loc>
+    
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/styles/_footer.css</loc>
+    
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/styles/_post.css</loc>
+    
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/styles/_search.css</loc>
+    
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/styles/site.css</loc>
+    
+  </url>
+
+  <url>
+    <loc>https://blog.dztang.net/archive/</loc>
+    
+  </url>
+
+</urlset>

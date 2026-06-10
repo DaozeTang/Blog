@@ -1,0 +1,36 @@
+title: "Blog - Daoze Tang"
+url: "https://blog.dztang.net"
+description: "Blog - Daoze Tang"
+keywords: "Blog, Deep Learning, Artificial Intelligence, Computer Vision, Object Detection"
+lang: "zh-CN"
+
+author:
+  name: "Daoze Tang"
+  email: "tdz@s.hrbcu.edu.cn"
+  homepage: "https://dztang.net/"
+  github: "https://github.com/DaozeTang"
+
+start_year: 2022
+
+posts_per_page: 10
+
+footer_text: >-
+  <code>assert os.getenv("Smoking", "False") != "True", "Cigarettes are a drug, not a feature."</code>
+
+analytics:
+  gtm_head_id: "GTM-P53R3M9S"
+  gtm_body_id: "GTM-KRX3XGVH"
+  clarity_id: "tx9equrgr6"
+
+giscus:
+  repo: "DaozeTang/Blog"
+  repo_id: "R_kgDOQkCvvA"
+  category: "Announcements"
+  category_id: "DIC_kwDOQkCvvM4Czis6"
+  mapping: "pathname"
+  strict: "0"
+  reactions_enabled: "1"
+  emit_metadata: "1"
+  input_position: "top"
+  lang: "en"
+  loading: "lazy"

@@ -1,0 +1,1288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Blog - Daoze Tang</title>
+    <link>https://blog.dztang.net/</link>
+    <atom:link href="https://blog.dztang.net/rss.xml" rel="self" type="application/rss+xml" />
+    <description>Blog - Daoze Tang</description>
+    <language>zh-CN</language>
+    <generator>Eleventy</generator>
+    <copyright>© 2022–2026 Daoze Tang</copyright>
+    <lastBuildDate>Sat, 30 May 2026 00:00:00 GMT</lastBuildDate>
+    
+    <item>
+      <title>macOS 多开任意应用：以微信为例</title>
+      <link>https://blog.dztang.net/posts/macos-multi-instance-wechat/</link>
+      <guid isPermaLink="true">https://blog.dztang.net/posts/macos-multi-instance-wechat/</guid>
+      <pubDate>Sat, 30 May 2026 00:00:00 GMT</pubDate>
+      <category>macOS</category>
+      <description>复制应用、修改 Bundle ID 并重新签名，在 macOS 上为任意应用实现多开。以微信 4.0.5+ 双开为例。</description>
+      <content:encoded><![CDATA[<p>macOS 上很多应用默认只能开一个实例，双击图标只会激活已有窗口。原因是应用按 <strong>Bundle ID</strong>（<code>CFBundleIdentifier</code>，应用唯一标识）做进程互斥：检测到相同 ID 的进程已存在，就不再新开。</p>
+<p>绕过的思路：复制一份应用 → 给副本换一个不同的 Bundle ID → 系统将其视为另一个应用，与原版互不干扰。由于改动了 <code>Info.plist</code>，原签名会失效（提示&quot;应用已损坏&quot;），所以最后需重新签名。整个过程不修改原版、不注入插件。</p>
+<h2 id="nopen--n复制重签名的区别" tabindex="-1">⌘N、open -n、复制重签名的区别 <a class="heading-anchor" href="#nopen--n复制重签名的区别" aria-hidden="true">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>打开的是</th>
+<th>进程</th>
+<th>数据 / 账号</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>⌘N</code></td>
+<td>新窗口</td>
+<td>同一进程</td>
+<td>视应用而定</td>
+</tr>
+<tr>
+<td><code>open -n</code></td>
+<td>新实例</td>
+<td>独立进程</td>
+<td>视应用而定</td>
+</tr>
+<tr>
+<td>复制 + 重签名</td>
+<td>新应用</td>
+<td>独立进程</td>
+<td>完全独立</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong><code>⌘N</code></strong>：应用内快捷键，行为完全由应用定义，且始终在同一进程内。多数应用只是新建窗口、共用账号；但内置多账号的应用（如 QQ）可借此直接登录第二个账号，无需后续步骤。微信等不支持的应用，则需用方法二。</li>
+<li><strong><code>open -n</code></strong>：终端命令，强制启动新进程，但绕不过应用自身的进程互斥（微信等会立即退出或切回原窗口）。</li>
+<li><strong>复制 + 重签名</strong>：从应用身份层面解决，可登录第二个账号。</li>
+</ul>
+<h2 id="方法一open--n" tabindex="-1">方法一：open -n <a class="heading-anchor" href="#方法一open--n" aria-hidden="true">#</a></h2>
+<p>原生支持多实例的应用，一行即可：</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">open</span> <span class="token parameter variable">-n</span> /Applications/Safari.app</code></pre>
+<p>能开出独立窗口即成功。微信 4.0.5+、QQ、Telegram 等做了互斥的应用对此无效，用方法二。</p>
+<h2 id="方法二复制--改-bundle-id--重新签名" tabindex="-1">方法二：复制 + 改 Bundle ID + 重新签名 <a class="heading-anchor" href="#方法二复制--改-bundle-id--重新签名" aria-hidden="true">#</a></h2>
+<p>适用于按 Bundle ID 互斥的应用。下面以微信为例，套用到其他应用时替换路径与 ID 即可（路径含空格或中文时用引号括起）。</p>
+<p><strong>1. 查看原始 Bundle ID</strong></p>
+<pre class="language-bash"><code class="language-bash">/usr/libexec/PlistBuddy <span class="token parameter variable">-c</span> <span class="token string">"Print :CFBundleIdentifier"</span> <span class="token string">"/Applications/WeChat.app/Contents/Info.plist"</span></code></pre>
+<p>微信结果一般为 <code>com.tencent.xinWeChat</code>，副本在其后加后缀即可。</p>
+<p><strong>2. 复制副本</strong></p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">cp</span> <span class="token parameter variable">-R</span> /Applications/WeChat.app <span class="token string">"/Applications/微信双开.app"</span></code></pre>
+<p>回车后输入开机密码（不显示字符）。不想用 <code>sudo</code> 可改放到 <code>~/Applications</code>。</p>
+<p><strong>3. 改 Bundle ID</strong></p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> /usr/libexec/PlistBuddy <span class="token parameter variable">-c</span> <span class="token string">"Set :CFBundleIdentifier com.tencent.xinWeChat.dual"</span> <span class="token string">"/Applications/微信双开.app/Contents/Info.plist"</span></code></pre>
+<p>无输出即成功。</p>
+<p><strong>4. 重新签名</strong>（ad-hoc 签名，<code>-</code> 表示无需证书）</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> codesign <span class="token parameter variable">--force</span> <span class="token parameter variable">--deep</span> <span class="token parameter variable">--sign</span> - <span class="token string">"/Applications/微信双开.app"</span></code></pre>
+<p>提示 <code>replacing existing signature</code> 即成功。若找不到 <code>codesign</code>，先装命令行工具：<code>xcode-select --install</code>。</p>
+<p><strong>5. 启动并固定</strong></p>
+<p>双击副本，或 <code>open &quot;/Applications/微信双开.app&quot;</code>。在 Dock 右键图标 →「选项」→「在程序坞中保留」。</p>
+<p>微信双开完整命令：</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">cp</span> <span class="token parameter variable">-R</span> /Applications/WeChat.app <span class="token string">"/Applications/微信双开.app"</span>
+<span class="token function">sudo</span> /usr/libexec/PlistBuddy <span class="token parameter variable">-c</span> <span class="token string">"Set :CFBundleIdentifier com.tencent.xinWeChat.dual"</span> <span class="token string">"/Applications/微信双开.app/Contents/Info.plist"</span>
+<span class="token function">sudo</span> codesign <span class="token parameter variable">--force</span> <span class="token parameter variable">--deep</span> <span class="token parameter variable">--sign</span> - <span class="token string">"/Applications/微信双开.app"</span></code></pre>
+<p>完成后先开原版登录账号 A，再开副本登录账号 B。</p>
+<h2 id="常见问题" tabindex="-1">常见问题 <a class="heading-anchor" href="#常见问题" aria-hidden="true">#</a></h2>
+<p><strong>提示&quot;应用已损坏&quot;</strong>：清除扩展属性后重签。</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> xattr <span class="token parameter variable">-cr</span> <span class="token string">"/Applications/微信双开.app"</span>
+<span class="token function">sudo</span> codesign <span class="token parameter variable">--force</span> <span class="token parameter variable">--deep</span> <span class="token parameter variable">--sign</span> - <span class="token string">"/Applications/微信双开.app"</span></code></pre>
+<p><strong>副本无法联网 / 不同步</strong>：检查防火墙是否拦截；关闭微信「自动登录」（设置 → 账号与储存）；必要时 <code>sudo killall -9 WeChat</code> 后重开。</p>
+<p><strong>更新后副本失效</strong>：官方更新只覆盖原版，副本停留在旧版本。重跑步骤 2–4 覆盖即可。</p>
+<p><strong>不适用的情况</strong>：原生支持多开的用 <code>open -n</code> 即可；靠锁文件、单一端口或服务端登录态互斥的，改 ID 无效；启用强校验或依赖推送、钥匙串共享、App Groups 等权限的应用，重签名可能使相关功能失效；App Store 沙盒应用因收据校验可能打不开。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Word引用文献合并</title>
+      <link>https://blog.dztang.net/posts/word-merge-citations/</link>
+      <guid isPermaLink="true">https://blog.dztang.net/posts/word-merge-citations/</guid>
+      <pubDate>Wed, 13 May 2026 00:00:00 GMT</pubDate>
+      <category>文档写作</category>
+      <description>Word引用文献合并。</description>
+      <content:encoded><![CDATA[<p>首先在对应位置插入所需文献的交叉引用，例如[1][2]。</p>
+<p>选中插入的引用，右键选择 切换域代码。</p>
+<p>得到例如：</p>
+<pre><code>{ REF _Ref227822518 \r \h }{ REF _Ref227822519 \r \h }
+</code></pre>
+<p>如果需要去除 [1] 的“]”，则在代码中添加“#&quot;[0&quot;”，如果需要去除“[”，则在代码中添加“#&quot;0]&quot;”。</p>
+<p>例如：</p>
+<pre><code>{ REF _Ref227822518 \r \h \#&quot;[0&quot; }{ REF _Ref227822519 \r \h \#&quot;0]&quot; }
+</code></pre>
+<p>重新切换域代码并更新域后，则会得到[12]。</p>
+<p>手动插入“-”，如：</p>
+<pre><code>{ REF _Ref227822518 \r \h \#&quot;[0&quot; }-{ REF _Ref227822519 \r \h \#&quot;0]&quot; }
+</code></pre>
+<p>重新切换域代码并更新域后，则会得到[1-2]。</p>
+<p>如果超过则2个引用，例如[1][2][5]，非两端的引用则需要在代码中插入“#&quot;0&quot;”，例如：</p>
+<pre><code>{ REF _Ref227822518 \r \h \#&quot;[0&quot; }{ REF _Ref227822519 \r \h \#&quot;0&quot; }{ REF _Ref227822522 \r \h \#&quot;0]&quot; }
+</code></pre>
+<p>重新切换域代码并更新域后，则会得到[125]。</p>
+<p>手动插入“-”、“,”，如：</p>
+<pre><code>{ REF _Ref227822518 \r \h \#&quot;[0&quot; }-{ REF _Ref227822519 \r \h \#&quot;0&quot; },{ REF _Ref227822522 \r \h \#&quot;0]&quot; }
+</code></pre>
+<p>重新切换域代码并更新域后，则会得到[1-2,5]。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>安装Ubuntu双系统时Grub Install报错内存写入失败的解决方案</title>
+      <link>https://blog.dztang.net/posts/ubuntu-dual-boot-grub-install-error/</link>
+      <guid isPermaLink="true">https://blog.dztang.net/posts/ubuntu-dual-boot-grub-install-error/</guid>
+      <pubDate>Wed, 29 Apr 2026 00:00:00 GMT</pubDate>
+      <category>Linux 运维</category>
+      <description>安装Ubuntu双系统时Grub Install报错内存写入失败的解决方案。</description>
+      <content:encoded><![CDATA[<ol>
+<li>遇到的问题</li>
+</ol>
+<p>安装 Ubuntu 双系统时 Grub Install 报错内存写入失败，多次尝试重装无效，确保已关闭安全启动，确保硬盘与 U 盘分区格式正确，确保镜像与 U 盘启动项无损坏。</p>
+<ol start="2">
+<li>原因分析</li>
+</ol>
+<p>现代主板使用 UEFI 替代了传统的 BIOS。UEFI 启动操作系统需要依赖一些“启动变量”（比如先启动 Windows 还是先启动 Ubuntu），这些变量保存在主板上一块名为 NVRAM（非易失性随机访问存储器）的芯片里。它的容量极其有限，通常只有 64KB 左右。</p>
+<p>由于容量极小，NVRAM 是寸土寸金的。里面通常存放着：</p>
+<p>启动项（Boot Entries）： 比如 Windows Boot Manager、ubuntu、网络唤醒启动项等。</p>
+<p>硬件配置变量： 主板厂商自定义的一些底层硬件信息。</p>
+<p>系统崩溃日志（pstore/dump）： 当 Linux 内核崩溃时，有一个叫 pstore 的机制会试图把崩溃日志（通常以 dump- 开头）写到 NVRAM 里以便下次开机排错。</p>
+<p>早年间，Linux 在写入 NVRAM 时由于不加节制，导致一些设计缺陷的主板在 NVRAM 被写满后，主板直接“变砖”。为了防止背锅，Linux 内核开发者加入了“EFI Storage Paranoia（EFI 存储偏执/安全保护机制）”。规则规定，只要 Linux 发现主板 NVRAM 的剩余空间不足 50%，或者写入一个新的变量会导致剩余空间低于安全线，Linux 内核就会强制拒绝写入，直接报错（提示 No space left on device）。</p>
+<p>安装 Ubuntu 到了最后一步，Ubuntu 需要把自己的启动项（GRUB）写进主板 NVRAM。但是，Linux 内核检查发现 NVRAM 空间已经超过了安全警戒线，触发了保护机制，拒绝了这次写入。因此安装程序报错。</p>
+<ol start="3">
+<li>解决方案</li>
+</ol>
+<p>在启动安装盘时，在内核参数中加入 efi_no_storage_paranoia。</p>
+<p>这个参数的意思是：</p>
+<p>efi_no_storage_paranoia = EFI 无存储偏执（关闭空间安全检查）</p>
+<ul>
+<li>第一步：清理安装失败残留项</li>
+</ul>
+<p>(1) 在 U 盘 Ubuntu 环境中清理 EFI 残留项</p>
+<p>在终端输入 efibootmgr 并回车。</p>
+<p>找到名字带有 ubuntu 的硬盘启动项，记下它的编号（比如 Boot0002）。</p>
+<p>输入以下命令删除它：</p>
+<pre><code>sudo efibootmgr -b 0002 -B
+</code></pre>
+<p>注意硬盘启动项不要和 U 盘启动项搞混，不过此处把 U 盘启动项删了也没事，没有则跳过。</p>
+<p>(2) 清理硬盘 EFI 分区里的残留文件</p>
+<p>如果停留在 Ubuntu 环境，在终端输入 lsblk，找到 EFI 分区（通常是几百 MB 大小，标签可能是 /boot/efi，比如 sda1 或 nvme0n1p1）。</p>
+<p>假设 EFI 分区是 nvme0n1p1，依次执行以下命令把它挂载并清理：</p>
+<pre><code>sudo mkdir -p /mnt/efi
+sudo mount /dev/nvme0n1p1 /mnt/efi
+sudo rm -rf /mnt/efi/EFI/ubuntu
+sudo umount /mnt/efi
+</code></pre>
+<p>如果进入了 Windows 环境，可以直接使用 DiskGenius 操作删除。</p>
+<p>打开 DiskGenius，在左侧的磁盘列表中，找到硬盘中标有 &quot;ESP&quot; 或 &quot;EFI&quot; 的小分区（FAT32格式）。</p>
+<p>展开这个分区，点击里面的 EFI 文件夹。</p>
+<p>找到 ubuntu 文件夹，右键 -&gt; 强制删除，完成。</p>
+<p>(3) 清理硬盘 Ubuntu 分区里的残留文件</p>
+<p>将之前选择安装或挂载 Ubuntu 的分区格式化或删除成为空闲空间。</p>
+<ul>
+<li>第二步：重新从 U 盘启动，添加启动参数</li>
+</ul>
+<p>将 Ubuntu 安装 U 盘插入电脑，重启电脑，从 U 盘启动。</p>
+<p>在菜单界面选中 &quot;Try or Install Ubuntu&quot; （试用或安装 Ubuntu），按下键盘上的字母 e 键，进入参数编辑模式。</p>
+<p>此时会进入类似文本编辑器的界面，使用键盘的上、下、左、右方向键移动光标，找到以单词 linux 开头的那一行。</p>
+<p>这行代码的末尾，通常会写着 quiet splash --- （有时候没有 ---）。</p>
+<p>将光标移动到 quiet splash 的后面。</p>
+<p>按一下空格键，然后输入参数：</p>
+<pre><code>efi_no_storage_paranoia
+</code></pre>
+<p>修改完成后，这一行的末尾看起来应该是这样的：</p>
+<pre><code>... quiet splash efi_no_storage_paranoia ---
+</code></pre>
+<p>(注意：如果原来有 ---，就把参数加在 --- 前面；如果没有，直接加在最后面就行。单词之间必须有空格隔开。)</p>
+<p>确认无误后，按下键盘上的 F10 键。此时，系统会使用刚刚添加了“解除限制”参数的状态开始启动。</p>
+<ul>
+<li>第三步：正常安装系统</li>
+</ul>
+<p>顺利解决，不再报错。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Ubuntu VPS开启BBR加速</title>
+      <link>https://blog.dztang.net/posts/ubuntu-vps-enable-bbr/</link>
+      <guid isPermaLink="true">https://blog.dztang.net/posts/ubuntu-vps-enable-bbr/</guid>
+      <pubDate>Fri, 10 Apr 2026 00:00:00 GMT</pubDate>
+      <category>Linux 运维</category>
+      <description>Ubuntu VPS开启BBR加速。</description>
+      <content:encoded><![CDATA[<p>1.检查内核版本
+首先，确认系统内核是否满足要求。在终端输入以下命令：</p>
+<pre><code>uname -r
+</code></pre>
+<p>如果输出的版本号低于 4.9，则需要升级内核。通常，Ubuntu 16.04 及以上版本都支持 BBR。</p>
+<p>2.写入 BBR 配置
+需要将启用 BBR 的参数写入系统的配置文件中。依次执行以下两条命令：</p>
+<pre><code>echo &quot;net.core.default_qdisc=fq&quot; &gt;&gt; /etc/sysctl.conf
+echo &quot;net.ipv4.tcp_congestion_control=bbr&quot; &gt;&gt; /etc/sysctl.conf
+</code></pre>
+<p>3.应用配置
+执行完上述命令后，需要让系统重新加载配置文件才能生效。输入以下命令：</p>
+<pre><code>sysctl -p
+</code></pre>
+<p>4.验证 BBR 是否启用
+最后，验证 BBR 是否已成功启用。输入以下命令：</p>
+<pre><code># 检查 TCP 拥塞控制算法
+sysctl net.ipv4.tcp_congestion_control
+</code></pre>
+<p>预期输出：net.ipv4.tcp_congestion_control = bbr</p>
+<pre><code># 检查 BBR 内核模块是否已加载
+lsmod | grep bbr
+</code></pre>
+<p>预期输出：类似 tcp_bbr                20480  14 的字样</p>
+<p>以上两项验证通过，则成功开启了 BBR 加速。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Ubuntu VPS自建代理节点</title>
+      <link>https://blog.dztang.net/posts/ubuntu-vps-proxy-node/</link>
+      <guid isPermaLink="true">https://blog.dztang.net/posts/ubuntu-vps-proxy-node/</guid>
+      <pubDate>Fri, 10 Apr 2026 00:00:00 GMT</pubDate>
+      <category>Linux 运维</category>
+      <description>Ubuntu VPS自建代理节点。</description>
+      <content:encoded><![CDATA[<ol>
+<li>更新系统并安装基础组件</li>
+</ol>
+<p>进入服务器终端，依次执行以下命令：</p>
+<pre><code>sudo -i
+apt update &amp;&amp; apt upgrade -y
+apt install curl wget -y
+</code></pre>
+<ol start="2">
+<li>一键安装 3x-ui 面板</li>
+</ol>
+<p>运行官方推荐的一键安装脚本：</p>
+<pre><code>bash &lt;(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
+</code></pre>
+<p>安装过程中，脚本会暂停并提示设置面板的访问端口（建议设置一个大于10000的不常用端口，设置好后需要在防火墙放行端口）。</p>
+<p>安装完成后，会显示随机生成的用户名、密码、以及后台管理网站入口。</p>
+<ol start="3">
+<li>配置选项</li>
+</ol>
+<p>在服务器终端中，输入以下命令呼出 3x-ui 管理菜单：</p>
+<pre><code>x-ui
+</code></pre>
+<p>输入对应选项，对默认随机生成的账户密码进行修改并启动BBR加速。</p>
+<ol start="4">
+<li>登录面板并创建节点</li>
+</ol>
+<p>打开浏览器，访问后台管理入口，登陆账户。</p>
+<p>点击左侧菜单的“入站列表 (Inbounds)”，然后点击“添加入站”。</p>
+<p>推荐的防阻断配置：</p>
+<pre><code>协议 (Protocol)：vless
+传输配置 (Network)：tcp
+安全性 (Security)：reality （安全性设置中点击“Get New Cert”）
+</code></pre>
+<p>上述配置设置完成后，其余选项保持默认，直接点击“创建”。</p>
+<p>在列表中找到刚创建的节点，点击操作栏的“查看”，然后复制节点分享链接（以 vless:// 开头的一长串字符）。将这串链接直接导入本地的客户端软件（V2rayN）中即可使用。</p>
+<ol start="5">
+<li>使用 Clash Verge 连接 Vless 节点</li>
+</ol>
+<p>Clash Verge 连接 Vless 节点需要使用 [.yaml] 配置文件，文件名任意。按照如下模板将 vless 链接中的参数手动填入模板中或使用 Gemini 等 AI 帮忙转换填写。</p>
+<pre><code>mode: rule
+log-level: info
+allow-lan: false
+
+# 代理节点配置区域
+proxies:
+  - name: &quot;My-VLESS-Node&quot;          # [自定义] 节点名称，可以随便改（如 &quot;US-Node-1&quot;）
+    type: vless
+    server: YOUR_SERVER_IP         # [必填] 替换为服务器 IP 或域名
+    port: YOUR_PORT                # [必填] 替换为节点端口 (纯数字，如 443)
+    uuid: YOUR_UUID                # [必填] 替换为 UUID
+    network: tcp                   # 传输协议，通常为 tcp, ws 或 grpc
+    tls: true
+    udp: true
+    servername: YOUR_SNI           # [必填] 替换为伪装域名 (SNI，如 aws.amazon.com)
+    client-fingerprint: chrome     # 客户端指纹，建议保留 chrome 或 safari
+    reality-opts:                  # Reality 专属配置 (如果新节点不是 Reality 协议，删除这两行)
+      public-key: YOUR_PUBLIC_KEY  # [必填] 替换为 Public Key (pbk)
+      short-id: YOUR_SHORT_ID      # [选填] 替换为 Short Id (sid)，如果没有则删除此行
+
+# 代理组配置区域
+proxy-groups:
+  - name: &quot;PROXIES&quot;
+    type: select
+    proxies:
+      - &quot;My-VLESS-Node&quot;            # [注意] 这里的名字必须和上面 proxies 里的 name 一模一样
+
+# 路由规则区域 (已配置绕过大陆)
+rules:
+  # 1. 局域网及本地流量直连 (防止影响本地打印机、NAS 等)
+  - GEOSITE,private,DIRECT
+  - GEOIP,lan,DIRECT,no-resolve
+  
+  # 2. 绕过大陆网站
+  - GEOSITE,cn,DIRECT
+  
+  # 3. 绕过大陆 IP
+  - GEOIP,cn,DIRECT
+  
+  # 4. 其他所有流量走代理组
+  - MATCH,PROXIES
+</code></pre>
+<p>填写好配置文件后，将配置文件直接拖入 Clash Verge 的 [订阅] UI 页面中，选中后即可同其他订阅链接般正常使用。</p>
+<p>实测，Cloudflare WARP 的 IP 无法解锁服务。如果需要访问流媒体或AI，需要选择原生纯净 IP 的 VPS 或使用 DNS解锁 / 静态ISP代理 等方式。</p>
+<ol start="6">
+<li>补充 Hysteria 2 UDP 链接快速部署方案</li>
+</ol>
+<p>使用一键安装脚本跟随引导部署：</p>
+<pre><code>bash &lt;(curl -fsSL https://raw.githubusercontent.com/Misaka-blog/hysteria-install/main/hy2/hysteria.sh)
+</code></pre>
+<p>在VPS防火墙上将对应端口的 TCP、UDP 协议放行。</p>
+<p>在配置文件中添加节点的对应信息。</p>
+<pre><code>mode: rule
+log-level: info
+allow-lan: false
+
+# 代理节点配置区域
+proxies:
+  # ---------------- 节点 1：原来的 VLESS-Reality 节点 ----------------
+  - name: &quot;My-VLESS-Node&quot;          # [自定义] 节点名称，可以随便改（如 &quot;US-Node-1&quot;）
+    type: vless
+    server: YOUR_SERVER_IP         # [必填] 替换为服务器 IP 或域名
+    port: YOUR_PORT                # [必填] 替换为节点端口 (纯数字，如 443)
+    uuid: YOUR_UUID                # [必填] 替换为 UUID
+    network: tcp                   # 传输协议，通常为 tcp, ws 或 grpc
+    tls: true
+    udp: true
+    servername: YOUR_SNI           # [必填] 替换为伪装域名 (SNI，如 aws.amazon.com)
+    client-fingerprint: chrome     # 客户端指纹，建议保留 chrome 或 safari
+    reality-opts:                  # Reality 专属配置 (如果新节点不是 Reality 协议，删除这两行)
+      public-key: YOUR_PUBLIC_KEY  # [必填] 替换为 Public Key (pbk)
+      short-id: YOUR_SHORT_ID      # [选填] 替换为 Short Id (sid)，如果没有则删除此行
+
+  # ---------------- 节点 2：新增的 Hysteria 2 节点 ----------------
+  - name: &quot;My-Hysteria-2-Node&quot;     # [自定义] 节点名称，可以随便改（如 &quot;US-Node-1&quot;）
+    type: hysteria2
+    server: YOUR_SERVER_IP         # [必填] 替换为服务器 IP 或域名
+    port: YOUR_PORT                # [必填] 替换为节点端口 (纯数字，如 443)
+    password: &quot;YOUR_PASSWORD&quot;      # [必填] 替换为节点密码
+    sni: YOUR_SNI                  # [必填] 替换为伪装域名 (SNI，如 aws.amazon.com)
+    skip-cert-verify: true         # 对应 insecure=1 (允许自签证书)
+    # Hysteria 建议配置上下行带宽(Mbps)，可以根据你的实际宽带调整，这里默认填宽带500M
+    up: 100
+    down: 500
+
+# 代理组配置区域
+proxy-groups:
+  - name: &quot;PROXIES&quot;
+    type: select
+    proxies:
+      - &quot;My-Hysteria-2-Node&quot;       # 把 Hysteria2 加进来 (放第一位方便优先选)
+      - &quot;My-VLESS-Node&quot;            # [注意] 这里的名字必须和上面 proxies 里的 name 一模一样
+
+# 路由规则区域 (已配置绕过大陆)
+rules:
+  # 1. 局域网及本地流量直连 (防止影响本地打印机、NAS 等)
+  - GEOSITE,private,DIRECT
+  - GEOIP,lan,DIRECT,no-resolve
+  
+  # 2. 绕过大陆网站
+  - GEOSITE,cn,DIRECT
+  
+  # 3. 绕过大陆 IP
+  - GEOIP,cn,DIRECT
+  
+  # 4. 其他所有流量走代理组
+  - MATCH,PROXIES
+</code></pre>
+<p>导入软件后选择连接即可。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>systemctl --user daemon-reload报错</title>
+      <link>https://blog.dztang.net/posts/systemctl-user-daemon-reload-error/</link>
+      <guid isPermaLink="true">https://blog.dztang.net/posts/systemctl-user-daemon-reload-error/</guid>
+      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
+      <category>Linux 运维</category>
+      <description>systemctl --user daemon-reload报错解决。</description>
+      <content:encoded><![CDATA[<p>运行 systemctl --user daemon-reload 时，遇到如下报错。</p>
+<pre><code>Failed to connect to bus: $DBUS_SESSION_BUS_ADDRESS and $XDG_RUNTIME_DIR not defined (consider using --machine=&lt;user&gt;@.host --user to connect to bus of other user)
+</code></pre>
+<p>解决方案，依次运行以下命令。</p>
+<pre><code>export XDG_RUNTIME_DIR=&quot;/run/user/$(id -u)&quot;
+export DBUS_SESSION_BUS_ADDRESS=&quot;unix:path=${XDG_RUNTIME_DIR}/bus&quot;
+</code></pre>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Overleaf生成GB/T 7714国标格式参考文献的最小实现</title>
+      <link>https://blog.dztang.net/posts/overleaf-gbt7714-bibliography/</link>
+      <guid isPermaLink="true">https://blog.dztang.net/posts/overleaf-gbt7714-bibliography/</guid>
+      <pubDate>Sun, 01 Mar 2026 00:00:00 GMT</pubDate>
+      <category>文档写作</category>
+      <description>Overleaf生成GB/T 7714国标格式参考文献的最小实现。</description>
+      <content:encoded><![CDATA[<p>编译器选择XeLaTeX，新建&quot;ref.bib&quot;文件填入参考文献bib信息，正文&quot;main.tex&quot;文件内容如下。</p>
+<pre><code>\documentclass{article}
+\usepackage{graphicx}
+\usepackage{ctex}
+
+\usepackage{gbt7714}
+\bibliographystyle{gbt7714-numerical}
+
+\begin{document}
+
+\section{Introduction}
+
+引用参考文献\cite{[参考文献bib]}。
+
+\bibliography{ref} % bib文件
+
+\end{document}
+</code></pre>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Ubuntu无ROOT使用Tailscale实现异地组网和内网穿透</title>
+      <link>https://blog.dztang.net/posts/ubuntu-rootless-tailscale-networking/</link>
+      <guid isPermaLink="true">https://blog.dztang.net/posts/ubuntu-rootless-tailscale-networking/</guid>
+      <pubDate>Sat, 10 Jan 2026 00:00:00 GMT</pubDate>
+      <category>Linux 运维</category>
+      <description>Ubuntu无ROOT使用Tailscale实现异地组网和内网穿透。</description>
+      <content:encoded><![CDATA[<h1 id="配置手动启动" tabindex="-1">配置手动启动 <a class="heading-anchor" href="#配置手动启动" aria-hidden="true">#</a></h1>
+<p>访问<a href="https://pkgs.tailscale.com/stable/#static">https://pkgs.tailscale.com/stable/#static</a>选择对应处理器类的版本下载。</p>
+<p>压缩包中可以得到类似'tailscale_1.92.5_amd64'的文件夹，其中包含'tailscale'、'tailscaled'等，将其解压至'/home/[username]/tailscale_1.92.5_amd64'路径。</p>
+<p>首先启动守护程序，依次执行：</p>
+<pre><code>mkdir -p /home/[username]/.local/share/tailscale
+
+# 启动 tailscaled（后台）
+nohup /home/[username]/tailscale_1.92.5_amd64/tailscaled \
+  --tun=userspace-networking \
+  --state=/home/[username]/.local/share/tailscale/tailscaled.state \
+  --socket=/home/[username]/.local/share/tailscale/tailscaled.sock \
+  --socks5-server=127.0.0.1:1055 \
+  --outbound-http-proxy-listen=127.0.0.1:1055 \
+  &gt; /home/[username]/.local/share/tailscale/tailscaled.log 2&gt;&amp;1 &amp;
+</code></pre>
+<p>使用前需要先绑定账户：</p>
+<pre><code>/home/[username]/tailscale_1.92.5_amd64/tailscale --socket=/home/[username]/.local/share/tailscale/tailscaled.sock up
+</code></pre>
+<p>验证是否上线：</p>
+<pre><code>/home/[username]/tailscale_1.92.5_amd64/tailscale --socket=/home/[username]/.local/share/tailscale/tailscaled.sock status
+</code></pre>
+<p>端口暴露给 tailnet [可选]：</p>
+<pre><code># tcp协议
+/home/[username]/tailscale_1.92.5_amd64/tailscale --socket=/home/[username]/.local/share/tailscale/tailscaled.sock serve --tcp 2222 tcp://localhost:22
+
+# http协议
+/home/[username]/tailscale_1.92.5_amd64/tailscale --socket=/home/[username]/.local/share/tailscale/tailscaled.sock serve localhost:3000
+</code></pre>
+<p>查看当前暴露状态：</p>
+<pre><code>/home/[username]/tailscale_1.92.5_amd64/tailscale --socket=/home/[username]/.local/share/tailscale/tailscaled.sock serve status
+</code></pre>
+<p>关闭：</p>
+<pre><code>/home/[username]/tailscale_1.92.5_amd64/tailscale --socket=/home/[username]/.local/share/tailscale/tailscaled.sock serve reset
+</code></pre>
+<h1 id="设置开机自启" tabindex="-1">设置开机自启 <a class="heading-anchor" href="#设置开机自启" aria-hidden="true">#</a></h1>
+<ol>
+<li>启用用户驻留 (Linger)
+默认情况下，用户级 systemd 服务只有在用户登录时才会启动，在用户登出时会关闭。启用 linger 可以让服务在系统开机时自动启动。
+运行以下命令：</li>
+</ol>
+<pre><code>loginctl enable-linger [username]
+</code></pre>
+<p>可以通过 ls /var/lib/systemd/linger 查看是否生成了 [username] 文件来确认是否成功。</p>
+<ol start="2">
+<li>创建 Systemd 服务目录
+为当前用户创建 systemd 配置目录：</li>
+</ol>
+<pre><code>mkdir -p ~/.config/systemd/user
+</code></pre>
+<ol start="3">
+<li>创建 tailscaled 服务文件
+使用习惯的编辑器（nano 或 vim）创建服务配置文件：</li>
+</ol>
+<pre><code>nano ~/.config/systemd/user/tailscaled.service
+</code></pre>
+<p>将以下内容粘贴进去：</p>
+<pre><code>[Unit]
+Description=Tailscale Userspace Daemon
+After=network.target
+
+[Service]
+Type=simple
+# 启动 tailscaled 进程
+ExecStart=/home/[username]/tailscale_1.92.5_amd64/tailscaled \
+  --tun=userspace-networking \
+  --state=/home/[username]/.local/share/tailscale/tailscaled.state \
+  --socket=/home/[username]/.local/share/tailscale/tailscaled.sock \
+  --socks5-server=127.0.0.1:1055 \
+  --outbound-http-proxy-listen=127.0.0.1:1055
+
+# 崩溃后自动重启
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target
+</code></pre>
+<p>保存并退出。</p>
+<ol start="4">
+<li>重新加载并启动服务
+执行以下命令让 systemd 识别新服务，并设置为开机自启：</li>
+</ol>
+<pre><code># 重新加载 user systemd 守护进程
+systemctl --user daemon-reload
+
+# 设置开机自启
+systemctl --user enable tailscaled.service
+
+# 立即启动服务 (启动前确保之前手动后台运行的 tailscaled 进程已经被 kill 掉)
+systemctl --user start tailscaled.service
+</code></pre>
+<ol start="5">
+<li>查看运行状态和日志
+现在，tailscaled 已经被 systemd 托管了。</li>
+</ol>
+<pre><code># 查看状态
+systemctl --user status tailscaled.service
+
+# 查看运行日志（替代 &gt; tailscaled.log）
+journalctl --user -u tailscaled.service -f
+</code></pre>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Ubuntu系统重装NVIDIA显卡驱动</title>
+      <link>https://blog.dztang.net/posts/ubuntu-reinstall-nvidia-driver/</link>
+      <guid isPermaLink="true">https://blog.dztang.net/posts/ubuntu-reinstall-nvidia-driver/</guid>
+      <pubDate>Wed, 31 Dec 2025 00:00:00 GMT</pubDate>
+      <category>Linux 运维</category>
+      <description>Ubuntu系统重装NVIDIA显卡驱动。</description>
+      <content:encoded><![CDATA[<ol>
+<li>卸载现有驱动</li>
+</ol>
+<p>运行以下命令彻底清除旧驱动（不用担心，重启后会使用通用显示驱动）：</p>
+<pre><code>sudo apt-get --purge remove &quot;*nvidia*&quot;
+sudo apt-get --purge remove &quot;*libnvidia*&quot;
+sudo apt-get autoremove
+</code></pre>
+<ol start="2">
+<li>确认推荐驱动版本</li>
+</ol>
+<p>清除后，检查系统推荐的驱动版本：</p>
+<pre><code>ubuntu-drivers devices
+</code></pre>
+<p>会看到类似 driver   : nvidia-driver-580-open - distro non-free recommended 的输出。记住那个 recommended 的版本号或其他自己想要安装的版本。</p>
+<ol start="3">
+<li>重新安装驱动</li>
+</ol>
+<p>可以选择自动安装推荐版本，或者手动指定版本。</p>
+<p>方法 A：自动安装</p>
+<pre><code>sudo ubuntu-drivers autoinstall
+</code></pre>
+<p>方法 B：手动安装指定版本
+假设需要安装的是 nvidia-driver-580-server-open 版本：</p>
+<pre><code>sudo apt-get update
+sudo apt-get install nvidia-driver-580-server-open5
+</code></pre>
+<ol start="4">
+<li>重启验证</li>
+</ol>
+<p>安装完成后，重启：</p>
+<pre><code>sudo reboot
+</code></pre>
+<p>重启后再次输入 nvidia-smi，此时应该可以看到新的驱动信息了。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>内网在线设备扫描</title>
+      <link>https://blog.dztang.net/posts/lan-device-scanning/</link>
+      <guid isPermaLink="true">https://blog.dztang.net/posts/lan-device-scanning/</guid>
+      <pubDate>Wed, 31 Dec 2025 00:00:00 GMT</pubDate>
+      <category>Linux 运维</category>
+      <description>内网在线设备扫描。</description>
+      <content:encoded><![CDATA[<pre><code>import subprocess
+import socket
+import threading
+import ipaddress
+import platform
+from queue import Queue
+from datetime import datetime
+
+# 设置扫描的线程数，线程越多扫描越快，但过高可能导致网络拥堵或报错
+THREAD_COUNT = 100
+queue = Queue()
+active_hosts = []
+lock = threading.Lock()
+
+def get_local_ip_info():
+    &quot;&quot;&quot;
+    获取本机IP和大致的网段信息
+    注意：这是一个简化的网段获取方式，假设是常见的 /24 子网
+    &quot;&quot;&quot;
+    try:
+        # 创建一个UDP套接字连接到外部以获取本机IP（不会实际发送数据）
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect((&quot;8.8.8.8&quot;, 80))
+        local_ip = s.getsockname()[0]
+        s.close()
+        
+        # 假设子网掩码是 255.255.255.0 (/24)
+        # 将IP的最后一段替换为0，例如 192.168.1.5 -&gt; 192.168.1.0/24
+        network_prefix = '.'.join(local_ip.split('.')[:-1]) + '.0/24'
+        return local_ip, network_prefix
+    except Exception as e:
+        print(f&quot;获取本机IP失败: {e}&quot;)
+        return None, None
+
+def ping_host(ip):
+    &quot;&quot;&quot;
+    对单个IP执行Ping操作
+    Windows下参数是 -n, Linux/Mac下是 -c
+    &quot;&quot;&quot;
+    param = '-n' if platform.system().lower() == 'windows' else '-c'
+    # timeout参数在不同系统表现不同，Windows ping 默认等待时间较长
+    # -w 500 表示等待500毫秒
+    timeout_param = '-w' if platform.system().lower() == 'windows' else '-W'
+    timeout_val = '500' if platform.system().lower() == 'windows' else '1'
+
+    command = ['ping', param, '1', timeout_param, timeout_val, str(ip)]
+    
+    # 禁止弹出控制台窗口 (Windows特有优化)
+    startupinfo = None
+    if platform.system().lower() == 'windows':
+        startupinfo = subprocess.STARTUPINFO()
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+
+    try:
+        response = subprocess.call(
+            command, 
+            stdout=subprocess.DEVNULL, 
+            stderr=subprocess.DEVNULL,
+            startupinfo=startupinfo
+        )
+        return response == 0
+    except Exception:
+        return False
+
+def get_hostname(ip):
+    &quot;&quot;&quot;尝试解析主机名&quot;&quot;&quot;
+    try:
+        hostname, _, _ = socket.gethostbyaddr(str(ip))
+        return hostname
+    except socket.herror:
+        return &quot;Unknown&quot;
+
+def worker():
+    &quot;&quot;&quot;线程工作函数&quot;&quot;&quot;
+    while True:
+        ip = queue.get()
+        if ip is None:
+            break
+        
+        if ping_host(ip):
+            hostname = get_hostname(ip)
+            with lock:
+                print(f&quot;[+] 发现设备: {ip} ({hostname})&quot;)
+                active_hosts.append({'ip': str(ip), 'hostname': hostname})
+        
+        queue.task_done()
+
+def scan_network():
+    print(&quot;-&quot; * 50)
+    print(&quot;简单 Python 内网扫描器 (基于 Ping)&quot;)
+    print(&quot;-&quot; * 50)
+
+    local_ip, network_str = get_local_ip_info()
+    if not local_ip:
+        return
+
+    print(f&quot;本机 IP: {local_ip}&quot;)
+    print(f&quot;扫描目标网段: {network_str}&quot;)
+    print(f&quot;开始扫描... (线程数: {THREAD_COUNT})&quot;)
+    print(&quot;-&quot; * 50)
+
+    start_time = datetime.now()
+
+    # 创建网络对象
+    try:
+        network = ipaddress.ip_network(network_str, strict=False)
+    except ValueError:
+        print(&quot;网段格式错误&quot;)
+        return
+
+    # 启动线程
+    threads = []
+    for _ in range(THREAD_COUNT):
+        t = threading.Thread(target=worker)
+        t.daemon = True # 设置为守护线程
+        t.start()
+        threads.append(t)
+
+    # 将所有IP放入队列 (跳过网络地址和广播地址)
+    for ip in network.hosts():
+        queue.put(str(ip))
+
+    # 等待队列清空
+    queue.join()
+
+    # 停止线程
+    for _ in range(THREAD_COUNT):
+        queue.put(None)
+    for t in threads:
+        t.join()
+
+    end_time = datetime.now()
+    duration = end_time - start_time
+
+    print(&quot;-&quot; * 50)
+    print(f&quot;扫描完成。耗时: {duration}&quot;)
+    print(f&quot;共发现 {len(active_hosts)} 个在线设备:&quot;)
+    
+    # 简单的排序并输出
+    active_hosts.sort(key=lambda x: ipaddress.IPv4Address(x['ip']))
+    for host in active_hosts:
+        print(f&quot;IP: {host['ip'].ljust(15)} | Hostname: {host['hostname']}&quot;)
+
+if __name__ == &quot;__main__&quot;:
+    scan_network()
+    input(&quot;\n按回车键退出...&quot;)
+</code></pre>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Ubuntu安装和使用Miniconda</title>
+      <link>https://blog.dztang.net/posts/ubuntu-install-miniconda/</link>
+      <guid isPermaLink="true">https://blog.dztang.net/posts/ubuntu-install-miniconda/</guid>
+      <pubDate>Wed, 17 Dec 2025 00:00:00 GMT</pubDate>
+      <category>Linux 运维</category>
+      <description>Ubuntu安装和使用Miniconda。</description>
+      <content:encoded><![CDATA[<h1 id="安装miniconda" tabindex="-1">安装Miniconda <a class="heading-anchor" href="#安装miniconda" aria-hidden="true">#</a></h1>
+<p>进入用户根目录，运行：</p>
+<pre><code>wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+</code></pre>
+<p>下载完成后，运行：</p>
+<pre><code>bash Miniconda3-latest-Linux-x86_64.sh
+</code></pre>
+<p>根据提示完成安装。</p>
+<p>激活环境变量。</p>
+<pre><code>source ~/.bashrc
+</code></pre>
+<p>验证安装。</p>
+<pre><code>conda --version
+</code></pre>
+<p>如果最后一步初始化时选了no，可以手动执行：</p>
+<pre><code>~/miniconda3/bin/conda init bash
+source ~/.bashrc
+</code></pre>
+<h1 id="创建和使用虚拟环境" tabindex="-1">创建和使用虚拟环境 <a class="heading-anchor" href="#创建和使用虚拟环境" aria-hidden="true">#</a></h1>
+<p>查询Conda可以安装的Python版本：</p>
+<pre><code># 基础查询
+conda search -f python
+
+# 查看特定版本
+conda search -f python=3.13
+conda search -f &quot;python&gt;=3.10&quot;
+
+# 指定源查询（比如 conda-forge）
+conda search -c conda-forge -f python
+
+# 只看最新的几个版本
+conda search -f python | tail -n 20
+</code></pre>
+<p>创建新的虚拟环境：</p>
+<pre><code># 创建一个名为 new_env 的环境，指定 Python 3.13.9
+conda create -n new_env python=3.13.9
+
+# 绝对纯净方法，防止配置干扰
+conda create -n new_env python=3.13.9 --no-default-packages
+</code></pre>
+<p>激活环境：</p>
+<pre><code>conda activate new_env
+</code></pre>
+<p>退出环境：</p>
+<pre><code>conda deactivate
+</code></pre>
+<p>查看环境：</p>
+<pre><code>conda env list
+</code></pre>
+<p>删除环境</p>
+<pre><code>conda remove -n new_env --all
+</code></pre>
+<p>克隆环境：</p>
+<pre><code>conda create -n new_new_env --clone new_env
+</code></pre>
+<h1 id="卸载miniconda" tabindex="-1">卸载Miniconda <a class="heading-anchor" href="#卸载miniconda" aria-hidden="true">#</a></h1>
+<p>清理环境变量：</p>
+<pre><code>conda init --reverse --all
+</code></pre>
+<p>删除 Conda 的配置文件夹：</p>
+<pre><code>rm -rf ~/.condarc ~/.conda ~/.continuum
+</code></pre>
+<p>删除 Miniconda 文件夹：</p>
+<pre><code>rm -rf ~/miniconda3
+</code></pre>
+<p>手动清理 .bashrc：</p>
+<p>1.使用编辑器或其他方式打开配置文件</p>
+<pre><code>vim ~/.bashrc
+</code></pre>
+<p>2.向下滚动到文件底部，找到类似下面被 &gt;&gt;&gt; conda initialize &gt;&gt;&gt; 包裹的代码块：</p>
+<pre><code># &gt;&gt;&gt; conda initialize &gt;&gt;&gt;
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup=&quot;$('/home/你的用户名/miniconda3/bin/conda' 'shell.bash' 'hook' 2&gt; /dev/null)&quot;
+if [ $? -eq 0 ]; then
+    eval &quot;$__conda_setup&quot;
+else
+    if [ -f &quot;/home/你的用户名/miniconda3/etc/profile.d/conda.sh&quot; ]; then
+        . &quot;/home/你的用户名/miniconda3/etc/profile.d/conda.sh&quot;
+    else
+        export PATH=&quot;/home/你的用户名/miniconda3/bin:$PATH&quot;
+    fi
+fi
+unset __conda_setup
+# &lt;&lt;&lt; conda initialize &lt;&lt;&lt;
+</code></pre>
+<p>3.删除这整个代码块。</p>
+<p>刷新一下环境变量：</p>
+<pre><code>source ~/.bashrc
+</code></pre>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>JupyterLab彻底删除文件</title>
+      <link>https://blog.dztang.net/posts/jupyterlab-permanently-delete-files/</link>
+      <guid isPermaLink="true">https://blog.dztang.net/posts/jupyterlab-permanently-delete-files/</guid>
+      <pubDate>Wed, 17 Dec 2025 00:00:00 GMT</pubDate>
+      <category>Linux 运维</category>
+      <description>JupyterLab彻底删除文件。</description>
+      <content:encoded><![CDATA[<p>JupyterLab删除的文件会被保存在Trash路径，通过以下命令访问。</p>
+<pre><code>cd ~/.local/share/Trash
+</code></pre>
+<p>查看回收站占用了多少空间：</p>
+<pre><code>du -sh ~/.local/share/Trash/
+</code></pre>
+<p>彻底清空回收站：</p>
+<pre><code>rm -rf ~/.local/share/Trash/files/*
+</code></pre>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Ubuntu无ROOT权限安装、优化和使用Screen</title>
+      <link>https://blog.dztang.net/posts/ubuntu-rootless-screen/</link>
+      <guid isPermaLink="true">https://blog.dztang.net/posts/ubuntu-rootless-screen/</guid>
+      <pubDate>Wed, 17 Dec 2025 00:00:00 GMT</pubDate>
+      <category>Linux 运维</category>
+      <description>Ubuntu无ROOT权限安装、优化和使用Screen。</description>
+      <content:encoded><![CDATA[<h1 id="安装screen" tabindex="-1">安装Screen <a class="heading-anchor" href="#安装screen" aria-hidden="true">#</a></h1>
+<h2 id="一如果有-conda-环境" tabindex="-1">一：如果有 Conda 环境： <a class="heading-anchor" href="#一如果有-conda-环境" aria-hidden="true">#</a></h2>
+<pre><code>conda install -c conda-forge screen
+</code></pre>
+<h2 id="二从源码编译安装" tabindex="-1">二：从源码编译安装 <a class="heading-anchor" href="#二从源码编译安装" aria-hidden="true">#</a></h2>
+<p>1.创建本地安装目录</p>
+<pre><code>mkdir -p ~/local/src
+cd ~/local/src
+</code></pre>
+<p>2.下载 Screen 源码，以 4.9.0 为例</p>
+<pre><code>wget https://ftp.gnu.org/gnu/screen/screen-4.9.0.tar.gz
+tar -xzvf screen-4.9.0.tar.gz
+cd screen-4.9.0
+</code></pre>
+<p>3.配置并指定安装路径</p>
+<pre><code>./configure --prefix=$HOME/local
+</code></pre>
+<p>4.编译并安装</p>
+<pre><code>make
+make install
+</code></pre>
+<p>5.配置环境变量</p>
+<pre><code>echo 'export PATH=$HOME/local/bin:$PATH' &gt;&gt; ~/.bashrc
+source ~/.bashrc
+</code></pre>
+<h1 id="配置screen" tabindex="-1">配置Screen <a class="heading-anchor" href="#配置screen" aria-hidden="true">#</a></h1>
+<p>在你的用户主目录下创建或编辑配置文件.screenrc：</p>
+<pre><code>vim ~/.screenrc
+</code></pre>
+<p>在配置文件中写入内容：</p>
+<pre><code>$Id: screenrc,v 1.15 2003/10/08 11:39:03 zal Exp $
+#
+# /etc/screenrc
+#
+#   This is the system wide screenrc.
+#
+#   You can use this file to change the default behavior of screen system wide
+#   or copy it to ~/.screenrc and use it as a starting point for your own
+#   settings.
+#
+#   Commands in this file are used to set options, bind screen functions to
+#   keys, redefine terminal capabilities, and to automatically establish one or
+#   more windows at the beginning of your screen session.
+#
+#   This is not a comprehensive list of options, look at the screen manual for
+#   details on everything that you can put in this file.
+#
+
+# ------------------------------------------------------------------------------
+# SCREEN SETTINGS
+# ------------------------------------------------------------------------------
+
+startup_message off
+#nethack on
+
+#defflow on # will force screen to process ^S/^Q
+deflogin on
+#autodetach off
+autodetach on
+
+# turn visual bell on
+#vbell on
+#vbell_msg &quot;   Wuff  ----  Wuff!!  &quot;
+vbell off
+
+# define a bigger scrollback, default is 100 lines
+defscrollback 102400
+
+# ------------------------------------------------------------------------------
+# SCREEN KEYBINDINGS
+# ------------------------------------------------------------------------------
+
+# Remove some stupid / dangerous key bindings
+bind ^k
+#bind L
+bind ^\
+# Make them better
+bind \\ quit
+bind K kill
+bind I login on
+bind O login off
+bind } history
+
+# An example of a &quot;screen scraper&quot; which will launch urlview on the current
+# screen window
+#
+#bind ^B eval &quot;hardcopy_append off&quot; &quot;hardcopy -h $HOME/.screen-urlview&quot; &quot;screen urlvi&gt;
+
+# ------------------------------------------------------------------------------
+# TERMINAL SETTINGS
+# ------------------------------------------------------------------------------
+
+# The vt100 description does not mention &quot;dl&quot;. *sigh*
+termcapinfo vt100 dl=5\E[M
+
+
+# --- MODIFIED SECTION START ---
+
+# 1. Disable the old hardstatus off setting to allow our bottom bar
+# hardstatus off
+hardstatus on
+
+# 2. Define custom commands (Backticks) to fetch dynamic info
+#    %1` will hold the Username (runs 'whoami' once)
+backtick 1 0 0 whoami
+
+#    %2` will hold the Session ID/PID (Using $PPID is more reliable than $STY here)
+backtick 2 0 0 sh -c 'echo $PPID'
+
+# 3. Configure the status line (hardstatus)
+#    Use 'alwayslastline' to fix it at the bottom of the terminal.
+#hardstatus alwayslastline
+hardstatus on
+
+# 4. Define the format string
+#    Format: Hostname | Username | Session ID | Session Name | Date Time
+#    Colors: %{= kw} (Black bg, White fg), %{g} (Green separators), etc.
+#hardstatus string &quot;%{= kw}%H %{g}| %{C}%1` %{g}| %{M}%2` %{g}| %{Y}%S %{g}| %{W}%Y-%m-%d %c&quot;
+hardstatus string &quot;%2` | %S&quot;
+
+# --- MODIFIED SECTION END ---
+
+
+# Set the hardstatus prop on gui terms to set the titlebar/icon title
+termcapinfo xterm*|rxvt*|kterm*|Eterm* hs:ts=\E]0;:fs=\007:ds=\E]0;\007
+# use this for the hard status string (Commented out old default string)
+#hardstatus string &quot;%h%? users: %u%?&quot;
+
+# An alternative hardstatus to display a bar at the bottom listing the
+# windownames and highlighting the current windowname in blue. (This is only
+# enabled if there is no hardstatus setting for your terminal)
+#
+#hardstatus lastline &quot;%-Lw%{= BW}%50&gt;%n%f* %t%{-}%+Lw%&lt;&quot;
+
+# set these terminals up to be 'optimal' instead of vt100
+termcapinfo xterm*|linux*|rxvt*|Eterm* OP
+
+# Change the xterm initialization string from is2=\E[!p\E[?3;4l\E[4l\E&gt;
+# (This fixes the &quot;Aborted because of window size change&quot; konsole symptoms found
+#  in bug #134198)
+termcapinfo xterm 'is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l'
+
+# To get screen to add lines to xterm's scrollback buffer, uncomment the
+# following termcapinfo line which tells xterm to use the normal screen buffer
+# (which has scrollback), not the alternate screen buffer.
+#
+termcapinfo xterm*|xterms|xs|rxvt ti@:te@
+
+# Enable non-blocking mode to better cope with flaky ssh connections.
+defnonblock 5
+
+# ------------------------------------------------------------------------------
+# STARTUP SCREENS
+# ------------------------------------------------------------------------------
+
+# Example of automatically running some programs in windows on screen startup.
+#
+#   The following will open top in the first window, an ssh session to monkey
+#   in the next window, and then open mutt and tail in windows 8 and 9
+#   respectively.
+#
+# screen top
+# screen -t monkey ssh monkey
+# screen -t mail 8 mutt
+# screen -t daemon 9 tail -f /var/log/daemon.log
+</code></pre>
+<p>配置好 ~/.screenrc 后，新开启的会话自动生效。</p>
+<p>已经运行中的会话，需要：</p>
+<pre><code>1.在 Screen 会话中，按下 Ctrl + a。
+
+2.松开手，输入 : (冒号，进入 Screen 的命令行模式)。
+
+3.输入以下命令并回车：
+source ~/.screenrc
+</code></pre>
+<h1 id="使用screen" tabindex="-1">使用Screen <a class="heading-anchor" href="#使用screen" aria-hidden="true">#</a></h1>
+<p>新建命名会话：</p>
+<pre><code>screen -S &lt;name&gt;
+</code></pre>
+<p>列出所有会话：</p>
+<pre><code>screen -ls
+</code></pre>
+<p>恢复会话：</p>
+<pre><code>screen -r &lt;id或name&gt;
+</code></pre>
+<p>强制恢复：</p>
+<pre><code>screen -d -r &lt;id或name&gt;
+</code></pre>
+<p>关闭会话：</p>
+<pre><code>screen -X -S &lt;name&gt; quit
+</code></pre>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>JupyterLab在Ubuntu系统上的部署流程</title>
+      <link>https://blog.dztang.net/posts/deploy-jupyterlab-on-ubuntu/</link>
+      <guid isPermaLink="true">https://blog.dztang.net/posts/deploy-jupyterlab-on-ubuntu/</guid>
+      <pubDate>Wed, 17 Dec 2025 00:00:00 GMT</pubDate>
+      <category>Linux 运维</category>
+      <description>JupyterLab在Ubuntu系统上的部署流程。</description>
+      <content:encoded><![CDATA[<h1 id="第一步准备-miniconda-环境" tabindex="-1">第一步：准备 Miniconda 环境 <a class="heading-anchor" href="#第一步准备-miniconda-环境" aria-hidden="true">#</a></h1>
+<p>创建专属虚拟环境：</p>
+<pre><code># 创建一个名为 jupyterlab 的环境，指定 Python 版本
+conda create -n jupyterlab python=3.13.9 -y
+
+# 激活环境
+conda activate jupyterlab
+</code></pre>
+<h1 id="第二步安装-jupyterlab" tabindex="-1">第二步：安装 JupyterLab <a class="heading-anchor" href="#第二步安装-jupyterlab" aria-hidden="true">#</a></h1>
+<p>在激活的环境中安装：</p>
+<pre><code>conda install -c conda-forge jupyterlab -y
+</code></pre>
+<h1 id="第三步生成并修改配置文件" tabindex="-1">第三步：生成并修改配置文件 <a class="heading-anchor" href="#第三步生成并修改配置文件" aria-hidden="true">#</a></h1>
+<p>生成配置文件：</p>
+<pre><code>jupyter lab --generate-config
+</code></pre>
+<p>设置访问密码：</p>
+<pre><code>jupyter server password
+</code></pre>
+<p><em>输入两次密码后，系统会将哈希后的密码写入配置文件。</em></p>
+<p>修改配置文件：</p>
+<pre><code>vim ~/.jupyter/jupyter_lab_config.py
+</code></pre>
+<p>在文件末尾添加（或取消注释并修改）以下几行关键配置：</p>
+<pre><code># 允许监听所有 IP (0.0.0.0)，这样才能通过外部 IP 访问
+c.ServerApp.ip = '0.0.0.0'
+
+# 禁止服务器端自动打开浏览器 (因为是纯命令行环境)
+c.ServerApp.open_browser = False
+
+# 指定一个固定的端口 (选一个不太常用的，比如 8899，避免默认 8888 冲突)
+c.ServerApp.port = 8899
+
+# 允许远程访问
+c.ServerApp.allow_remote_access = True
+
+# 允许显示隐藏文件
+c.ContentsManager.allow_hidden = True
+
+# (可选) 设置根目录，如果不设则默认为启动命令所在的目录
+# c.ServerApp.root_dir = '/home/your_username/projects'
+</code></pre>
+<h1 id="第四步启动-jupyterlab" tabindex="-1">第四步：启动 JupyterLab <a class="heading-anchor" href="#第四步启动-jupyterlab" aria-hidden="true">#</a></h1>
+<pre><code>jupyter lab
+</code></pre>
+<h1 id="部署完成" tabindex="-1">部署完成 <a class="heading-anchor" href="#部署完成" aria-hidden="true">#</a></h1>
+<h1 id="设置开机启动运行" tabindex="-1">设置开机启动运行 <a class="heading-anchor" href="#设置开机启动运行" aria-hidden="true">#</a></h1>
+<ol>
+<li>获取 JupyterLab 的绝对路径</li>
+</ol>
+<p>首先，需要找出 conda 环境中 jupyter-lab 程序的绝对路径。打开终端，运行：</p>
+<pre><code>conda activate tangdz-jupyterlab
+which jupyter-lab
+</code></pre>
+<p>终端会输出一个路径，通常长这样：</p>
+<pre><code>/home/[username]/miniconda3/envs/[envname]/bin/jupyter-lab
+</code></pre>
+<p>把这串路径复制下来。</p>
+<ol start="2">
+<li>创建 Systemd 服务文件</li>
+</ol>
+<p>使用习惯的编辑器创建一个新的服务配置文件：</p>
+<pre><code>nano ~/.config/systemd/user/jupyterlab.service
+</code></pre>
+<p>将以下内容粘贴进去（注意替换刚刚复制的绝对路径）：</p>
+<pre><code>[Unit]
+Description=JupyterLab Server
+After=network.target
+
+[Service]
+Type=simple
+# 设置 JupyterLab 启动时的默认工作目录
+WorkingDirectory=/home/[username]
+
+# 这里的环境变量是为了确保 jupyter 能够找到正确的 conda 依赖
+Environment=&quot;PATH=/home/[username]/miniconda3/envs/[envname]/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin&quot;
+
+# 替换为刚刚通过 which 命令查到的绝对路径
+ExecStart=[绝对路径] --no-browser --ip=0.0.0.0
+
+# 崩溃后自动重启
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=default.target
+</code></pre>
+<ol start="3">
+<li>重新加载并启动服务</li>
+</ol>
+<pre><code># 重新加载 user systemd 守护进程
+systemctl --user daemon-reload
+
+# 设置开机自启
+systemctl --user enable jupyterlab.service
+
+# 立即启动服务
+systemctl --user start jupyterlab.service
+</code></pre>
+<ol start="4">
+<li>检查状态和日志</li>
+</ol>
+<p>查看运行状态：</p>
+<pre><code>systemctl --user status jupyterlab.service
+</code></pre>
+<p>查看日志（获取 Token）：</p>
+<pre><code>journalctl --user -u jupyterlab.service -n 50 -f
+</code></pre>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Ubuntu系统资源监控</title>
+      <link>https://blog.dztang.net/posts/ubuntu-system-monitoring/</link>
+      <guid isPermaLink="true">https://blog.dztang.net/posts/ubuntu-system-monitoring/</guid>
+      <pubDate>Tue, 16 Dec 2025 00:00:00 GMT</pubDate>
+      <category>Linux 运维</category>
+      <description>Ubuntu系统资源监控。</description>
+      <content:encoded><![CDATA[<p>安装nvitop：</p>
+<pre><code>pip install --user nvitop
+</code></pre>
+<p>启动nvitop：</p>
+<pre><code>nvitop
+</code></pre>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>修改Docker默认安装路径</title>
+      <link>https://blog.dztang.net/posts/change-docker-data-root/</link>
+      <guid isPermaLink="true">https://blog.dztang.net/posts/change-docker-data-root/</guid>
+      <pubDate>Sat, 13 Dec 2025 00:00:00 GMT</pubDate>
+      <category>Linux 运维</category>
+      <description>修改Docker默认安装路径。</description>
+      <content:encoded><![CDATA[<p>PowerShell运行命令。</p>
+<pre><code>Start-Process 'Docker Desktop Installer.exe' -Wait &quot;install --installation-dir=&lt;path&gt;&quot;
+</code></pre>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>解决文件资源管理器关联出错</title>
+      <link>https://blog.dztang.net/posts/fix-explorer-file-association/</link>
+      <guid isPermaLink="true">https://blog.dztang.net/posts/fix-explorer-file-association/</guid>
+      <pubDate>Sat, 13 Dec 2025 00:00:00 GMT</pubDate>
+      <category>杂项</category>
+      <description>解决报错“Explorer.exe该文件没有与之关联的应用来执行该操作。请安装应用，若已经安装应用，请在默认应用设置页面中创建关联”。</description>
+      <content:encoded><![CDATA[<p>起因：使用第三方文件资源管理器并尝试修改默认文件资源管理后，将第三方文件资源管理器卸载。</p>
+<p>原因分析：第三方文件资源管理器修改注册表后，未能彻底还原。</p>
+<p>解决方案：使用**.reg**文件一键修补注册表，文件内容如下。</p>
+<pre><code>Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\Folder\shell\explore\command]
+
+&quot;DelegateExecute&quot;=&quot;{11dbb47c-a525-400b-9e80-a54615a090c0}&quot;
+
+[HKEY_CLASSES_ROOT\Folder\shell\opennewwindow\command]
+
+&quot;DelegateExecute&quot;=&quot;{11dbb47c-a525-400b-9e80-a54615a090c0}&quot;
+</code></pre>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Chrome、Edge浏览器启用多线程下载</title>
+      <link>https://blog.dztang.net/posts/chrome-edge-parallel-downloading/</link>
+      <guid isPermaLink="true">https://blog.dztang.net/posts/chrome-edge-parallel-downloading/</guid>
+      <pubDate>Thu, 11 Dec 2025 00:00:00 GMT</pubDate>
+      <category>杂项</category>
+      <description>Chrome、Edge浏览器启用多线程下载。</description>
+      <content:encoded><![CDATA[<p>Chrome浏览器，地址栏输入：</p>
+<pre><code>chrome://flags/#enable-parallel-downloading
+</code></pre>
+<p>Edge浏览器，地址栏输入：</p>
+<pre><code>edge://flags/#enable-parallel-downloading
+</code></pre>
+<p>将默认的<em><strong>Default</strong></em>选项改为<em><strong>Enabled</strong></em>后重启浏览器即可。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>查询 Github 账户信息</title>
+      <link>https://blog.dztang.net/posts/query-github-account-info/</link>
+      <guid isPermaLink="true">https://blog.dztang.net/posts/query-github-account-info/</guid>
+      <pubDate>Wed, 04 Jun 2025 00:00:00 GMT</pubDate>
+      <category>杂项</category>
+      <description>查询 Github 账户信息。</description>
+      <content:encoded><![CDATA[<pre><code>https://api.github.com/users/{用户名}
+</code></pre>
+<p>字段 “created_at” 的值为注册时间</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>将 PDF 页面调整为统一大小</title>
+      <link>https://blog.dztang.net/posts/normalize-pdf-page-size/</link>
+      <guid isPermaLink="true">https://blog.dztang.net/posts/normalize-pdf-page-size/</guid>
+      <pubDate>Mon, 19 May 2025 00:00:00 GMT</pubDate>
+      <category>文档写作</category>
+      <description>将 PDF 页面调整为统一大小。</description>
+      <content:encoded><![CDATA[<p>最近在准备材料，需要整合、提交很多PDF文件，想要把页面大小不一的文件统一合并成A4尺寸的PDF，搜索了一下，找到了一个好方法。</p>
+<p>使用工具：Adobe Acrobat</p>
+<p>① 在 所有工具 中找到 使用印制</p>
+<p><img src="https://blog.dztang.net/posts/images/pdf-page-resize/Step1.png" alt="Setp1"></p>
+<p>② 导入需要修改的PDF后选择左侧 印前检查</p>
+<p><img src="https://blog.dztang.net/posts/images/pdf-page-resize/Step2.png" alt="Setp2"></p>
+<p>③ 在 Acrobat Pro  DC 2015 配置文件 中，选择 将页面缩放为A4 并点击 分析和修复</p>
+<p><img src="https://blog.dztang.net/posts/images/pdf-page-resize/Step3.png" alt="Setp3"></p>
+<p>完美完成！</p>
+]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>

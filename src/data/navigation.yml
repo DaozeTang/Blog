@@ -1,0 +1,9 @@
+pages:
+- name: Posts
+  url: /
+- name: Archive
+  url: /archive/
+
+external:
+- name: Homepage
+  url: https://dztang.net/

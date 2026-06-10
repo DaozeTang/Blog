@@ -1,0 +1,35 @@
+---
+layout: base.liquid
+navTitle: Posts
+pagination:
+  data: collections.postsPinnedFirst
+  size: 10
+  alias: posts
+permalink: "{% if pagination.pageNumber == 0 %}/{% else %}/{{ pagination.pageNumber | plus: 1 }}/{% endif %}"
+eleventyExcludeFromCollections: true
+---
+
+{% if pagination.pageNumber == 0 %}
+<header class="page-header">
+    <p class="page-header-kicker kicker">Notes &amp; write-ups</p>
+    <h1 class="page-header-title">Blog<span class="title-dot">.</span></h1>
+    <p class="page-header-subtitle">Technical notes on deep learning, computer vision, Linux ops, and the
+        occasional rabbit hole — written down so I only have to debug things once.</p>
+    <div class="page-header-meta">
+        <span class="page-header-stat"><i class="far fa-file-lines" aria-hidden="true"></i> {{ collections.posts.size }} posts</span>
+        <span class="page-header-stat"><i class="far fa-folder-open" aria-hidden="true"></i> {{ collections.categories.size }} categories</span>
+        <span class="page-header-stat"><i class="fas fa-hashtag" aria-hidden="true"></i> {{ collections.tagList.size }} tags</span>
+        <a class="page-header-stat" href="/rss.xml"><i class="fas fa-rss" aria-hidden="true"></i> RSS</a>
+    </div>
+</header>
+{% else %}
+<header class="page-header">
+    <p class="page-header-kicker kicker">Page {{ pagination.pageNumber | plus: 1 }} of {{ pagination.pages.size }}</p>
+    <h1 class="page-header-title">Blog<span class="title-dot">.</span></h1>
+</header>
+{% endif %}
+
+<section class="section post-feed">
+    {% include "post-list" %}
+    {% include "pagination" %}
+</section>

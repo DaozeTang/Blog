@@ -1,0 +1,125 @@
+/* Search dialog (navbar) ----------------------------------------------------- */
+.search-dialog {
+    width: min(42rem, calc(100vw - 2.5rem));
+    margin: 9vh auto auto;
+    padding: var(--space-6);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--card);
+    color: var(--ink);
+    box-shadow: var(--shadow-lg);
+}
+
+.search-dialog::backdrop {
+    background: rgba(12, 10, 6, 0.45);
+    backdrop-filter: blur(4px);
+}
+
+.search-dialog .dialog-close {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.8rem;
+    border: 0;
+    background: transparent;
+    color: var(--ink-3);
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.search-dialog .dialog-close:hover {
+    color: var(--accent);
+}
+
+.search-dialog .pagefind-box {
+    min-height: 7rem;
+}
+
+/* Pagefind UI themed to match the design tokens ----------------------------- */
+.pagefind-box {
+    --pagefind-ui-scale: 0.95;
+    --pagefind-ui-primary: var(--accent);
+    --pagefind-ui-text: var(--ink-2);
+    --pagefind-ui-background: var(--card);
+    --pagefind-ui-border: var(--line);
+    --pagefind-ui-tag: var(--surface);
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: var(--radius-md);
+    --pagefind-ui-image-border-radius: var(--radius-md);
+    --pagefind-ui-image-box-ratio: 3 / 2;
+    --pagefind-ui-font: var(--font-sans);
+}
+
+.pagefind-box .pagefind-ui__search-input {
+    border-radius: var(--radius-pill);
+    background: var(--card);
+    color: var(--ink);
+    font-weight: 500;
+    transition: border-color var(--t-fast), box-shadow var(--t-fast);
+}
+
+.pagefind-box .pagefind-ui__search-input:focus {
+    border-color: var(--accent-line);
+    box-shadow: var(--ring);
+    outline: none;
+}
+
+.pagefind-box .pagefind-ui__search-clear {
+    color: var(--ink-3);
+    background: transparent;
+}
+
+.pagefind-box .pagefind-ui__result {
+    border-top: 1px solid var(--line-soft);
+}
+
+.pagefind-box .pagefind-ui__result-link {
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-weight: 700;
+}
+
+.pagefind-box .pagefind-ui__result-link:hover {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.pagefind-box .pagefind-ui__result-excerpt {
+    color: var(--ink-2);
+}
+
+.pagefind-box .pagefind-ui__result-excerpt mark {
+    padding: 0.05em 0.25em;
+    border-radius: var(--radius-sm);
+    background: var(--accent-soft);
+    color: var(--accent-deep);
+    font-weight: 600;
+}
+
+.pagefind-box .pagefind-ui__button {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-pill);
+    background: var(--card);
+    color: var(--ink-2);
+    font-weight: 600;
+    transition: var(--t-fast);
+}
+
+.pagefind-box .pagefind-ui__button:hover {
+    border-color: var(--accent-line);
+    color: var(--accent-deep);
+}
+
+.pagefind-box .pagefind-ui__message {
+    color: var(--ink-3);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+}
+
+.search-unavailable {
+    padding: var(--space-5);
+    border: 1px dashed var(--line-strong);
+    border-radius: var(--radius-md);
+    color: var(--ink-3);
+    font-size: 0.92rem;
+}
