@@ -1,0 +1,61 @@
+---
+layout: base.liquid
+title: Tools
+navTitle: Tools
+permalink: /tools/
+description: 我构建并部署的在线小工具合集。
+---
+
+<header class="page-header">
+    <p class="page-header-kicker kicker">Small things I built &amp; deployed</p>
+    <h1 class="page-header-title">Tools<span class="title-dot">.</span></h1>
+    <div class="page-header-meta">
+        <span class="page-header-stat"><i class="fas fa-toolbox" aria-hidden="true"></i> {{ tools.size }} tool{% if tools.size != 1 %}s{% endif %}</span>
+    </div>
+</header>
+
+<section class="section">
+    <ul class="tools-grid">
+        {% for tool in tools %}
+        <li class="tool-card panel{% if tool.status == 'archived' %} is-archived{% endif %}">
+            <div class="tool-card-head">
+                <span class="tool-icon" aria-hidden="true">
+                    <i class="{{ tool.icon | default: 'fa-solid fa-cube' }}"></i>
+                </span>
+                <h2 class="tool-name">
+                    <a class="tool-name-link" href="{{ tool.url }}" target="_blank" rel="noopener">{{ tool.name }}</a>
+                </h2>
+                {% if tool.status == 'beta' %}
+                <span class="tool-badge tool-badge-beta">Beta</span>
+                {% elsif tool.status == 'archived' %}
+                <span class="tool-badge tool-badge-archived">Archived</span>
+                {% endif %}
+            </div>
+
+            <p class="tool-tagline">{{ tool.tagline }}</p>
+            {% if tool.description %}
+            <p class="tool-desc">{{ tool.description }}</p>
+            {% endif %}
+
+            {% if tool.tech %}
+            <ul class="tool-tech">
+                {% for t in tool.tech %}
+                <li class="tool-tech-chip mono">{{ t }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            <div class="tool-actions">
+                <a class="social-btn social-btn-primary" href="{{ tool.url }}" target="_blank" rel="noopener">
+                    <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i>Open
+                </a>
+                {% if tool.repo %}
+                <a class="social-btn" href="{{ tool.repo }}" target="_blank" rel="noopener">
+                    <i class="fab fa-github" aria-hidden="true"></i>Source
+                </a>
+                {% endif %}
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</section>

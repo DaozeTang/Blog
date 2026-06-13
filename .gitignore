@@ -1,0 +1,8 @@
+# Dependencies
+node_modules/
+
+# Build output (built on CI, see .github/workflows/deploy.yml)
+_site/
+
+# OS
+.DS_Store

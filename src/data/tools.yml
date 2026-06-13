@@ -1,0 +1,26 @@
+# ---------------------------------------------------------------------------
+# 在线小工具列表 —— /tools/ 页面的唯一数据源
+#
+# 增删改工具只需编辑本文件,页面自动更新,无需改模板或样式。
+#
+# 字段说明:
+#   name:        工具名称(必填)
+#   tagline:     一句话简介,卡片上最醒目的描述(必填)
+#   description: 补充介绍,1~2 句(可选)
+#   url:         在线访问地址(必填,卡片主按钮)
+#   repo:        源码仓库地址(可选,显示 Source 链接)
+#   icon:        Font Awesome 图标类,如 fa-solid fa-list-check(可选,默认 fa-solid fa-cube)
+#   tech:        技术/特性标签列表(可选)
+#   status:      stable | beta | archived(可选,默认 stable;beta/archived 会显示角标)
+#
+# 排序即展示顺序:新工具按希望出现的位置插入即可。
+# ---------------------------------------------------------------------------
+
+- name: TaskFlow · 任务流
+  tagline: 纯前端、单文件、注重隐私的任务管理器
+  description: 列表与看板双视图,支持快速添加语法、重复任务、标签、统计与深色模式。零依赖、零网络请求,数据完全保存在本地设备。
+  url: https://taskflow.dztang.net/
+  repo: https://github.com/DaozeTang/TaskFlow
+  icon: fa-solid fa-list-check
+  tech: [Vanilla JS, Single File, Local-first]
+  status: stable

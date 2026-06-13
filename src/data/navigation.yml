@@ -3,6 +3,8 @@ pages:
   url: /
 - name: Archive
   url: /archive/
+- name: Tools
+  url: /tools/
 
 external:
 - name: Homepage
