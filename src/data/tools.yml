@@ -24,3 +24,12 @@
   icon: fa-solid fa-list-check
   tech: [Vanilla JS, Single File, Local-first]
   status: stable
+
+- name: ImageDiff · 图片对比工具
+  tagline: 单文件、注重隐私的左右并排图片对比工具
+  description: 缩放与平移同步、分辨率归一化、同步十字准星,可逐像素对比两张图片。零依赖、零网络请求,图片不离开本地设备。
+  url: https://imagediff.dztang.net/
+  repo: https://github.com/DaozeTang/ImageDiff
+  icon: fa-solid fa-images
+  tech: [Vanilla JS, Single File, Local-first]
+  status: stable
