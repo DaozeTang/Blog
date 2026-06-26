@@ -3,32 +3,41 @@
     width: min(42rem, calc(100vw - 2.5rem));
     margin: 9vh auto auto;
     padding: var(--space-6);
-    border: 1px solid var(--line);
+    border: 1px solid var(--glass-edge);
     border-radius: var(--radius-lg);
-    background: var(--card);
+    background: var(--glass-strong);
+    backdrop-filter: var(--glass-deep);
+    -webkit-backdrop-filter: var(--glass-deep);
     color: var(--ink);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-lg), var(--rim-strong);
 }
 
 .search-dialog::backdrop {
-    background: rgba(12, 10, 6, 0.45);
-    backdrop-filter: blur(4px);
+    background: rgba(6, 9, 18, 0.5);
+    backdrop-filter: blur(6px);
 }
 
 .search-dialog .dialog-close {
     position: absolute;
-    top: 0.6rem;
-    right: 0.8rem;
+    top: 0.7rem;
+    right: 0.9rem;
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
     border: 0;
-    background: transparent;
+    border-radius: var(--radius-pill);
+    background: var(--surface-2);
     color: var(--ink-3);
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     line-height: 1;
     cursor: pointer;
+    transition: var(--t-fast);
 }
 
 .search-dialog .dialog-close:hover {
     color: var(--accent);
+    background: var(--accent-soft);
 }
 
 .search-dialog .pagefind-box {
@@ -40,8 +49,8 @@
     --pagefind-ui-scale: 0.95;
     --pagefind-ui-primary: var(--accent);
     --pagefind-ui-text: var(--ink-2);
-    --pagefind-ui-background: var(--card);
-    --pagefind-ui-border: var(--line);
+    --pagefind-ui-background: transparent;
+    --pagefind-ui-border: var(--glass-edge);
     --pagefind-ui-tag: var(--surface);
     --pagefind-ui-border-width: 1px;
     --pagefind-ui-border-radius: var(--radius-md);
@@ -75,8 +84,8 @@
 
 .pagefind-box .pagefind-ui__result-link {
     color: var(--ink);
-    font-family: var(--font-display);
-    font-weight: 700;
+    font-weight: 720;
+    letter-spacing: -0.01em;
 }
 
 .pagefind-box .pagefind-ui__result-link:hover {
@@ -97,7 +106,7 @@
 }
 
 .pagefind-box .pagefind-ui__button {
-    border: 1px solid var(--line);
+    border: 1px solid var(--glass-edge);
     border-radius: var(--radius-pill);
     background: var(--card);
     color: var(--ink-2);
