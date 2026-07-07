@@ -5,9 +5,8 @@
     var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     var darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
-    /* Theme: light → dark → system ------------------------------------ */
     var themeToggle = document.getElementById("theme-toggle");
-    var THEME_COLORS = { light: "#eef1f8", dark: "#060912" };
+    var THEME_COLORS = { light: "#eff1f7", dark: "#070a13" };
     var MODE_ORDER = ["light", "dark", "system"];
     var MODE_ICONS = {
         light: "fas fa-sun",
@@ -37,9 +36,6 @@
         );
     }
 
-    // The giscus iframe loads lazily, so theme changes that happen before it
-    // is ready are silently lost. Re-push the current theme every time the
-    // iframe (re)loads, so it always converges to the page theme.
     function watchGiscusFrame() {
         var container = document.getElementById("giscus-container");
         if (!container) return;
@@ -84,7 +80,7 @@
     if (themeToggle) {
         themeToggle.addEventListener("click", function () {
             var next = MODE_ORDER[(MODE_ORDER.indexOf(currentMode()) + 1) % MODE_ORDER.length];
-            try { localStorage.setItem("theme", next); } catch (e) { /* private mode */ }
+            try { localStorage.setItem("theme", next); } catch (e) {}
             applyMode(next);
         });
         applyMode(currentMode());
@@ -94,7 +90,6 @@
         if (currentMode() === "system") applyMode("system");
     });
 
-    /* Navbar ----------------------------------------------------------- */
     var topbar = document.getElementById("topbar");
     var burger = document.getElementById("nav-burger");
 
@@ -132,11 +127,10 @@
         });
     }
 
-    /* Search dialog (Pagefind) ------------------------------------------ */
     var searchBtn = document.getElementById("nav-search-btn");
     var searchDialog = document.getElementById("search-dialog");
     var searchContainer = document.getElementById("navbar-search");
-    var pagefindState = "idle"; // idle | loading | ready | failed
+    var pagefindState = "idle";
 
     function focusSearchInput() {
         if (!searchDialog) return;
@@ -186,7 +180,6 @@
 
     if (searchBtn && searchDialog) {
         searchBtn.addEventListener("click", function (event) {
-            // Fall back to the /search/ page when <dialog> is unsupported.
             if (openSearch()) event.preventDefault();
         });
 
@@ -208,7 +201,6 @@
         });
     }
 
-    /* Table of contents scroll spy --------------------------------------- */
     var tocLinks = document.querySelectorAll(".toc-link");
 
     if (tocLinks.length && "IntersectionObserver" in window) {
@@ -230,7 +222,6 @@
         if (headings.length) setActiveToc(headings[0].id);
     }
 
-    /* Scroll reveal ----------------------------------------------------- */
     var revealTargets = document.querySelectorAll(".section, .post-item");
 
     if ("IntersectionObserver" in window && !reducedMotion) {
@@ -248,7 +239,6 @@
         revealTargets.forEach(function (el) { revealObserver.observe(el); });
     }
 
-    /* Code block copy buttons ------------------------------------------- */
     document.querySelectorAll(".prose pre").forEach(function (pre) {
         var button = document.createElement("button");
         button.className = "code-copy";
@@ -272,7 +262,6 @@
         pre.appendChild(button);
     });
 })();
-/* Pointer parallax on the aurora canvas — adds liquid depth ----------- */
 (function () {
     var mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (mq.matches || !window.matchMedia("(pointer: fine)").matches) return;
@@ -282,7 +271,7 @@
     function tick() {
         cx += (tx - cx) * 0.06;
         cy += (ty - cy) * 0.06;
-        glow.style.transform = "translate3d(" + (cx * 60).toFixed(2) + "px," + (cy * 60).toFixed(2) + "px,0)";
+        glow.style.transform = "translate3d(" + (cx * 44).toFixed(2) + "px," + (cy * 44).toFixed(2) + "px,0)";
         if (Math.abs(tx - cx) > 0.0005 || Math.abs(ty - cy) > 0.0005) {
             raf = requestAnimationFrame(tick);
         } else { raf = null; }
@@ -293,7 +282,6 @@
         if (!raf) raf = requestAnimationFrame(tick);
     }, { passive: true });
 })();
-/* Cursor-tracked specular highlight on glass cards ------------------- */
 (function () {
     if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
     var sel = ".pub-item, .tool-card, .post-item, .award-card, a.post-nav-card";

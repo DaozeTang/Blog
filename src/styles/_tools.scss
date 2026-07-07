@@ -1,6 +1,3 @@
-/* Tools page (/tools/) ------------------------------------------------------
-   数据来自 src/data/tools.yml,模板为 src/tools.liquid。 */
-
 .tools-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
@@ -37,10 +34,9 @@
     transition: opacity var(--t-med);
 }
 
-
 .tool-card:hover {
     transform: translateY(-5px);
-    box-shadow: var(--shadow-lg), 0 18px 40px rgba(79, 99, 255, 0.16), var(--rim);
+    box-shadow: var(--shadow-lg), 0 16px 36px rgba(59, 107, 255, 0.13), var(--rim);
     border-color: var(--accent-line);
 }
 
@@ -52,7 +48,6 @@
     opacity: 0.72;
 }
 
-/* Head: icon + name + badge */
 .tool-card-head {
     display: flex;
     align-items: center;
@@ -69,9 +64,9 @@
     border: 1px solid var(--glass-edge);
     border-radius: var(--radius-md);
     background: var(--accent-soft);
-    color: var(--accent);
+    color: var(--accent-deep);
     font-size: 1.15rem;
-    box-shadow: var(--rim);
+    box-shadow: var(--rim-soft);
     transition: transform var(--t-med);
 }
 
@@ -96,7 +91,6 @@
     color: var(--accent-deep);
 }
 
-/* Stretch the title link over the whole card; buttons stay clickable above. */
 .tool-name-link::after {
     content: "";
     position: absolute;
@@ -124,7 +118,6 @@
     color: var(--ink-3);
 }
 
-/* Copy */
 .tool-tagline {
     margin: 0;
     color: var(--ink);
@@ -140,7 +133,6 @@
     line-height: 1.7;
 }
 
-/* Tech chips */
 .tool-tech {
     display: flex;
     flex-wrap: wrap;
@@ -160,7 +152,6 @@
     font-weight: 600;
 }
 
-/* Actions */
 .tool-actions {
     position: relative;
     z-index: 1;

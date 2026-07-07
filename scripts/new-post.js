@@ -1,6 +1,3 @@
-/* Create a new post markdown file with frontmatter.
- * Usage: npm run new-post -- "My Post Title"
- */
 const fs = require("node:fs");
 const path = require("node:path");
 

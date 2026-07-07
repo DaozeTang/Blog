@@ -18,7 +18,7 @@
 <meta property="og:url" content="{{ page.url | encodeUri | prepend: site.url }}">
 <meta property="og:image" content="{{ site.url }}/assets/avatar.jpg">
 <meta name="twitter:card" content="summary">
-<meta name="theme-color" id="meta-theme-color" content="#eef1f8">
+<meta name="theme-color" id="meta-theme-color" content="#eff1f7">
 
 <script>
     (function () {
@@ -34,11 +34,10 @@
         root.setAttribute("data-theme", theme);
         root.setAttribute("data-theme-mode", mode);
         var meta = document.getElementById("meta-theme-color");
-        if (meta) meta.setAttribute("content", theme === "dark" ? "#060912" : "#eef1f8");
+        if (meta) meta.setAttribute("content", theme === "dark" ? "#070a13" : "#eff1f7");
     })();
 </script>
 
-<!-- Google Tag Manager -->
 <script>
     (function (w, d, s, l, i) {
         w[l] = w[l] || [];
@@ -51,9 +50,7 @@
         f.parentNode.insertBefore(j, f);
     })(window, document, "script", "dataLayer", "{{ site.analytics.gtm_head_id }}");
 </script>
-<!-- End Google Tag Manager -->
 
-<!-- Microsoft Clarity -->
 <script type="text/javascript">
     (function (c, l, a, r, i, t, y) {
         c[a] =
@@ -68,7 +65,6 @@
         y.parentNode.insertBefore(t, y);
     })(window, document, "clarity", "script", "{{ site.analytics.clarity_id }}");
 </script>
-<!-- End Microsoft Clarity -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

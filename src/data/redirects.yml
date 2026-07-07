@@ -1,5 +1,3 @@
-# Old (Chinese-slug) post URLs → new English slugs.
-# Each entry renders a meta-refresh redirect page at /posts/<from>/.
 - from: "chromeedge浏览器启用多线程下载"
   to: "chrome-edge-parallel-downloading"
 - from: "jupyterlab在ubuntu系统上的部署流程"

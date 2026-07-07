@@ -6,19 +6,15 @@ const markdownItAnchor = require("markdown-it-anchor");
 const GithubSlugger = require("github-slugger");
 const syntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
 
-// Kebab-case slugs for URLs (github-slugger).
 const ghSlug = (value) => new GithubSlugger().slug(String(value));
 
-const CJK_RE = /[㐀-䶿一-鿿豈-﫿]/g;
+const CJK_RE = /[㐀-䶿一-鿿豈-﫿]/g;
 
 module.exports = function (eleventyConfig) {
     eleventyConfig.addPlugin(syntaxHighlight);
 
     eleventyConfig.addDataExtension("yml,yaml", (contents) => yaml.load(contents));
 
-    /* ---------------------------------------------------------------- *
-     * Markdown
-     * ---------------------------------------------------------------- */
     const md = markdownIt({ html: true, linkify: true });
 
     md.use(markdownItAnchor, {
@@ -31,9 +27,6 @@ module.exports = function (eleventyConfig) {
         }),
     });
 
-    // Posts reference images relatively (./images/...). Output pages live at
-    // /posts/<slug>/, while images are copied to /posts/images/ — rewrite to
-    // absolute paths so both keep working.
     const defaultImageRule =
         md.renderer.rules.image ||
         function (tokens, idx, options, env, self) {
@@ -50,9 +43,6 @@ module.exports = function (eleventyConfig) {
 
     eleventyConfig.setLibrary("md", md);
 
-    /* ---------------------------------------------------------------- *
-     * Collections
-     * ---------------------------------------------------------------- */
     const POSTS_GLOB = "src/content/posts/**/*.md";
     const isLive = (item) => !item.data.draft;
     const postDate = (item) => item.data.published || item.date;
@@ -107,9 +97,6 @@ module.exports = function (eleventyConfig) {
         collectTerms(livePosts(api).sort(byDateDesc), "tags")
     );
 
-    /* ---------------------------------------------------------------- *
-     * Filters
-     * ---------------------------------------------------------------- */
     eleventyConfig.addFilter("ghSlug", ghSlug);
 
     eleventyConfig.addFilter("readableDate", (value) => {
@@ -153,7 +140,6 @@ module.exports = function (eleventyConfig) {
         `<![CDATA[${String(value).replace(/]]>/g, "]]]]><![CDATA[>")}]]>`
     );
 
-    // Make root-relative URLs absolute (for the RSS feed content).
     eleventyConfig.addFilter("absoluteHtml", (html, base) =>
         String(html).replace(
             /(src|href)="\/(?!\/)/g,
@@ -171,7 +157,6 @@ module.exports = function (eleventyConfig) {
         return `${minutes} min read`;
     });
 
-    // Build a flat TOC list from rendered post HTML (h1-h4 with ids).
     eleventyConfig.addFilter("tocList", (content) => {
         const headings = [];
         const re = /<h([1234])[^>]*\bid="([^"]+)"[^>]*>([\s\S]*?)<\/h\1>/g;
@@ -202,9 +187,6 @@ module.exports = function (eleventyConfig) {
         return (cjk + words).toLocaleString("en-US");
     });
 
-    /* ---------------------------------------------------------------- *
-     * SCSS (same pipeline as the homepage project)
-     * ---------------------------------------------------------------- */
     eleventyConfig.addTemplateFormats("scss");
     eleventyConfig.addExtension("scss", {
         outputFileExtension: "css",
@@ -224,9 +206,6 @@ module.exports = function (eleventyConfig) {
         },
     });
 
-    /* ---------------------------------------------------------------- *
-     * Passthrough copy
-     * ---------------------------------------------------------------- */
     eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
     eleventyConfig.addPassthroughCopy({ "src/content/posts/images": "posts/images" });
     eleventyConfig.addPassthroughCopy({ "src/scripts": "scripts" });
