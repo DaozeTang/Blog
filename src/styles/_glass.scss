@@ -58,9 +58,7 @@
     }
 
     [data-theme="dark"] .lq-glare:hover {
-        background:
-            radial-gradient(300px circle at var(--mx) var(--my), rgba(170, 200, 255, 0.13), transparent 64%),
-            var(--card);
+        background: var(--card);
     }
 }
 

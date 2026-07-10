@@ -23,25 +23,10 @@
     transition: var(--t-spring);
 }
 
-.tool-card::before {
-    content: "";
-    position: absolute;
-    inset: 0 0 auto 0;
-    height: 3px;
-    background: var(--grad-aurora);
-    opacity: 0;
-    z-index: 2;
-    transition: opacity var(--t-med);
-}
-
 .tool-card:hover {
     transform: translateY(-5px);
     box-shadow: var(--shadow-lg), 0 16px 36px rgba(59, 107, 255, 0.13), var(--rim);
     border-color: var(--accent-line);
-}
-
-.tool-card:hover::before {
-    opacity: 1;
 }
 
 .tool-card.is-archived {
