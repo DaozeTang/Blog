@@ -10,7 +10,7 @@
     gap: 0.45em;
     padding: 0.45rem 1rem;
     border: 1px solid var(--glass-edge);
-    border-radius: var(--radius-pill);
+    border-radius: var(--radius-chip);
     background: var(--card);
     color: var(--ink-2);
     font-size: 0.88rem;
@@ -28,7 +28,7 @@
 
 .term-count {
     padding: 0.05rem 0.5rem;
-    border-radius: var(--radius-pill);
+    border-radius: var(--radius-chip);
     background: var(--surface-2);
     color: var(--ink-3);
     font-family: var(--font-mono);

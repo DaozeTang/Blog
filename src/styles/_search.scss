@@ -58,7 +58,7 @@
 }
 
 .pagefind-box .pagefind-ui__search-input {
-    border-radius: var(--radius-pill);
+    border-radius: var(--radius-chip);
     background: var(--card);
     color: var(--ink);
     font-weight: 500;
@@ -105,7 +105,7 @@
 
 .pagefind-box .pagefind-ui__button {
     border: 1px solid var(--glass-edge);
-    border-radius: var(--radius-pill);
+    border-radius: var(--radius-chip);
     background: var(--card);
     color: var(--ink-2);
     font-weight: 600;

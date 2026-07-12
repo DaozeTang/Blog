@@ -85,7 +85,7 @@
 .tool-badge {
     margin-left: auto;
     padding: 0.2rem 0.65rem;
-    border-radius: var(--radius-pill);
+    border-radius: var(--radius-chip);
     font-family: var(--font-mono);
     font-size: 0.66rem;
     font-weight: 700;
@@ -130,7 +130,7 @@
 .tool-tech-chip {
     padding: 0.22rem 0.65rem;
     border: 1px solid var(--line-soft);
-    border-radius: var(--radius-pill);
+    border-radius: var(--radius-chip);
     background: var(--surface);
     color: var(--ink-3);
     font-size: 0.7rem;
