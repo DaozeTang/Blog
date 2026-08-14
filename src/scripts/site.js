@@ -27,6 +27,15 @@
         return mode === "system" ? (darkQuery.matches ? "dark" : "light") : mode;
     }
 
+    function persistMode(mode) {
+        try { localStorage.setItem("theme", mode); } catch (e) {}
+        try {
+            if (location.hostname === "dztang.net" || location.hostname.endsWith(".dztang.net")) {
+                document.cookie = "dzt_theme=" + mode + "; Domain=.dztang.net; Path=/; Max-Age=31536000; SameSite=Lax";
+            }
+        } catch (e) {}
+    }
+
     function syncGiscusTheme(theme) {
         var iframe = document.querySelector("iframe.giscus-frame");
         if (!iframe) return;
@@ -71,7 +80,7 @@
             var icon = themeToggle.querySelector("i");
             if (icon) icon.className = MODE_ICONS[mode];
             themeToggle.setAttribute("aria-label", MODE_LABELS[mode]);
-            themeToggle.setAttribute("aria-pressed", String(theme === "dark"));
+            themeToggle.setAttribute("title", MODE_LABELS[mode]);
         }
 
         syncGiscusTheme(theme);
@@ -80,7 +89,7 @@
     if (themeToggle) {
         themeToggle.addEventListener("click", function () {
             var next = MODE_ORDER[(MODE_ORDER.indexOf(currentMode()) + 1) % MODE_ORDER.length];
-            try { localStorage.setItem("theme", next); } catch (e) {}
+            persistMode(next);
             applyMode(next);
         });
         applyMode(currentMode());
@@ -101,10 +110,11 @@
         onScroll();
     }
 
-    function closeNav() {
+    function closeNav(restoreFocus) {
         if (!topbar) return;
         topbar.classList.remove("nav-open");
         if (burger) burger.setAttribute("aria-expanded", "false");
+        if (restoreFocus && burger) burger.focus();
     }
 
     if (burger && topbar) {
@@ -112,6 +122,10 @@
             event.stopPropagation();
             var open = topbar.classList.toggle("nav-open");
             burger.setAttribute("aria-expanded", String(open));
+            if (open) {
+                var firstLink = topbar.querySelector(".nav-link");
+                if (firstLink) setTimeout(function () { firstLink.focus(); }, 80);
+            }
         });
 
         document.addEventListener("click", function (event) {
@@ -119,11 +133,11 @@
         });
 
         document.addEventListener("keydown", function (event) {
-            if (event.key === "Escape") closeNav();
+            if (event.key === "Escape") closeNav(true);
         });
 
         topbar.querySelectorAll(".nav-link").forEach(function (link) {
-            link.addEventListener("click", closeNav);
+            link.addEventListener("click", function () { closeNav(false); });
         });
     }
 
@@ -208,7 +222,10 @@
 
         var setActiveToc = function (id) {
             tocLinks.forEach(function (link) {
-                link.classList.toggle("active", link.getAttribute("href") === "#" + encodeURI(id));
+                var active = link.getAttribute("href") === "#" + encodeURI(id);
+                link.classList.toggle("active", active);
+                if (active) link.setAttribute("aria-current", "true");
+                else link.removeAttribute("aria-current");
             });
         };
 
@@ -237,6 +254,9 @@
         }, { threshold: 0.05, rootMargin: "0px 0px -40px 0px" });
 
         revealTargets.forEach(function (el) { revealObserver.observe(el); });
+        window.setTimeout(function () {
+            revealTargets.forEach(function (el) { el.classList.add("revealed"); });
+        }, 3200);
     }
 
     document.querySelectorAll(".prose pre").forEach(function (pre) {
@@ -284,7 +304,7 @@
 })();
 (function () {
     if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
-    var sel = ".pub-item, .tool-card, .post-item, .award-card, a.post-nav-card";
+    var sel = ".pub-item, .tool-card, .award-card, a.post-nav-card";
     var cards = document.querySelectorAll(sel);
     if (!cards.length) return;
     cards.forEach(function (el) { el.classList.add("lq-glare"); });

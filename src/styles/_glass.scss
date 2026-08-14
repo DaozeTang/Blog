@@ -8,7 +8,7 @@
     .pubs-rail,
     .toc-panel,
     .stat-grid,
-    .post-item:hover,
+    .post-item,
     .search-dialog,
     .site-dialog,
     .footer-base {
@@ -24,6 +24,7 @@
     }
 
     .pub-item:hover,
+    .post-item:hover,
     .tool-card:hover,
     .award-card:hover {
         -webkit-backdrop-filter: var(--glass) url(#liquid-distortion-strong);

@@ -5,6 +5,7 @@
     {% include "head" %}
 </head>
 <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ site.analytics.gtm_body_id }}"
         height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
@@ -29,7 +30,7 @@
 
     {% include "navbar" %}
 
-    <main class="page-main">
+    <main class="page-main" id="main-content" tabindex="-1">
         <div class="shell">
             {{ content }}
         </div>

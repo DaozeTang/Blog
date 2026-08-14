@@ -38,6 +38,8 @@ module.exports = function (eleventyConfig) {
         if (/^(?:\.\/)?images\//.test(src)) {
             token.attrSet("src", `/posts/${src.replace(/^\.\//, "")}`);
         }
+        token.attrSet("loading", "lazy");
+        token.attrSet("decoding", "async");
         return defaultImageRule(tokens, idx, options, env, self);
     };
 

@@ -30,6 +30,11 @@ eleventyExcludeFromCollections: true
 {% endif %}
 
 <section class="section post-feed">
+    <header class="section-head post-feed-head">
+        <span class="section-index" aria-hidden="true"></span>
+        <h2 class="section-title">{% if pagination.pageNumber == 0 %}Latest posts{% else %}More posts{% endif %}<span class="title-dot">.</span></h2>
+        <span class="section-rule" aria-hidden="true"></span>
+    </header>
     {% include "post-list" %}
     {% include "pagination" %}
 </section>

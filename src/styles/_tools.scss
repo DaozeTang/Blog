@@ -1,6 +1,6 @@
 .tools-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
     gap: var(--space-5);
     margin: 0;
     padding: 0;
@@ -25,7 +25,7 @@
 
 .tool-card:hover {
     transform: translateY(-5px);
-    box-shadow: var(--shadow-lg), 0 16px 36px rgba(30, 150, 215, 0.16), var(--rim);
+    box-shadow: var(--shadow-interactive);
     border-color: var(--accent-line);
 }
 
@@ -62,7 +62,7 @@
 .tool-name {
     margin: 0;
     font-size: 1.2rem;
-    font-weight: 720;
+    font-weight: 700;
     letter-spacing: -0.018em;
     line-height: 1.3;
 }
@@ -95,7 +95,7 @@
 
 .tool-badge-beta {
     background: var(--gold-soft);
-    color: var(--gold);
+    color: var(--gold-ink);
 }
 
 .tool-badge-archived {
@@ -106,7 +106,7 @@
 .tool-tagline {
     margin: 0;
     color: var(--ink);
-    font-weight: 620;
+    font-weight: 600;
     font-size: 0.98rem;
     line-height: 1.55;
 }
