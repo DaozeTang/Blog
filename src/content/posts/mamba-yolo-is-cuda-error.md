@@ -16,7 +16,7 @@ draft: false
 
 苦苦排查了很久，终于让我找到了解决办法。在"ultralytics-main/ultralytics/nn/tasks.py"中，找到"class DetectionModel(BaseModel):"下的"m.stride = torch.tensor([s / x.shape[-2] for x in _forward(torch.zeros(1, ch, s, s))])  # forward"这行代码，将其修改为如下代码，即可完美解决该问题。
 
-```
+```python
             try:
                 m.stride = torch.tensor([s / x.shape[-2] for x in _forward(torch.zeros(1, ch, s, s))])  # forward on CPU
             except RuntimeError:

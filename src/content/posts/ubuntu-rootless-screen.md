@@ -11,7 +11,7 @@ draft: false
 # 安装Screen
 ## 一：如果有 Conda 环境：
 
-```
+```bash
 conda install -c conda-forge screen
 ```
 
@@ -19,14 +19,14 @@ conda install -c conda-forge screen
 
 1.创建本地安装目录
 
-```
+```bash
 mkdir -p ~/local/src
 cd ~/local/src
 ```
 
 2.下载 Screen 源码，以 4.9.0 为例
 
-```
+```bash
 wget https://ftp.gnu.org/gnu/screen/screen-4.9.0.tar.gz
 tar -xzvf screen-4.9.0.tar.gz
 cd screen-4.9.0
@@ -34,20 +34,20 @@ cd screen-4.9.0
 
 3.配置并指定安装路径
 
-```
+```bash
 ./configure --prefix=$HOME/local
 ```
 
 4.编译并安装
 
-```
+```bash
 make
 make install
 ```
 
 5.配置环境变量
 
-```
+```bash
 echo 'export PATH=$HOME/local/bin:$PATH' >> ~/.bashrc
 source ~/.bashrc
 ```
@@ -56,13 +56,13 @@ source ~/.bashrc
 
 在你的用户主目录下创建或编辑配置文件.screenrc：
 
-```
+```bash
 vim ~/.screenrc
 ```
 
 在配置文件中写入内容：
 
-```
+```ini
 $Id: screenrc,v 1.15 2003/10/08 11:39:03 zal Exp $
 #
 # /etc/screenrc
@@ -204,7 +204,7 @@ defnonblock 5
 
 已经运行中的会话，需要：
 
-```
+```text
 1.在 Screen 会话中，按下 Ctrl + a。
 
 2.松开手，输入 : (冒号，进入 Screen 的命令行模式)。
@@ -217,30 +217,30 @@ source ~/.screenrc
 
 新建命名会话：
 
-```
+```bash
 screen -S <name>
 ```
 
 列出所有会话：
 
-```
+```bash
 screen -ls
 ```
 
 恢复会话：
 
-```
+```bash
 screen -r <id或name>
 ```
 
 强制恢复：
 
-```
+```bash
 screen -d -r <id或name>
 ```
 
 关闭会话：
 
-```
+```bash
 screen -X -S <name> quit
 ```

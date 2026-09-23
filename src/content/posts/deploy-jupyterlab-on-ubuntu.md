@@ -12,7 +12,7 @@ draft: false
 
 创建专属虚拟环境：
 
-```
+```bash
 # 创建一个名为 jupyterlab 的环境，指定 Python 版本
 conda create -n jupyterlab python=3.13.9 -y
 
@@ -24,7 +24,7 @@ conda activate jupyterlab
 
 在激活的环境中安装：
 
-```
+```bash
 conda install -c conda-forge jupyterlab -y
 ```
 
@@ -32,13 +32,13 @@ conda install -c conda-forge jupyterlab -y
 
 生成配置文件：
 
-```
+```bash
 jupyter lab --generate-config
 ```
 
 设置访问密码：
 
-```
+```bash
 jupyter server password
 ```
 
@@ -46,13 +46,13 @@ jupyter server password
 
 修改配置文件：
 
-```
+```bash
 vim ~/.jupyter/jupyter_lab_config.py
 ```
 
 在文件末尾添加（或取消注释并修改）以下几行关键配置：
 
-```
+```python
 # 允许监听所有 IP (0.0.0.0)，这样才能通过外部 IP 访问
 c.ServerApp.ip = '0.0.0.0'
 
@@ -74,7 +74,7 @@ c.ContentsManager.allow_hidden = True
 
 # 第四步：启动 JupyterLab
 
-```
+```bash
 jupyter lab
 ```
 
@@ -86,14 +86,14 @@ jupyter lab
 
 首先，需要找出 conda 环境中 jupyter-lab 程序的绝对路径。打开终端，运行：
 
-```
+```bash
 conda activate tangdz-jupyterlab
 which jupyter-lab
 ```
 
 终端会输出一个路径，通常长这样：
 
-```
+```text
 /home/[username]/miniconda3/envs/[envname]/bin/jupyter-lab
 ```
 
@@ -103,13 +103,13 @@ which jupyter-lab
 
 使用习惯的编辑器创建一个新的服务配置文件：
 
-```
+```bash
 nano ~/.config/systemd/user/jupyterlab.service
 ```
 
 将以下内容粘贴进去（注意替换刚刚复制的绝对路径）：
 
-```
+```ini
 [Unit]
 Description=JupyterLab Server
 After=network.target
@@ -135,7 +135,7 @@ WantedBy=default.target
 
 3. 重新加载并启动服务
 
-```
+```bash
 # 重新加载 user systemd 守护进程
 systemctl --user daemon-reload
 
@@ -150,11 +150,11 @@ systemctl --user start jupyterlab.service
 
 查看运行状态：
 
-```
+```bash
 systemctl --user status jupyterlab.service
 ```
 
 查看日志（获取 Token）：
-```
+```bash
 journalctl --user -u jupyterlab.service -n 50 -f
 ```

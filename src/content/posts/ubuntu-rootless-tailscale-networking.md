@@ -16,7 +16,7 @@ draft: false
 
 首先启动守护程序，依次执行：
 
-```
+```bash
 mkdir -p /home/[username]/.local/share/tailscale
 
 # 启动 tailscaled（后台）
@@ -31,19 +31,19 @@ nohup /home/[username]/tailscale_1.92.5_amd64/tailscaled \
 
 使用前需要先绑定账户：
 
-```
+```bash
 /home/[username]/tailscale_1.92.5_amd64/tailscale --socket=/home/[username]/.local/share/tailscale/tailscaled.sock up
 ```
 
 验证是否上线：
 
-```
+```bash
 /home/[username]/tailscale_1.92.5_amd64/tailscale --socket=/home/[username]/.local/share/tailscale/tailscaled.sock status
 ```
 
 端口暴露给 tailnet [可选]：
 
-```
+```bash
 # tcp协议
 /home/[username]/tailscale_1.92.5_amd64/tailscale --socket=/home/[username]/.local/share/tailscale/tailscaled.sock serve --tcp 2222 tcp://localhost:22
 
@@ -53,13 +53,13 @@ nohup /home/[username]/tailscale_1.92.5_amd64/tailscaled \
 
 查看当前暴露状态：
 
-```
+```bash
 /home/[username]/tailscale_1.92.5_amd64/tailscale --socket=/home/[username]/.local/share/tailscale/tailscaled.sock serve status
 ```
 
 关闭：
 
-```
+```bash
 /home/[username]/tailscale_1.92.5_amd64/tailscale --socket=/home/[username]/.local/share/tailscale/tailscaled.sock serve reset
 ```
 
@@ -69,7 +69,7 @@ nohup /home/[username]/tailscale_1.92.5_amd64/tailscaled \
 默认情况下，用户级 systemd 服务只有在用户登录时才会启动，在用户登出时会关闭。启用 linger 可以让服务在系统开机时自动启动。
 运行以下命令：
 
-```
+```bash
 loginctl enable-linger [username]
 ```
 
@@ -78,20 +78,20 @@ loginctl enable-linger [username]
 2. 创建 Systemd 服务目录
 为当前用户创建 systemd 配置目录：
 
-```
+```bash
 mkdir -p ~/.config/systemd/user
 ```
 
 3. 创建 tailscaled 服务文件
 使用习惯的编辑器（nano 或 vim）创建服务配置文件：
 
-```
+```bash
 nano ~/.config/systemd/user/tailscaled.service
 ```
 
 将以下内容粘贴进去：
 
-```
+```ini
 [Unit]
 Description=Tailscale Userspace Daemon
 After=network.target
@@ -119,7 +119,7 @@ WantedBy=default.target
 4. 重新加载并启动服务
 执行以下命令让 systemd 识别新服务，并设置为开机自启：
 
-```
+```bash
 # 重新加载 user systemd 守护进程
 systemctl --user daemon-reload
 
@@ -133,7 +133,7 @@ systemctl --user start tailscaled.service
 5. 查看运行状态和日志
 现在，tailscaled 已经被 systemd 托管了。
 
-```
+```bash
 # 查看状态
 systemctl --user status tailscaled.service
 

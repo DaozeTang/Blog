@@ -46,7 +46,7 @@ efi_no_storage_paranoia = EFI 无存储偏执（关闭空间安全检查）
 
 输入以下命令删除它：
 
-```
+```bash
 sudo efibootmgr -b 0002 -B
 ```
 
@@ -58,7 +58,7 @@ sudo efibootmgr -b 0002 -B
 
 假设 EFI 分区是 nvme0n1p1，依次执行以下命令把它挂载并清理：
 
-```
+```bash
 sudo mkdir -p /mnt/efi
 sudo mount /dev/nvme0n1p1 /mnt/efi
 sudo rm -rf /mnt/efi/EFI/ubuntu
@@ -92,13 +92,13 @@ sudo umount /mnt/efi
 
 按一下空格键，然后输入参数：
 
-```
+```text
 efi_no_storage_paranoia
 ```
 
 修改完成后，这一行的末尾看起来应该是这样的：
 
-```
+```text
 ... quiet splash efi_no_storage_paranoia ---
 ```
 

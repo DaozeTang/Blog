@@ -14,7 +14,7 @@ draft: false
 
 解决方案：使用**.reg**文件一键修补注册表，文件内容如下。
 
-```
+```ini
 Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\Folder\shell\explore\command]

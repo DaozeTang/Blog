@@ -26,7 +26,7 @@ draft: false
 
 start.bat原本的代码如下：
 
-```
+```batch
 echo %cd%
 start /d "%cd%" wgcloud-daemon-release.exe
 java  -Xms256m -Xmx512m  -jar %cd%/wgcloud-server-release.jar
@@ -34,7 +34,7 @@ java  -Xms256m -Xmx512m  -jar %cd%/wgcloud-server-release.jar
 
 修改后的start.bat的代码如下：
 
-```
+```batch
 start wgcloud-daemon-release.exe
 java -jar wgcloud-server-release.jar
 ```

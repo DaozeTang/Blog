@@ -6,10 +6,12 @@ Personal blog of **Daoze Tang**. Built with [Eleventy](https://www.11ty.dev/) an
 
 ```bash
 npm install
-npm run serve   # dev server with live reload (search index not built)
-npm run build   # production build into _site/ + Pagefind index
+npm run serve     # dev server with live reload (search index not built)
+npm run build     # production build into _site/ + Pagefind index
 npm run new-post -- "Post Title"
 ```
+
+Fenced code blocks need a Prism language tag to be highlighted, e.g. ` ```bash `, ` ```python `, ` ```yaml `, ` ```ini ` for systemd/screenrc/registry files, ` ```batch `, ` ```powershell `, ` ```latex `. Use ` ```text ` for command output, error messages, URLs and other non-code samples so they stay deliberately unhighlighted instead of appearing broken.
 
 ## Edit
 

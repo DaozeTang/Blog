@@ -12,7 +12,7 @@ draft: false
 
 进入服务器终端，依次执行以下命令：
 
-```
+```bash
 sudo -i
 apt update && apt upgrade -y
 apt install curl wget -y
@@ -22,7 +22,7 @@ apt install curl wget -y
 
 运行官方推荐的一键安装脚本：
 
-```
+```bash
 bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
 ```
 安装过程中，脚本会暂停并提示设置面板的访问端口（建议设置一个大于10000的不常用端口，设置好后需要在防火墙放行端口）。
@@ -33,7 +33,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.
 
 在服务器终端中，输入以下命令呼出 3x-ui 管理菜单：
 
-```
+```bash
 x-ui
 ```
 
@@ -47,7 +47,7 @@ x-ui
 
 推荐的防阻断配置：
 
-```
+```text
 协议 (Protocol)：vless
 传输配置 (Network)：tcp
 安全性 (Security)：reality （安全性设置中点击“Get New Cert”）
@@ -61,7 +61,7 @@ x-ui
 
 Clash Verge 连接 Vless 节点需要使用 [.yaml] 配置文件，文件名任意。按照如下模板将 vless 链接中的参数手动填入模板中或使用 Gemini 等 AI 帮忙转换填写。
 
-```
+```yaml
 mode: rule
 log-level: info
 allow-lan: false
@@ -113,7 +113,7 @@ rules:
 
 使用一键安装脚本跟随引导部署：
 
-```
+```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/Misaka-blog/hysteria-install/main/hy2/hysteria.sh)
 ```
 
@@ -121,7 +121,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/Misaka-blog/hysteria-install
 
 在配置文件中添加节点的对应信息。
 
-```
+```yaml
 mode: rule
 log-level: info
 allow-lan: false

@@ -8,7 +8,7 @@ category: 杂项
 draft: false
 ---
 
-```
+```text
 https://api.github.com/users/{用户名}
 ```
 

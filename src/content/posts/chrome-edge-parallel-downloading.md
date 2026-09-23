@@ -10,13 +10,13 @@ draft: false
 
 Chrome浏览器，地址栏输入：
 
-```
+```text
 chrome://flags/#enable-parallel-downloading
 ```
 
 Edge浏览器，地址栏输入：
 
-```
+```text
 edge://flags/#enable-parallel-downloading
 ```
 

@@ -8,7 +8,7 @@ category: 大模型
 draft: false
 ---
 
-### 1.安装大语言模型部署运行工具Ollama
+## 1.安装大语言模型部署运行工具Ollama
 
 访问Ollama官网「[https://ollama.com/](https://ollama.com/)」点击屏幕中心的「Download」按钮，进入下载界面。
 
@@ -30,7 +30,7 @@ draft: false
 
 ![Quit Ollama](./images/local-llm-rag/Quit.png)
 
-### 2.配置Ollama on Windows
+## 2.配置Ollama on Windows
 
 Ollama默认将随Windows启动而自动启动，可以在文件资源管理器的地址栏中输入「%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup」并按下回车进入启动运行路径。在该路径中删除其中的「Ollama.lnk」快捷方式文件，即可阻止Ollama随系统启动而自动启动。也可复制该快捷方式文件至其他位置，方便在需要时快速运行Ollama。
 
@@ -60,7 +60,7 @@ Ollama API 的默认侦听端口为「11434」，并且只监听来自「127.0.0
 
 ![Running](./images/local-llm-rag/Running.png)
 
-### 3.通过Ollama获取并运行大语言模型
+## 3.通过Ollama获取并运行大语言模型
 
 访问Ollama的官方模型库「https://ollama.com/library」选择一个合适自己需求的模型以及合适的模型大小，保存其对应的运行指令。
 
@@ -78,7 +78,7 @@ Ollama API 的默认侦听端口为「11434」，并且只监听来自「127.0.0
 
 成功得到模型回复，说明模型已顺利运行。
 
-### 4.在Docker容器中部署作为RAG知识库问答系统的MaxKB
+## 4.在Docker容器中部署作为RAG知识库问答系统的MaxKB
 
 首先，我们参照教程「[https://docker-practice.github.io/zh-cn/install/windows.html](https://docker-practice.github.io/zh-cn/install/windows.html)」完成Docker的安装。注意，这里并不推荐设置国内镜像加速。
 

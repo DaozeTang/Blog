@@ -8,7 +8,7 @@ category: Linux 运维
 draft: false
 ---
 
-```
+```python
 import subprocess
 import socket
 import threading

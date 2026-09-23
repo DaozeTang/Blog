@@ -12,7 +12,7 @@ draft: false
 
 ![Zipimporter Problem](./images/python-pkgutil-error/Problem.png)
 
-```
+```bash
 python -m ensurepip --upgrade
 ```
 
@@ -20,7 +20,7 @@ python -m ensurepip --upgrade
 
 后发现，一共需要运行两条命令更新两个组件，更新完之后问题完美解决。命令如下。
 
-```
+```bash
 python -m ensurepip --upgrade
 python -m pip install --upgrade setuptools
 ```

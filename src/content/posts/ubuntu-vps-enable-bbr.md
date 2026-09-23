@@ -11,7 +11,7 @@ draft: false
 1.检查内核版本
 首先，确认系统内核是否满足要求。在终端输入以下命令：
 
-```
+```bash
 uname -r
 ```
 
@@ -20,7 +20,7 @@ uname -r
 2.写入 BBR 配置
 需要将启用 BBR 的参数写入系统的配置文件中。依次执行以下两条命令：
 
-```
+```bash
 echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
 echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf
 ```
@@ -28,21 +28,21 @@ echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf
 3.应用配置
 执行完上述命令后，需要让系统重新加载配置文件才能生效。输入以下命令：
 
-```
+```bash
 sysctl -p
 ```
 
 4.验证 BBR 是否启用
 最后，验证 BBR 是否已成功启用。输入以下命令：
 
-```
+```bash
 # 检查 TCP 拥塞控制算法
 sysctl net.ipv4.tcp_congestion_control
 ```
 
 预期输出：net.ipv4.tcp_congestion_control = bbr
 
-```
+```bash
 # 检查 BBR 内核模块是否已加载
 lsmod | grep bbr
 ```

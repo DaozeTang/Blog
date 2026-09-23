@@ -10,12 +10,12 @@ draft: false
 
 安装nvitop：
 
-```
+```bash
 pip install --user nvitop
 ```
 
 启动nvitop：
 
-```
+```bash
 nvitop
 ```

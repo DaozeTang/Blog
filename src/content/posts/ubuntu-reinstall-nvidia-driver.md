@@ -12,7 +12,7 @@ draft: false
 
 运行以下命令彻底清除旧驱动（不用担心，重启后会使用通用显示驱动）：
 
-```
+```bash
 sudo apt-get --purge remove "*nvidia*"
 sudo apt-get --purge remove "*libnvidia*"
 sudo apt-get autoremove
@@ -22,7 +22,7 @@ sudo apt-get autoremove
 
 清除后，检查系统推荐的驱动版本：
 
-```
+```bash
 ubuntu-drivers devices
 ```
 
@@ -34,14 +34,14 @@ ubuntu-drivers devices
 
 方法 A：自动安装
 
-```
+```bash
 sudo ubuntu-drivers autoinstall
 ```
 
 方法 B：手动安装指定版本
 假设需要安装的是 nvidia-driver-580-server-open 版本：
 
-```
+```bash
 sudo apt-get update
 sudo apt-get install nvidia-driver-580-server-open5
 ```
@@ -50,7 +50,7 @@ sudo apt-get install nvidia-driver-580-server-open5
 
 安装完成后，重启：
 
-```
+```bash
 sudo reboot
 ```
 

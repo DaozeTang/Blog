@@ -97,7 +97,7 @@
 
 @media (min-width: 1024px) {
     .post-body:not(.no-toc) {
-        grid-template-columns: minmax(0, 72ch) 14rem;
+        grid-template-columns: minmax(0, 68ch) minmax(16rem, 18rem);
         justify-content: space-between;
     }
 
@@ -150,12 +150,13 @@
 .toc-link {
     display: block;
     margin-left: -1px;
-    padding: 0.32rem 0.5rem 0.32rem 0.9rem;
+    padding: 0.34rem 0.5rem 0.34rem 0.9rem;
     border-left: 2px solid transparent;
     color: var(--ink-3);
     font-size: 0.8rem;
-    line-height: 1.45;
-    overflow-wrap: break-word;
+    line-height: 1.5;
+    overflow-wrap: normal;
+    line-break: strict;
     transition: var(--t-fast);
 }
 
@@ -270,20 +271,20 @@
 
 .prose pre {
     position: relative;
-    margin: var(--space-5) 0 0;
-    padding: var(--space-5);
+    margin: var(--space-4) 0 var(--space-5);
+    padding: 0.95rem 1.15rem;
     overflow-x: auto;
     border: 1px solid var(--glass-edge);
     border-radius: var(--radius-md);
-    background: linear-gradient(155deg, rgba(255, 255, 255, 0.92) 0%, rgba(252, 253, 255, 0.78) 40%, rgba(248, 250, 255, 0.72) 100%);
+    background: linear-gradient(155deg, rgba(255, 255, 255, 0.94) 0%, rgba(253, 252, 250, 0.8) 40%, rgba(250, 248, 244, 0.74) 100%);
     backdrop-filter: var(--glass);
     -webkit-backdrop-filter: var(--glass);
     box-shadow: var(--shadow-sm), var(--rim-soft);
-    line-height: 1.7;
+    line-height: 1.62;
 }
 
 [data-theme="dark"] .prose pre {
-    background: linear-gradient(155deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 42%, rgba(255, 255, 255, 0) 100%), rgba(8, 12, 24, 0.78);
+    background: linear-gradient(155deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.015) 42%, rgba(255, 255, 255, 0) 100%), rgba(26, 21, 16, 0.84);
 }
 
 .prose pre code {
@@ -293,7 +294,9 @@
     border-radius: 0;
     background: transparent;
     color: var(--ink-2);
-    font-size: 0.86rem;
+    font-size: 0.83rem;
+    letter-spacing: 0.004em;
+    white-space: pre;
 }
 
 .code-copy {
@@ -347,7 +350,7 @@
 .token.tag,
 .token.constant,
 .token.symbol,
-.token.deleted { color: var(--pink); }
+.token.deleted { color: var(--pink-ink); }
 
 .token.boolean,
 .token.number { color: var(--gold-ink); }
@@ -361,14 +364,14 @@
 
 .token.operator,
 .token.entity,
-.token.url { color: var(--cyan); }
+.token.url { color: var(--cyan-ink); }
 
 .token.atrule,
 .token.attr-value,
 .token.keyword { color: var(--violet-ink); }
 
 .token.function,
-.token.class-name { color: var(--blue-bright); }
+.token.class-name { color: var(--blue-ink); }
 
 .token.regex,
 .token.important,

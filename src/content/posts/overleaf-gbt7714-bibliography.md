@@ -11,7 +11,7 @@ draft: false
 编译器选择XeLaTeX，新建"ref.bib"文件填入参考文献bib信息，正文"main.tex"文件内容如下。
 
 
-```
+```latex
 \documentclass{article}
 \usepackage{graphicx}
 \usepackage{ctex}

@@ -10,13 +10,13 @@ draft: false
 
 运行 systemctl --user daemon-reload 时，遇到如下报错。
 
-```
+```text
 Failed to connect to bus: $DBUS_SESSION_BUS_ADDRESS and $XDG_RUNTIME_DIR not defined (consider using --machine=<user>@.host --user to connect to bus of other user)
 ```
 
 解决方案，依次运行以下命令。
 
-```
+```bash
 export XDG_RUNTIME_DIR="/run/user/$(id -u)"
 export DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus"
 ```

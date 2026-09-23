@@ -10,6 +10,6 @@ draft: false
 
 PowerShell运行命令。
 
-```
+```powershell
 Start-Process 'Docker Desktop Installer.exe' -Wait "install --installation-dir=<path>"
 ```

@@ -8,7 +8,7 @@ category: 计算机视觉
 draft: false
 ---
 
-```
+```python
 import os
 
 def count_non_empty_lines_in_folder(folder_path):
