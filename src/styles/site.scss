@@ -1,3 +1,8 @@
+/* Blog — pixel theme entrypoint.
+   Shared core (identical in both repos): tokens, base, layout, cards,
+   navbar, footer, buttons, animations, responsive.
+   Blog-only modules follow; the pixel finish layer loads last so it wins
+   over component defaults. */
 @use "tokens";
 @use "base";
 @use "layout";
@@ -12,4 +17,5 @@
 @use "search";
 @use "animations";
 @use "responsive";
-@use "glass";
+@use "responsive-pages";
+@use "pixel";

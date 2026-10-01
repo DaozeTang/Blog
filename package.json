@@ -6,10 +6,12 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "eleventy && pagefind --site _site",
+    "build": "node scripts/sync-pixel-theme.js check && eleventy && pagefind --site _site",
     "serve": "eleventy --serve",
     "clean": "rm -rf _site",
-    "new-post": "node scripts/new-post.js"
+    "new-post": "node scripts/new-post.js",
+    "theme:check": "node scripts/sync-pixel-theme.js check",
+    "theme:sync": "node scripts/sync-pixel-theme.js sync"
   },
   "engines": {
     "node": ">=18"

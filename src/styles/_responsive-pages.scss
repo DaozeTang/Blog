@@ -1,0 +1,84 @@
+/* Blog-only responsive rules (the shared breakpoint core lives in
+   _responsive.scss, which must stay identical to the homepage repo). */
+
+@media (max-width: 719.98px) {
+    .post-nav {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .post-nav-card.empty {
+        display: none;
+    }
+
+    .post-nav-next {
+        align-items: flex-start;
+        text-align: left;
+    }
+}
+
+@media (max-width: 559.98px) {
+    .post-item {
+        grid-template-columns: minmax(0, 1fr);
+        padding: var(--space-4);
+    }
+
+    .post-item-main {
+        padding-right: 0;
+    }
+
+    .post-item-title {
+        font-size: clamp(1.12rem, 5.5vw, 1.28rem);
+    }
+
+    .post-item-read {
+        flex-basis: 100%;
+        justify-content: flex-end;
+        margin-left: auto;
+        padding-top: var(--space-1);
+        padding-left: 0;
+    }
+
+    .archive-item,
+    .archive-year-marker {
+        grid-template-columns: 16px minmax(0, 1fr);
+    }
+
+    .archive-list::before {
+        left: 6px;
+    }
+
+    .archive-date {
+        display: block;
+        grid-column: 2;
+        grid-row: 2;
+        padding: 0 0 0 var(--space-4);
+        text-align: left;
+    }
+
+    .archive-node {
+        grid-column: 1;
+        grid-row: 1;
+        align-self: baseline;
+        transform: translateY(4px);
+    }
+
+    .archive-text {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .archive-year-label {
+        grid-column: 2;
+    }
+
+    .pager {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .pager-pages {
+        order: -1;
+        width: 100%;
+        justify-content: center;
+    }
+}
