@@ -1,6 +1,3 @@
-/* Blog-only responsive rules (the shared breakpoint core lives in
-   _responsive.scss, which must stay identical to the homepage repo). */
-
 @media (max-width: 719.98px) {
     .post-nav {
         grid-template-columns: minmax(0, 1fr);

@@ -266,16 +266,51 @@
         button.setAttribute("aria-label", "Copy code");
         button.innerHTML = '<i class="far fa-copy" aria-hidden="true"></i>';
 
+        var resetTimer = null;
+        var liveRegion = document.getElementById("copy-status");
+
+        function announce(message) {
+            if (!liveRegion) return;
+
+            liveRegion.textContent = "";
+            window.setTimeout(function () { liveRegion.textContent = message; }, 50);
+        }
+
+        function showState(state) {
+
+            button.classList.remove("copied", "failed");
+            if (state === "copied") {
+                button.classList.add("copied");
+                button.setAttribute("aria-label", "Code copied to clipboard");
+                button.innerHTML = '<i class="fas fa-check" aria-hidden="true"></i>';
+                announce("Code copied to clipboard");
+            } else if (state === "failed") {
+                button.classList.add("failed");
+                button.setAttribute("aria-label", "Copy failed — select and copy manually");
+                button.innerHTML = '<i class="fas fa-triangle-exclamation" aria-hidden="true"></i>';
+                announce("Copy failed. Select the code and copy it manually.");
+            } else {
+                button.setAttribute("aria-label", "Copy code");
+                button.innerHTML = '<i class="far fa-copy" aria-hidden="true"></i>';
+            }
+            window.clearTimeout(resetTimer);
+            if (state !== "idle") {
+                resetTimer = window.setTimeout(function () { showState("idle"); }, 1600);
+            }
+        }
+
         button.addEventListener("click", function () {
             var code = pre.querySelector("code");
-            var text = code ? code.innerText : pre.innerText;
-            navigator.clipboard.writeText(text.replace(/\n$/, "")).then(function () {
-                button.classList.add("copied");
-                button.innerHTML = '<i class="fas fa-check" aria-hidden="true"></i>';
-                setTimeout(function () {
-                    button.classList.remove("copied");
-                    button.innerHTML = '<i class="far fa-copy" aria-hidden="true"></i>';
-                }, 1600);
+            var text = (code ? code.innerText : pre.innerText).replace(/\n$/, "");
+
+            if (!navigator.clipboard || typeof navigator.clipboard.writeText !== "function") {
+                showState("failed");
+                return;
+            }
+            navigator.clipboard.writeText(text).then(function () {
+                showState("copied");
+            }).catch(function () {
+                showState("failed");
             });
         });
 
@@ -304,7 +339,7 @@
 })();
 (function () {
     if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
-    var sel = ".pub-item, .tool-card, .award-card, a.post-nav-card";
+    var sel = ".tool-card, a.post-nav-card";
     var cards = document.querySelectorAll(sel);
     if (!cards.length) return;
     cards.forEach(function (el) { el.classList.add("lq-glare"); });
@@ -312,9 +347,7 @@
         var t = e.target.closest ? e.target.closest(".lq-glare") : null;
         if (!t) return;
         var r = t.getBoundingClientRect();
-        /* Lengths, not percentages: background-position percentages align P% of
-           the image with P% of the box, so a cursor-locked highlight can never
-           land on the pointer. Snap to the 4px pixel grid instead. */
+
         var grid = 4;
         var mx = Math.round((e.clientX - r.left) / grid) * grid;
         var my = Math.round((e.clientY - r.top) / grid) * grid;

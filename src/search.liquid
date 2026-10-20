@@ -3,8 +3,8 @@ layout: base.liquid
 title: Search
 permalink: /search/
 eleventyExcludeFromCollections: true
+headExtra: '<link href="/pagefind/pagefind-ui.css" rel="stylesheet">'
 ---
-
 <header class="page-header">
     <p class="page-header-kicker kicker">Full-text search</p>
     <h1 class="page-header-title">Search<span class="title-dot">.</span></h1>
@@ -13,7 +13,6 @@ eleventyExcludeFromCollections: true
 </header>
 
 <section class="section search-section">
-    <link href="/pagefind/pagefind-ui.css" rel="stylesheet">
     <div id="search" class="pagefind-box"></div>
     <script src="/pagefind/pagefind-ui.js"></script>
     <script>

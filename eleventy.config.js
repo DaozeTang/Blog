@@ -1,3 +1,4 @@
+const fs = require("node:fs");
 const path = require("node:path");
 const sass = require("sass");
 const yaml = require("js-yaml");
@@ -8,7 +9,26 @@ const syntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
 
 const ghSlug = (value) => new GithubSlugger().slug(String(value));
 
+const siteData = yaml.load(
+    fs.readFileSync(path.join(__dirname, "src", "data", "site.yml"), "utf8")
+);
+const POSTS_PER_PAGE = Math.max(1, Number(siteData.posts_per_page) || 10);
+
 const CJK_RE = /[㐀-䶿一-鿿豈-﫿]/g;
+
+const demoteHeadings = (md) => {
+    md.core.ruler.push("demote_post_headings", (state) => {
+        const tokens = state.tokens;
+        for (let i = 0; i < tokens.length; i++) {
+            const token = tokens[i];
+            if (token.type !== "heading_open") continue;
+            const level = Math.min(Number(token.tag.slice(1)) + 1, 6);
+            token.tag = `h${level}`;
+            const close = tokens[i + 2];
+            if (close && close.type === "heading_close") close.tag = token.tag;
+        }
+    });
+};
 
 module.exports = function (eleventyConfig) {
     eleventyConfig.addPlugin(syntaxHighlight);
@@ -26,6 +46,8 @@ module.exports = function (eleventyConfig) {
             symbol: "#",
         }),
     });
+
+    demoteHeadings(md);
 
     const defaultImageRule =
         md.renderer.rules.image ||
@@ -100,6 +122,36 @@ module.exports = function (eleventyConfig) {
     );
 
     eleventyConfig.addFilter("ghSlug", ghSlug);
+
+    eleventyConfig.addCollection("sitePages", (api) => {
+        const posts = livePosts(api).sort(byDateDesc);
+        const seen = new Set();
+        const pages = [];
+        const add = (url, lastmod) => {
+            if (!url || seen.has(url)) return;
+            seen.add(url);
+            pages.push({ url, lastmod });
+        };
+
+        const feedPages = Math.max(1, Math.ceil(posts.length / POSTS_PER_PAGE));
+        for (let i = 0; i < feedPages; i++) {
+            add(i === 0 ? "/" : `/${i + 1}/`, posts.length ? postDate(posts[0]) : undefined);
+        }
+
+        for (const term of collectTerms(posts, "category")) add(`/categories/${term.slug}/`);
+        for (const term of collectTerms(posts, "tags")) add(`/tags/${term.slug}/`);
+        for (const post of posts) add(post.url, postDate(post));
+
+        add("/search/");
+
+        for (const item of api.getAll()) {
+            if (typeof item.outputPath !== "string" || !item.outputPath.endsWith(".html")) continue;
+            if (item.data.noindex || item.data.draft || item.url === "/404.html") continue;
+            add(item.url, item.data.published);
+        }
+
+        return pages.sort((a, b) => (a.url < b.url ? -1 : a.url > b.url ? 1 : 0));
+    });
 
     eleventyConfig.addFilter("readableDate", (value) => {
         const d = value instanceof Date ? value : new Date(value);

@@ -1,10 +1,6 @@
 ---
 layout: base.liquid
 navTitle: Posts
-pagination:
-  data: collections.postsPinnedFirst
-  size: 10
-  alias: posts
 permalink: "{% if pagination.pageNumber == 0 %}/{% else %}/{{ pagination.pageNumber | plus: 1 }}/{% endif %}"
 eleventyExcludeFromCollections: true
 ---

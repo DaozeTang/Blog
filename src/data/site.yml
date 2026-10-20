@@ -18,8 +18,7 @@ footer_text: >-
   <code>assert os.getenv("Smoking", "False") != "True", "Cigarettes are a drug, not a feature."</code>
 
 analytics:
-  gtm_head_id: "GTM-P53R3M9S"
-  gtm_body_id: "GTM-KRX3XGVH"
+  gtm_id: "GTM-P53R3M9S"
   clarity_id: "tx9equrgr6"
 
 giscus:

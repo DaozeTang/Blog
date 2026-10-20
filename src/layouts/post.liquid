@@ -45,6 +45,8 @@ ogType: article
         {% endif %}
     </div>
 
+    <p class="visually-hidden" id="copy-status" role="status" aria-live="polite" data-pagefind-ignore></p>
+
     <footer class="post-footer" data-pagefind-ignore>
         {% assign newerPost = collections.posts | getPreviousCollectionItem %}
         {% assign olderPost = collections.posts | getNextCollectionItem %}

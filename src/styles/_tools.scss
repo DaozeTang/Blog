@@ -1,7 +1,3 @@
-/* ==========================================================================
-   TOOLS — pixel tool cards.
-   ========================================================================== */
-
 .tools-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
@@ -59,7 +55,6 @@
     transition: var(--t-spring);
 }
 
-/* icon steps up with the card instead of scaling/rotating */
 .tool-card:hover .tool-icon {
     transform: translate(-2px, -2px);
     background: var(--accent);
@@ -89,7 +84,6 @@
     content: "";
     position: absolute;
     inset: 0;
-    /* purely decorative: must never swallow clicks */
     pointer-events: none;
 }
 

@@ -3,16 +3,16 @@
     {% if pagination.href.previous %}
     <a class="pager-arrow" href="{{ pagination.href.previous }}" aria-label="Newer posts"><i class="fas fa-arrow-left" aria-hidden="true"></i><span>Newer</span></a>
     {% else %}
-    <span class="pager-arrow disabled"><i class="fas fa-arrow-left" aria-hidden="true"></i><span>Newer</span></span>
+    <span class="pager-arrow disabled" aria-hidden="true"><i class="fas fa-arrow-left"></i><span>Newer</span></span>
     {% endif %}
 
     <div class="pager-pages">
         {% for href in pagination.hrefs %}
         {% assign pageIndex = forloop.index %}
         {% if href == page.url %}
-        <span class="pager-num active" aria-current="page">{{ pageIndex }}</span>
+        <span class="pager-num active" aria-current="page" aria-label="Page {{ pageIndex }}, current page">{{ pageIndex }}</span>
         {% else %}
-        <a class="pager-num" href="{{ href }}">{{ pageIndex }}</a>
+        <a class="pager-num" href="{{ href }}" aria-label="Page {{ pageIndex }}">{{ pageIndex }}</a>
         {% endif %}
         {% endfor %}
     </div>
@@ -20,7 +20,7 @@
     {% if pagination.href.next %}
     <a class="pager-arrow" href="{{ pagination.href.next }}" aria-label="Older posts"><span>Older</span><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
     {% else %}
-    <span class="pager-arrow disabled"><span>Older</span><i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+    <span class="pager-arrow disabled" aria-hidden="true"><span>Older</span><i class="fas fa-arrow-right"></i></span>
     {% endif %}
 </nav>
 {% endif %}
