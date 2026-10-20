@@ -3,10 +3,7 @@
     margin: 9vh auto auto;
     padding: var(--space-6);
     border: var(--bw) solid var(--px-line);
-    border-radius: 0;
     background: var(--glass-strong);
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
     color: var(--ink);
     box-shadow: var(--shadow-lg), var(--rim-strong);
 }
@@ -15,7 +12,6 @@
     background:
         repeating-linear-gradient(180deg,
             rgba(5, 6, 15, 0.5) 0 var(--px), rgba(5, 6, 15, 0.68) var(--px) 8px);
-    backdrop-filter: none;
 }
 
 .search-dialog .dialog-close {
@@ -27,7 +23,6 @@
     width: var(--space-7);
     height: var(--space-7);
     border: var(--bw-hair) solid var(--px-line);
-    border-radius: 0;
     background: var(--surface-2);
     color: var(--ink-3);
     font-family: var(--font-mono);
@@ -63,7 +58,6 @@
 
 .pagefind-box .pagefind-ui__search-input {
     border: var(--bw) solid var(--px-line);
-    border-radius: 0;
     background: var(--card);
     color: var(--ink);
     font-family: var(--font-mono);
@@ -105,7 +99,6 @@
 
 .pagefind-box .pagefind-ui__result-excerpt mark {
     padding: 0 var(--space-1);
-    border-radius: 0;
     background: var(--accent-soft);
     color: var(--accent-deep);
     font-weight: 600;
@@ -113,7 +106,6 @@
 
 .pagefind-box .pagefind-ui__button {
     border: var(--bw) solid var(--px-line);
-    border-radius: 0;
     background: var(--card);
     color: var(--ink-2);
     font-family: var(--font-pixel);
@@ -138,7 +130,6 @@
 .search-unavailable {
     padding: var(--space-5);
     border: var(--bw) dashed var(--line-strong);
-    border-radius: 0;
     color: var(--ink-3);
     font-family: var(--font-serif);
     font-size: 1.15rem;

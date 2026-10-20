@@ -153,32 +153,22 @@ module.exports = function (eleventyConfig) {
         return pages.sort((a, b) => (a.url < b.url ? -1 : a.url > b.url ? 1 : 0));
     });
 
+    const toDate = (value) => (value instanceof Date ? value : new Date(value));
+    const pad2 = (n) => String(n).padStart(2, "0");
+
     eleventyConfig.addFilter("readableDate", (value) => {
-        const d = value instanceof Date ? value : new Date(value);
-        const pad = (n) => String(n).padStart(2, "0");
-        return `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}`;
+        const d = toDate(value);
+        return `${d.getUTCFullYear()}-${pad2(d.getUTCMonth() + 1)}-${pad2(d.getUTCDate())}`;
     });
 
     eleventyConfig.addFilter("monthDay", (value) => {
-        const d = value instanceof Date ? value : new Date(value);
-        const pad = (n) => String(n).padStart(2, "0");
-        return `${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}`;
+        const d = toDate(value);
+        return `${pad2(d.getUTCMonth() + 1)}-${pad2(d.getUTCDate())}`;
     });
 
-    eleventyConfig.addFilter("year", (value) => {
-        const d = value instanceof Date ? value : new Date(value);
-        return String(d.getUTCFullYear());
-    });
+    eleventyConfig.addFilter("rfc822", (value) => toDate(value).toUTCString());
 
-    eleventyConfig.addFilter("rfc822", (value) => {
-        const d = value instanceof Date ? value : new Date(value);
-        return d.toUTCString();
-    });
-
-    eleventyConfig.addFilter("isoDate", (value) => {
-        const d = value instanceof Date ? value : new Date(value);
-        return d.toISOString();
-    });
+    eleventyConfig.addFilter("isoDate", (value) => toDate(value).toISOString());
 
     eleventyConfig.addFilter("encodeUri", (value) => encodeURI(String(value)));
 
@@ -201,14 +191,18 @@ module.exports = function (eleventyConfig) {
         )
     );
 
-    eleventyConfig.addFilter("readingTime", (content) => {
+    // Counts CJK glyphs at 300/min and latin words at 200/min.
+    const countText = (content) => {
         const text = String(content)
             .replace(/<[^>]*>/g, " ")
             .replace(/&[a-z#0-9]+;/gi, " ");
         const cjk = (text.match(CJK_RE) || []).length;
-        const words = (text.replace(CJK_RE, " ").match(/[A-Za-z0-9_'-]+/g) || []).length;
-        const minutes = Math.max(1, Math.round(cjk / 300 + words / 200));
-        return `${minutes} min read`;
+        return { cjk, words: (text.replace(CJK_RE, " ").match(/[A-Za-z0-9_'-]+/g) || []).length };
+    };
+
+    eleventyConfig.addFilter("readingTime", (content) => {
+        const { cjk, words } = countText(content);
+        return `${Math.max(1, Math.round(cjk / 300 + words / 200))} min read`;
     });
 
     eleventyConfig.addFilter("tocList", (content) => {
@@ -233,11 +227,7 @@ module.exports = function (eleventyConfig) {
     });
 
     eleventyConfig.addFilter("wordCount", (content) => {
-        const text = String(content)
-            .replace(/<[^>]*>/g, " ")
-            .replace(/&[a-z#0-9]+;/gi, " ");
-        const cjk = (text.match(CJK_RE) || []).length;
-        const words = (text.replace(CJK_RE, " ").match(/[A-Za-z0-9_'-]+/g) || []).length;
+        const { cjk, words } = countText(content);
         return (cjk + words).toLocaleString("en-US");
     });
 
