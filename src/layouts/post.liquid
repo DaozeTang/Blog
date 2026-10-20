@@ -4,9 +4,6 @@ ogType: article
 ---
 <article class="post" data-pagefind-body>
     <header class="page-header post-header">
-        {% if category and category != "" %}
-        <p class="page-header-kicker kicker"><a href="/categories/{{ category | ghSlug }}/" data-pagefind-ignore>{{ category }}</a></p>
-        {% endif %}
         <h1 class="page-header-title post-title">{{ title }}</h1>
         <div class="page-header-meta" data-pagefind-ignore>
             <span class="page-header-stat"><i class="far fa-calendar" aria-hidden="true"></i> {{ published | readableDate }}</span>
@@ -19,8 +16,13 @@ ogType: article
             <span class="page-header-stat"><i class="fas fa-thumbtack" aria-hidden="true"></i> Pinned</span>
             {% endif %}
         </div>
-        {% if tags.size > 0 %}
+        {%- assign hasCategory = false -%}
+        {%- if category and category != "" -%}{%- assign hasCategory = true -%}{%- endif -%}
+        {% if hasCategory or tags.size > 0 %}
         <div class="post-tags" data-pagefind-ignore>
+            {% if hasCategory %}
+            <a class="post-chip post-chip-cat" href="/categories/{{ category | ghSlug }}/">{{ category }}</a>
+            {% endif %}
             {% for tag in tags %}
             <a class="post-chip" href="/tags/{{ tag | ghSlug }}/"><span class="post-chip-hash">#</span>{{ tag }}</a>
             {% endfor %}

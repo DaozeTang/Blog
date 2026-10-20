@@ -7,7 +7,6 @@ eleventyExcludeFromCollections: true
 
 {% if pagination.pageNumber == 0 %}
 <header class="page-header">
-    <p class="page-header-kicker kicker">Notes &amp; write-ups</p>
     <h1 class="page-header-title">Blog<span class="title-dot">.</span></h1>
     <p class="page-header-subtitle">Technical notes on deep learning, computer vision, Linux ops, and the
         occasional rabbit hole — written down so I only have to debug things once.</p>
@@ -21,7 +20,6 @@ eleventyExcludeFromCollections: true
 </header>
 {% else %}
 <header class="page-header">
-    <p class="page-header-kicker kicker">Page {{ pagination.pageNumber | plus: 1 }} of {{ pagination.pages.size }}</p>
     <h1 class="page-header-title">Blog<span class="title-dot">.</span></h1>
 </header>
 {% endif %}
