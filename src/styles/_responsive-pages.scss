@@ -28,11 +28,11 @@
     }
 
     .post-item-read {
-        flex-basis: 100%;
-        justify-content: flex-end;
-        margin-left: auto;
-        padding-top: var(--space-1);
-        padding-left: 0;
+        flex: 0 0 auto;
+    }
+
+    .post-item-topline {
+        margin-bottom: var(--space-2);
     }
 
     .archive-item,

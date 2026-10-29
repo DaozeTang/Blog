@@ -231,6 +231,7 @@ module.exports = function (eleventyConfig) {
         return (cjk + words).toLocaleString("en-US");
     });
 
+    eleventyConfig.ignores.add("src/styles/**/_*.scss");
     eleventyConfig.addTemplateFormats("scss");
     eleventyConfig.addExtension("scss", {
         outputFileExtension: "css",

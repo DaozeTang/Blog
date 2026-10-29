@@ -6,9 +6,9 @@ ogType: article
     <header class="page-header post-header">
         <h1 class="page-header-title post-title">{{ title }}</h1>
         <div class="page-header-meta" data-pagefind-ignore>
-            <span class="page-header-stat"><i class="far fa-calendar" aria-hidden="true"></i> {{ published | readableDate }}</span>
+            <time class="page-header-stat" datetime="{{ published | isoDate }}"><i class="far fa-calendar" aria-hidden="true"></i> {{ published | readableDate }}</time>
             {% if updated %}
-            <span class="page-header-stat"><i class="fas fa-rotate" aria-hidden="true"></i> Updated {{ updated | readableDate }}</span>
+            <time class="page-header-stat" datetime="{{ updated | isoDate }}"><i class="fas fa-rotate" aria-hidden="true"></i> Updated {{ updated | readableDate }}</time>
             {% endif %}
             <span class="page-header-stat"><i class="far fa-clock" aria-hidden="true"></i> {{ content | readingTime }}</span>
             <span class="page-header-stat"><i class="far fa-file-lines" aria-hidden="true"></i> {{ content | wordCount }} chars</span>

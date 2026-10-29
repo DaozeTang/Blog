@@ -66,11 +66,11 @@ permalink: /archive/
     <ol class="archive-list">
         {% for group in collections.postsByYear %}
         <li class="archive-year-marker" id="year-{{ group.year }}">
-            <span class="archive-year-label">{{ group.year }}</span>
+            <h3 class="archive-year-label">{{ group.year }}</h3>
         </li>
         {% for post in group.items %}
         <li class="archive-item">
-            <span class="archive-date mono">{{ post.data.published | monthDay }}</span>
+            <time class="archive-date mono" datetime="{{ post.data.published | isoDate }}">{{ post.data.published | monthDay }}</time>
             <span class="archive-node" aria-hidden="true"></span>
             <span class="archive-text">
                 <a class="archive-link" href="{{ post.url }}">{{ post.data.title }}</a>

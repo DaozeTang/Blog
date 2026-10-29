@@ -5,7 +5,7 @@
                 <span class="brand-name">{{ site.author.name }}</span>
             </a>
 
-            <div class="nav-links" id="site-nav">
+            <div class="nav-links" id="site-nav" hidden inert aria-hidden="true">
                 {% for item in navigation.pages %}
                 <a class="nav-link {% if item.name == navTitle %}active{% endif %}" href="{{ item.url }}"{% if item.name == navTitle %} aria-current="page"{% endif %}>{{ item.name }}</a>
                 {% endfor %}

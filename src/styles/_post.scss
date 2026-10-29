@@ -17,7 +17,7 @@
     margin-top: var(--space-6);
     color: var(--ink-2);
     font-family: var(--font-sans);
-    font-size: 1.05rem;
+    font-size: 1.025rem;
     line-height: var(--leading-prose);
     overflow-wrap: break-word;
 }
@@ -49,7 +49,7 @@
 .prose h2 {
     padding-bottom: var(--space-1);
     border-bottom: var(--bw-hair) solid var(--line);
-    text-shadow: 2px 2px 0 var(--px-shadow);
+    text-shadow: none;
 }
 
 .prose h1 { font-size: 1.7rem; }
@@ -75,6 +75,10 @@
 .prose h2:hover .heading-anchor,
 .prose h3:hover .heading-anchor,
 .prose h4:hover .heading-anchor,
+.prose h1:focus-within .heading-anchor,
+.prose h2:focus-within .heading-anchor,
+.prose h3:focus-within .heading-anchor,
+.prose h4:focus-within .heading-anchor,
 .heading-anchor:focus-visible {
     opacity: 1;
 }
@@ -90,7 +94,7 @@
     display: none;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1120px) {
     .post-body:not(.no-toc) {
         grid-template-columns: minmax(0, 68ch) minmax(16rem, 18rem);
         justify-content: space-between;
@@ -227,6 +231,12 @@
     margin: var(--space-7) 0;
 }
 
+.table-scroll {
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+}
+
 .prose table {
     width: 100%;
     border-collapse: separate;
@@ -258,15 +268,15 @@
 .prose pre {
     position: relative;
     margin: var(--space-4) 0 var(--space-5);
-    padding: var(--space-4) var(--space-5);
+    padding: var(--space-5) calc(var(--space-8) + var(--space-5)) var(--space-4) var(--space-5);
     overflow-x: auto;
     border: var(--bw) solid var(--px-line);
     background: var(--surface);
     box-shadow: var(--shadow-md), var(--rim);
     color: var(--ink-2);
     font-family: var(--font-mono);
-    font-size: 1.15rem;
-    line-height: 1.6;
+    font-size: 0.9rem;
+    line-height: 1.7;
 }
 
 .prose pre code {
@@ -287,8 +297,8 @@
     right: var(--space-2);
     display: grid;
     place-items: center;
-    width: var(--space-7);
-    height: var(--space-7);
+    width: 44px;
+    height: 44px;
     border: var(--bw-hair) solid var(--px-line);
     background: var(--card);
     color: var(--ink-3);
