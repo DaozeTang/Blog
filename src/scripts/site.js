@@ -5,6 +5,11 @@
     var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     var darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
+    function listenMedia(query, handler) {
+        if (typeof query.addEventListener === "function") query.addEventListener("change", handler);
+        else if (typeof query.addListener === "function") query.addListener(handler);
+    }
+
     var themeToggle = document.getElementById("theme-toggle");
     var THEME_COLORS = { light: "#e9e1c9", dark: "#14162b" };
     var MODE_ORDER = ["light", "dark", "system"];
@@ -95,7 +100,7 @@
         applyMode(currentMode());
     }
 
-    darkQuery.addEventListener("change", function () {
+    listenMedia(darkQuery, function () {
         if (currentMode() === "system") applyMode("system");
     });
 
@@ -108,6 +113,18 @@
         };
         window.addEventListener("scroll", onScroll, { passive: true });
         onScroll();
+    }
+
+    var backToTop = document.getElementById("back-to-top");
+    if (backToTop) {
+        var syncBackToTop = function () {
+            backToTop.classList.toggle("visible", window.scrollY > 480);
+        };
+        window.addEventListener("scroll", syncBackToTop, { passive: true });
+        syncBackToTop();
+        backToTop.addEventListener("click", function () {
+            window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
+        });
     }
 
     var navLinks = document.getElementById("site-nav");
@@ -399,4 +416,69 @@
         t.style.setProperty("--mx", mx + "px");
         t.style.setProperty("--my", my + "px");
     }, { passive: true });
+})();
+(function () {
+    "use strict";
+
+    var progress = document.getElementById("reading-progress");
+    if (progress) {
+        var ticking = false;
+        var updateProgress = function () {
+            ticking = false;
+            var max = document.documentElement.scrollHeight - window.innerHeight;
+            var ratio = max > 0 ? Math.min(window.scrollY / max, 1) : 0;
+            progress.style.transform = "scaleX(" + ratio.toFixed(4) + ")";
+        };
+        var requestProgress = function () {
+            if (!ticking) {
+                ticking = true;
+                window.requestAnimationFrame(updateProgress);
+            }
+        };
+        window.addEventListener("scroll", requestProgress, { passive: true });
+        window.addEventListener("resize", requestProgress);
+        updateProgress();
+    }
+
+    var lightbox = document.getElementById("lightbox");
+    var lightboxImg = document.getElementById("lightbox-img");
+    var lightboxCaption = document.getElementById("lightbox-caption");
+    if (lightbox && lightboxImg && typeof lightbox.showModal === "function") {
+        document.querySelectorAll(".prose img").forEach(function (img) {
+            img.addEventListener("click", function () {
+                lightboxImg.src = img.currentSrc || img.src;
+                lightboxImg.alt = img.alt || "";
+                var caption = img.getAttribute("alt") || "";
+                lightboxCaption.textContent = caption;
+                lightboxCaption.hidden = caption === "";
+                lightbox.showModal();
+            });
+        });
+
+        lightbox.querySelectorAll("[data-dialog-close]").forEach(function (btn) {
+            btn.addEventListener("click", function () { lightbox.close(); });
+        });
+
+        lightbox.addEventListener("click", function (event) {
+            if (event.target !== lightbox) return;
+            var rect = lightbox.getBoundingClientRect();
+            var outside = event.clientX < rect.left || event.clientX > rect.right ||
+                event.clientY < rect.top || event.clientY > rect.bottom;
+            if (outside) lightbox.close();
+        });
+
+        lightbox.addEventListener("close", function () {
+            lightboxImg.removeAttribute("src");
+        });
+    }
+
+    document.querySelectorAll(".prose pre").forEach(function (pre) {
+        var source = pre.className + " " + (pre.querySelector("code") ? pre.querySelector("code").className : "");
+        var match = source.match(/language-([a-z0-9+-]+)/i);
+        if (!match) return;
+        var label = document.createElement("span");
+        label.className = "code-lang";
+        label.textContent = match[1];
+        pre.insertBefore(label, pre.firstChild);
+    });
 })();

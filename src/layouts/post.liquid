@@ -3,6 +3,7 @@ layout: base.liquid
 ogType: article
 ---
 <article class="post" data-pagefind-body>
+    <div class="reading-progress" id="reading-progress" aria-hidden="true"></div>
     <header class="page-header post-header">
         <h1 class="page-header-title post-title">{{ title }}</h1>
         <div class="page-header-meta" data-pagefind-ignore>
@@ -109,3 +110,9 @@ ogType: article
         })();
     </script>
 </section>
+
+<dialog class="site-dialog lightbox" id="lightbox" aria-label="Image preview">
+    <button class="dialog-close" type="button" data-dialog-close aria-label="Close image preview">&times;</button>
+    <img id="lightbox-img" src="" alt="">
+    <p class="lightbox-caption" id="lightbox-caption"></p>
+</dialog>

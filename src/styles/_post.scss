@@ -460,3 +460,107 @@ a.post-nav-card:hover .post-nav-title {
         opacity: 1;
     }
 }
+
+.reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 120;
+    width: 100%;
+    height: var(--bw-lg);
+    background: var(--accent);
+    box-shadow: 0 var(--bw-hair) 0 0 var(--px-line);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    pointer-events: none;
+}
+
+.prose img {
+    cursor: zoom-in;
+    transition: transform var(--t-med), box-shadow var(--t-med);
+}
+
+.prose img:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: var(--shadow-lg), var(--rim-soft);
+}
+
+.lightbox {
+    position: fixed;
+    inset: 0;
+    width: min(64rem, calc(100vw - var(--space-7)));
+    height: fit-content;
+    max-height: calc(100vh - var(--space-9));
+    margin: auto;
+    padding: var(--space-5);
+    border: var(--bw) solid var(--px-line);
+    background: var(--glass-strong);
+    color: var(--ink);
+    box-shadow: var(--shadow-lg), var(--rim-strong);
+    overflow: auto;
+}
+
+.lightbox::backdrop {
+    background:
+        repeating-linear-gradient(180deg,
+            rgba(5, 6, 15, 0.6) 0 var(--px), rgba(5, 6, 15, 0.78) var(--px) 8px);
+}
+
+.lightbox img {
+    width: 100%;
+    max-height: calc(100vh - var(--space-10) - var(--space-8));
+    object-fit: contain;
+    border: var(--bw-hair) solid var(--px-line);
+    background: var(--surface);
+    image-rendering: auto;
+}
+
+.lightbox-caption {
+    margin-top: var(--space-3);
+    color: var(--ink-2);
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    line-height: 1.6;
+    text-align: center;
+}
+
+.lightbox .dialog-close {
+    position: absolute;
+    top: var(--space-2);
+    right: var(--space-2);
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: var(--space-7);
+    height: var(--space-7);
+    border: var(--bw-hair) solid var(--px-line);
+    background: var(--surface-2);
+    color: var(--ink-3);
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm), var(--rim-soft);
+    transition: var(--t-fast);
+}
+
+.lightbox .dialog-close:hover {
+    color: var(--accent-deep);
+    background: var(--accent-soft);
+}
+
+.code-lang {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: var(--space-1) var(--space-3);
+    border-right: var(--bw-hair) solid var(--px-line);
+    border-bottom: var(--bw-hair) solid var(--px-line);
+    background: var(--surface-2);
+    color: var(--ink-3);
+    font-family: var(--font-pixel);
+    font-size: 0.5rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    pointer-events: none;
+}
