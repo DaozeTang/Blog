@@ -11,15 +11,16 @@ eleventyComputed:
 eleventyExcludeFromCollections: true
 ---
 
-<header class="page-header">
-    <h1 class="page-header-title">{{ term.name }}<span class="title-dot">.</span></h1>
-    <div class="page-header-meta">
-        <span class="page-header-stat"><i class="far fa-file-lines" aria-hidden="true"></i> {{ term.items.size }} post{% if term.items.size > 1 %}s{% endif %}</span>
-        <a class="page-header-stat" href="/archive/"><i class="fas fa-arrow-left" aria-hidden="true"></i> All posts</a>
-    </div>
+<header class="page-head">
+    <p class="kicker"><span class="led" aria-hidden="true"></span>Category</p>
+    <h1 class="page-head__title">{{ term.name }}<span style="color: var(--accent)">.</span></h1>
+    <ul class="page-head__meta">
+        <li><span class="chip"><svg class="ico" aria-hidden="true"><use href="#i-file"></use></svg>{{ term.items.size }} post{% if term.items.size > 1 %}s{% endif %}</span></li>
+        <li><a class="chip" href="/archive/">All posts<svg class="ico" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a></li>
+    </ul>
 </header>
 
-<section class="section post-feed">
+<section class="sec post-feed">
     {% assign posts = term.items %}
     {% include "post-list" %}
 </section>

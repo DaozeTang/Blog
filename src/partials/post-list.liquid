@@ -1,27 +1,32 @@
-<ol class="post-list">
+<ol class="post-list" start="{{ pagination.pageNumber | default: 0 | times: 10 | plus: 1 }}">
     {% for post in posts %}
-    <li class="post-item" id="post-{{ post.fileSlug }}">
-        <div class="post-item-main">
-            <div class="post-item-topline">
-                <time class="post-item-date" datetime="{{ post.data.published | isoDate }}">{{ post.data.published | readableDate }}</time>
-                <span class="post-item-read"><i class="far fa-clock" aria-hidden="true"></i>{{ post.templateContent | readingTime }}</span>
-            </div>
-            <h2 class="post-item-title">
-                {% if post.data.pinned %}<i class="fas fa-thumbtack post-pin" aria-label="Pinned" title="Pinned"></i>{% endif %}
-                <a href="{{ post.url }}">{{ post.data.title }}</a>
-            </h2>
-            {% if post.data.description and post.data.description != "" %}
-            <p class="post-item-desc">{{ post.data.description }}</p>
-            {% endif %}
-            <div class="post-item-meta">
-                {% if post.data.category and post.data.category != "" %}
-                <a class="post-chip post-chip-cat" href="/categories/{{ post.data.category | ghSlug }}/">{{ post.data.category }}</a>
+    <li class="post-card">
+        <a class="post-card__link" href="{{ post.url }}">
+            <span class="post-card__no" aria-hidden="true">{{ forloop.index | prepend: "0" | slice: -2, 2 }}</span>
+            <div class="post-card__body">
+                <div class="post-card__top">
+                    <time datetime="{{ post.data.published | isoDate }}">{{ post.data.published | readableDate }}</time>
+                    <span class="post-card__dot" aria-hidden="true">&#9670;</span>
+                    <span>{{ post.templateContent | readingTime }}</span>
+                    {% if post.data.pinned %}
+                    <span class="post-card__pin"><svg class="ico" aria-hidden="true"><use href="#i-pin"></use></svg>Pinned</span>
+                    {% endif %}
+                </div>
+                <h3 class="post-card__title">{{ post.data.title }}</h3>
+                {% if post.data.description and post.data.description != "" %}
+                <p class="post-card__desc">{{ post.data.description }}</p>
                 {% endif %}
-                {% for tag in post.data.tags %}
-                <a class="post-chip" href="/tags/{{ tag | ghSlug }}/"><span class="post-chip-hash">#</span>{{ tag }}</a>
-                {% endfor %}
+                <div class="post-card__tags chips">
+                    {% if post.data.category and post.data.category != "" %}
+                    <span class="chip chip--soft">{{ post.data.category }}</span>
+                    {% endif %}
+                    {% for tag in post.data.tags limit: 4 %}
+                    <span class="chip"><span class="chip__hash">#</span>{{ tag }}</span>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
+            <span class="post-card__arrow" aria-hidden="true"><svg class="ico"><use href="#i-arrow-right"></use></svg></span>
+        </a>
     </li>
     {% endfor %}
 </ol>

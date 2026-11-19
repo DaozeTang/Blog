@@ -1,0 +1,57 @@
+// =============================================================================
+//  PAGES — 404 prompt screen and shared odd pages.
+// =============================================================================
+
+.prompt-body {
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+    padding: var(--s-8) var(--gutter);
+    background: var(--bg);
+}
+
+.prompt {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    justify-items: start;
+    gap: var(--s-3);
+    width: min(560px, 100%);
+    padding: var(--s-7);
+}
+
+.prompt__code {
+    margin: 0;
+    font-weight: 400;
+    color: var(--ink);
+    font-family: "VT323", var(--f-mono);
+    font-size: 128px;
+    line-height: 0.8;
+    letter-spacing: 0.02em;
+}
+
+.prompt__code span {
+    color: var(--accent);
+}
+
+.prompt__text {
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+.prompt__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2);
+    margin-top: var(--s-3);
+}
+
+.prompt__log {
+    margin-top: var(--s-2);
+    color: var(--ink-4);
+    font-family: var(--f-mono);
+    font-size: 11px;
+    line-height: 1.7;
+}

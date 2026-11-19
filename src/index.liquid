@@ -1,35 +1,101 @@
 ---
 layout: base.liquid
 navTitle: Posts
+showScene: true
 permalink: "{% if pagination.pageNumber == 0 %}/{% else %}/{{ pagination.pageNumber | plus: 1 }}/{% endif %}"
 eleventyExcludeFromCollections: true
 ---
 
 {% if pagination.pageNumber == 0 %}
-<header class="page-header">
-    <h1 class="page-header-title">Blog<span class="title-dot">.</span></h1>
-    <p class="page-header-subtitle">Technical notes on deep learning, computer vision, Linux ops, and the
-        occasional rabbit hole — written down so I only have to debug things once.</p>
-    <div class="page-header-meta">
-        <span class="page-header-stat"><i class="far fa-file-lines" aria-hidden="true"></i> {{ collections.posts.size }} posts</span>
-        <span class="page-header-stat"><i class="far fa-folder-open" aria-hidden="true"></i> {{ collections.categories.size }} categories</span>
-        <span class="page-header-stat"><i class="fas fa-hashtag" aria-hidden="true"></i> {{ collections.tagList.size }} tags</span>
-        <a class="page-header-stat" href="/rss.xml"><i class="fas fa-rss" aria-hidden="true"></i> RSS</a>
-        <a class="page-header-stat" href="/sitemap.xml"><i class="fas fa-sitemap" aria-hidden="true"></i> Sitemap</a>
+<section class="cover">
+    <div class="cover__main">
+        <p class="kicker">
+            <span class="led led--blink" aria-hidden="true"></span>
+            Field notes &middot; since {{ site.start_year }} &middot; 16-bit
+        </p>
+        <h1 class="cover__title">Blog<span>.</span></h1>
+        <p class="cover__lede">Technical notes on deep learning, computer vision, Linux ops, and the occasional
+            rabbit hole &mdash; written down so I only have to debug things once.</p>
+        <div class="cover__meta">
+            <a class="chip" href="/archive/"><svg class="ico" aria-hidden="true"><use href="#i-file"></use></svg>{{ collections.posts.size }} posts</a>
+            <a class="chip" href="/archive/#categories"><svg class="ico" aria-hidden="true"><use href="#i-folder"></use></svg>{{ collections.categories.size }} categories</a>
+            <a class="chip" href="/archive/#tags"><svg class="ico" aria-hidden="true"><use href="#i-tag"></use></svg>{{ collections.tagList.size }} tags</a>
+            <a class="chip chip--accent" href="/rss.xml"><svg class="ico" aria-hidden="true"><use href="#i-rss"></use></svg>RSS</a>
+        </div>
     </div>
-</header>
-{% else %}
-<header class="page-header">
-    <h1 class="page-header-title">Blog<span class="title-dot">.</span></h1>
-</header>
+
+    <aside class="cover__side">
+        <div class="screen cover__screen">
+            <canvas id="scene" data-scene="workshop" role="img" aria-label="Pixel-art illustration of a desk with a CRT monitor, a mug, books and a cat"></canvas>
+            <span class="screen__glare" aria-hidden="true"></span>
+        </div>
+        <p class="px-caption cover__fig">fig.01 — the workshop · object detection, live</p>
+        <button class="cover__search" type="button" data-open-search>
+            <svg class="ico" aria-hidden="true"><use href="#i-search"></use></svg>
+            Search the archive
+            <kbd>/</kbd>
+        </button>
+    </aside>
+</section>
+
+<div class="ticker" aria-hidden="true">
+    <div class="ticker__track">
+        {% for i in (1..2) %}
+        <div class="ticker__group">
+            <span>Object detection</span><span class="ticker__sep">&#10022;</span>
+            <span>Efficient models</span><span class="ticker__sep">&#10022;</span>
+            <span>Remote sensing</span><span class="ticker__sep">&#10022;</span>
+            <span>Linux ops</span><span class="ticker__sep">&#10022;</span>
+            <span>Local-first tools</span><span class="ticker__sep">&#10022;</span>
+            <span>One bug, one note</span><span class="ticker__sep">&#10022;</span>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 {% endif %}
 
-<section class="section post-feed">
-    <header class="section-head post-feed-head">
-        <span class="section-index" aria-hidden="true"></span>
-        <h2 class="section-title">{% if pagination.pageNumber == 0 %}Latest posts{% else %}More posts{% endif %}<span class="title-dot">.</span></h2>
-        <span class="section-rule" aria-hidden="true"></span>
-    </header>
-    {% include "post-list" %}
-    {% include "pagination" %}
-</section>
+<div class="split">
+    <section class="sec" aria-labelledby="feed-title">
+        <header class="sec-head">
+            <span class="sec-head__no" aria-hidden="true">01</span>
+            <h2 class="sec-head__title" id="feed-title">{% if pagination.pageNumber == 0 %}Latest posts{% else %}More posts{% endif %}<span class="sec-head__dot">.</span></h2>
+            <span class="sec-head__rule" aria-hidden="true"></span>
+            <div class="sec-head__aside">
+                <a class="chip" href="/archive/">Archive<svg class="ico" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a>
+            </div>
+        </header>
+
+        {% include "post-list" %}
+        {% include "pagination" %}
+    </section>
+
+    <aside class="rail" aria-label="Browse the blog">
+        <div class="panel rail__panel">
+            <p class="rail__label">Categories</p>
+            <ul class="rail__list">
+                {% for term in collections.categories %}
+                <li><a class="rail__link" href="/categories/{{ term.slug }}/"><span>{{ term.name }}</span><span class="rail__count">{{ term.items.size }}</span></a></li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="panel rail__panel">
+            <p class="rail__label">Top tags</p>
+            <div class="tag-cloud">
+                {% for term in collections.tagList limit: 12 %}
+                <a class="chip" href="/tags/{{ term.slug }}/"><span class="chip__hash">#</span>{{ term.name }}</a>
+                {% endfor %}
+                <a class="chip chip--soft" href="/archive/#tags">all tags</a>
+            </div>
+        </div>
+
+        <div class="panel rail__panel">
+            <p class="rail__label">Subscribe</p>
+            <div class="stack stack--tight">
+                <a class="btn btn--sm btn--accent" href="/rss.xml"><svg class="ico" aria-hidden="true"><use href="#i-rss"></use></svg>RSS feed</a>
+                <a class="btn btn--sm" href="/sitemap.xml"><svg class="ico" aria-hidden="true"><use href="#i-grid"></use></svg>Sitemap</a>
+                <a class="btn btn--sm" href="/tools/"><svg class="ico" aria-hidden="true"><use href="#i-floppy"></use></svg>Tools</a>
+            </div>
+        </div>
+    </aside>
+</div>

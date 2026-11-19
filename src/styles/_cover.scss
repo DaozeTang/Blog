@@ -1,0 +1,188 @@
+// =============================================================================
+//  COVER — the blog's attract screen.
+// =============================================================================
+
+.cover {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: var(--s-8) var(--s-9);
+    align-items: center;
+    padding: var(--s-7) 0 var(--s-6);
+}
+
+.cover__main {
+    min-width: 0;
+}
+
+.cover__title {
+    margin: var(--s-4) 0 0;
+    color: var(--ink);
+    font-family: var(--f-pixel);
+    font-size: 64px;
+    line-height: 0.92;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+}
+
+.cover__title span {
+    display: inline-block;
+    color: var(--accent);
+    transform: translateY(-6px);
+}
+
+.cover__lede {
+    max-width: 46ch;
+    margin: var(--s-5) 0 0;
+    color: var(--ink-2);
+    font-size: var(--t-body-lg);
+    line-height: 1.85;
+}
+
+.cover__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2);
+    margin-top: var(--s-5);
+}
+
+.cover__side {
+    min-width: 0;
+}
+
+.cover__screen {
+    aspect-ratio: 16 / 10;
+    box-shadow:
+        inset 2px 2px 0 rgba(0, 0, 0, 0.6),
+        inset -2px -2px 0 rgba(255, 255, 255, 0.08),
+        var(--sh-3);
+}
+
+.cover__screen canvas {
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+}
+
+.cover__fig {
+    margin: var(--s-3) 0 0;
+}
+
+.cover__fig .px-caption {
+    margin: 0;
+}
+
+.cover__hud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2);
+    margin-top: var(--s-4);
+}
+
+/* The quick search switch sits under the screen like a console button. */
+.cover__search {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    width: 100%;
+    margin-top: var(--s-4);
+    padding: 10px 12px;
+    border: var(--bw) solid var(--line-strong);
+    background: var(--surface);
+    color: var(--ink-3);
+    font-family: var(--f-mono);
+    font-size: 13px;
+    text-align: left;
+    cursor: pointer;
+    box-shadow: var(--sh-1);
+    transition: var(--move);
+}
+
+.cover__search:hover {
+    background: var(--surface-2);
+    color: var(--ink);
+    transform: translate(-2px, -2px);
+    box-shadow: var(--sh-2);
+}
+
+.cover__search kbd {
+    margin-left: auto;
+}
+
+/* -----------------------------------------------------------------------------
+   Ticker — the marquee under the cover.
+   -------------------------------------------------------------------------- */
+
+.ticker {
+    position: relative;
+    overflow: hidden;
+    border-top: var(--bw) solid var(--accent-3);
+    border-bottom: var(--bw) solid var(--accent-3);
+    background: var(--accent);
+    color: var(--on-accent);
+}
+
+.ticker__track {
+    display: flex;
+    width: max-content;
+    animation: marquee 48s linear infinite;
+}
+
+.ticker:hover .ticker__track {
+    animation-play-state: paused;
+}
+
+.ticker__group {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+    padding: 10px var(--s-4);
+    white-space: nowrap;
+    font-family: var(--f-pixel);
+    font-size: 16px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.ticker__sep {
+    color: var(--on-accent);
+    font-family: var(--f-mono);
+    opacity: 0.65;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ticker__track {
+        animation: none;
+        width: auto;
+        flex-wrap: wrap;
+    }
+}
+
+/* -----------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1023px) {
+    .cover {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--s-6);
+        padding-top: var(--s-6);
+    }
+
+    .cover__title {
+        font-size: 56px;
+    }
+
+    .cover__side {
+        max-width: 560px;
+    }
+}
+
+@media (max-width: 560px) {
+    .cover__title {
+        font-size: 40px;
+    }
+
+    .cover__lede {
+        font-size: 15.5px;
+    }
+}

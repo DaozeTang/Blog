@@ -1,7 +1,11 @@
-.tools-grid {
+// =============================================================================
+//  TOOLS — small programmes, shipped as floppy disks.
+// =============================================================================
+
+.tool-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
-    gap: var(--space-5);
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--s-5);
     margin: 0;
     padding: 0;
     list-style: none;
@@ -9,143 +13,115 @@
 
 .tool-card {
     position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-    padding: var(--space-6);
-    overflow: hidden;
-    border: var(--bw) solid var(--px-line);
-    background: var(--card);
-    box-shadow: var(--shadow-md), var(--rim);
-    transition: var(--t-spring);
+    display: grid;
+    gap: var(--s-3);
+    margin: 0;
+    padding: var(--s-5);
+    border: var(--bw) solid var(--line-strong);
+    background: var(--surface);
+    box-shadow: var(--sh-3);
+    transition: var(--move);
 }
 
 .tool-card:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: var(--shadow-lg), var(--rim);
-    border-color: var(--accent-line);
+    transform: translate(-3px, -3px);
+    box-shadow: var(--sh-4);
 }
 
-.tool-card.is-archived {
-    opacity: 0.72;
-}
-
-.tool-card-head {
+.tool-card__head {
     display: flex;
-    align-items: center;
-    gap: var(--space-3);
+    align-items: flex-start;
+    gap: var(--s-3);
 }
 
-.tool-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+.tool-card__disk {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
     flex: 0 0 auto;
-    width: var(--space-8);
-    height: var(--space-8);
-    border: var(--bw-hair) solid var(--px-line);
-    background: var(--accent-soft);
-    color: var(--accent-deep);
-    font-size: 1.4rem;
-    box-shadow: var(--rim-soft);
-    transition: var(--t-spring);
+    border: var(--bw) solid var(--line-strong);
+    background: var(--ink);
+    color: var(--accent-2);
+    box-shadow: var(--sh-1);
 }
 
-.tool-card:hover .tool-icon {
-    transform: translate(-2px, -2px);
-    background: var(--accent);
-    color: var(--on-accent);
-    box-shadow: var(--shadow-sm), var(--rim-soft);
+.tool-card__disk .ico {
+    width: 32px;
+    height: 32px;
 }
 
-.tool-name {
+.tool-card__title {
     margin: 0;
-    font-family: var(--font-display);
-    font-size: 1.2rem;
-    font-weight: 400;
-    letter-spacing: 0;
-    line-height: 1.4;
-}
-
-.tool-name-link {
     color: var(--ink);
-    text-decoration: none;
+    font-family: var(--f-dot);
+    font-size: 24px;
+    line-height: 1.35;
 }
 
-.tool-name-link:hover {
-    color: var(--accent-deep);
+.tool-card__title a:hover {
+    color: var(--accent);
 }
 
-.tool-name-link::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-}
-
-.tool-badge {
-    margin-left: auto;
-    padding: var(--space-1) var(--space-2);
-    border: var(--bw-hair) solid currentColor;
-    font-family: var(--font-pixel);
-    font-size: 0.62rem;
-    letter-spacing: 0;
-    text-transform: uppercase;
-}
-
-.tool-badge-beta {
-    background: var(--gold-soft);
-    color: var(--gold-ink);
-}
-
-.tool-badge-archived {
-    background: var(--ghost);
+.tool-card__tagline {
+    margin: var(--s-1) 0 0;
     color: var(--ink-3);
+    font-size: 13.5px;
+    line-height: 1.6;
 }
 
-.tool-tagline {
-    margin: 0;
-    color: var(--ink);
-    font-weight: 600;
-    font-size: 1.05rem;
-    line-height: 1.55;
-}
-
-.tool-desc {
+.tool-card__desc {
     margin: 0;
     color: var(--ink-2);
-    font-size: 1rem;
-    line-height: 1.7;
+    font-size: 14px;
+    line-height: 1.8;
 }
 
-.tool-tech {
+.tool-card__tech {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-2);
+    gap: 6px;
     margin: 0;
     padding: 0;
     list-style: none;
 }
 
-.tool-tech-chip {
-    padding: var(--space-1) var(--space-2);
-    border: var(--bw-hair) solid var(--line);
-    background: var(--surface);
-    color: var(--ink-3);
-    font-family: var(--font-pixel);
-    font-size: 0.62rem;
+.tool-card__tech li {
+    margin: 0;
 }
 
-.tool-actions {
-    position: relative;
-    z-index: 1;
+.tool-card__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-3);
-    margin-top: auto;
-    padding-top: var(--space-2);
+    gap: var(--s-2);
+    margin-top: var(--s-1);
+    padding-top: var(--s-3);
+    border-top: 2px dashed var(--line);
 }
 
-.tool-actions .social-btn {
-    padding: var(--space-2) var(--space-4);
-    font-size: 0.8rem;
+.tool-badge {
+    margin-left: auto;
+    padding: 2px 8px;
+    border: 2px solid var(--line);
+    color: var(--ink-3);
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.tool-badge--beta {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: var(--gold-soft);
+}
+
+.tool-badge--archived {
+    border-color: var(--coral);
+    color: var(--coral);
+    background: var(--coral-soft);
+}
+
+.tool-card.is-archived {
+    opacity: 0.75;
 }

@@ -3,29 +3,35 @@ layout: base.liquid
 ogType: article
 ---
 <article class="post" data-pagefind-body>
-    <div class="reading-progress" id="reading-progress" aria-hidden="true"></div>
-    <header class="page-header post-header">
-        <h1 class="page-header-title post-title">{{ title }}</h1>
-        <div class="page-header-meta" data-pagefind-ignore>
-            <time class="page-header-stat" datetime="{{ published | isoDate }}"><i class="far fa-calendar" aria-hidden="true"></i> {{ published | readableDate }}</time>
+    <div class="progress" id="reading-progress" aria-hidden="true">
+        {% for i in (1..32) %}<span class="progress__seg"></span>{% endfor %}
+    </div>
+
+    <header class="post-head">
+        {% if category and category != "" %}
+        <a class="chip chip--accent post-head__cat" href="/categories/{{ category | ghSlug }}/">
+            <svg class="ico" aria-hidden="true"><use href="#i-folder"></use></svg>{{ category }}
+        </a>
+        {% endif %}
+
+        <h1 class="post-title">{{ title }}</h1>
+
+        <ul class="post-meta" data-pagefind-ignore>
+            <li><svg class="ico" aria-hidden="true"><use href="#i-calendar"></use></svg><time datetime="{{ published | isoDate }}">{{ published | readableDate }}</time></li>
             {% if updated %}
-            <time class="page-header-stat" datetime="{{ updated | isoDate }}"><i class="fas fa-rotate" aria-hidden="true"></i> Updated {{ updated | readableDate }}</time>
+            <li><svg class="ico" aria-hidden="true"><use href="#i-sort"></use></svg>Updated {{ updated | readableDate }}</li>
             {% endif %}
-            <span class="page-header-stat"><i class="far fa-clock" aria-hidden="true"></i> {{ content | readingTime }}</span>
-            <span class="page-header-stat"><i class="far fa-file-lines" aria-hidden="true"></i> {{ content | wordCount }} chars</span>
+            <li><svg class="ico" aria-hidden="true"><use href="#i-clock"></use></svg>{{ content | readingTime }}</li>
+            <li><svg class="ico" aria-hidden="true"><use href="#i-file"></use></svg>{{ content | wordCount }} chars</li>
             {% if pinned %}
-            <span class="page-header-stat"><i class="fas fa-thumbtack" aria-hidden="true"></i> Pinned</span>
+            <li><svg class="ico" aria-hidden="true"><use href="#i-pin"></use></svg>Pinned</li>
             {% endif %}
-        </div>
-        {%- assign hasCategory = false -%}
-        {%- if category and category != "" -%}{%- assign hasCategory = true -%}{%- endif -%}
-        {% if hasCategory or tags.size > 0 %}
-        <div class="post-tags" data-pagefind-ignore>
-            {% if hasCategory %}
-            <a class="post-chip post-chip-cat" href="/categories/{{ category | ghSlug }}/">{{ category }}</a>
-            {% endif %}
+        </ul>
+
+        {% if tags.size > 0 %}
+        <div class="post-tags chips" data-pagefind-ignore>
             {% for tag in tags %}
-            <a class="post-chip" href="/tags/{{ tag | ghSlug }}/"><span class="post-chip-hash">#</span>{{ tag }}</a>
+            <a class="chip" href="/tags/{{ tag | ghSlug }}/"><span class="chip__hash">#</span>{{ tag }}</a>
             {% endfor %}
         </div>
         {% endif %}
@@ -38,9 +44,9 @@ ogType: article
         </div>
         {% if tocHtml != '' %}
         <aside class="post-toc" aria-label="Table of contents" data-pagefind-ignore>
-            <nav class="toc-panel">
-                <div class="toc-label">Contents</div>
-                <ol class="toc-list" id="toc-list">
+            <nav class="toc panel panel--flat">
+                <p class="toc__label"><svg class="ico" aria-hidden="true"><use href="#i-list"></use></svg>Contents</p>
+                <ol class="toc__list" id="toc-list">
                     {{ tocHtml }}
                 </ol>
             </nav>
@@ -56,32 +62,38 @@ ogType: article
         {% if newerPost or olderPost %}
         <nav class="post-nav" aria-label="Adjacent posts">
             {% if newerPost %}
-            <a class="post-nav-card panel" href="{{ newerPost.url }}">
-                <span class="post-nav-label"><i class="fas fa-arrow-left" aria-hidden="true"></i> Newer</span>
-                <span class="post-nav-title">{{ newerPost.data.title }}</span>
+            <a class="post-nav__card" href="{{ newerPost.url }}">
+                <span class="post-nav__label"><svg class="ico" aria-hidden="true"><use href="#i-arrow-left"></use></svg>Newer</span>
+                <span class="post-nav__title">{{ newerPost.data.title }}</span>
             </a>
             {% else %}
-            <span class="post-nav-card empty" aria-hidden="true"></span>
+            <span class="post-nav__card is-empty" aria-hidden="true"></span>
             {% endif %}
             {% if olderPost %}
-            <a class="post-nav-card panel post-nav-next" href="{{ olderPost.url }}">
-                <span class="post-nav-label">Older <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
-                <span class="post-nav-title">{{ olderPost.data.title }}</span>
+            <a class="post-nav__card post-nav--next" href="{{ olderPost.url }}">
+                <span class="post-nav__label">Older<svg class="ico" aria-hidden="true"><use href="#i-arrow-right"></use></svg></span>
+                <span class="post-nav__title">{{ olderPost.data.title }}</span>
             </a>
             {% else %}
-            <span class="post-nav-card empty" aria-hidden="true"></span>
+            <span class="post-nav__card is-empty" aria-hidden="true"></span>
             {% endif %}
         </nav>
         {% endif %}
     </footer>
 </article>
 
-<section class="post-comments" id="comments" data-pagefind-ignore>
-    <div class="section-head">
-        <h2 class="section-title">Comments<span class="title-dot">.</span></h2>
-        <span class="section-rule" aria-hidden="true"></span>
+<section class="comments" id="comments" data-pagefind-ignore>
+    <header class="sec-head">
+        <span class="sec-head__no" aria-hidden="true">02</span>
+        <h2 class="sec-head__title">Comments<span class="sec-head__dot">.</span></h2>
+        <span class="sec-head__rule" aria-hidden="true"></span>
+        <div class="sec-head__aside">
+            <span class="chip"><svg class="ico" aria-hidden="true"><use href="#i-comment"></use></svg>via GitHub</span>
+        </div>
+    </header>
+    <div class="panel panel--flat" style="padding: 16px">
+        <div id="giscus-container"></div>
     </div>
-    <div id="giscus-container"></div>
     <script>
         (function () {
             var container = document.getElementById("giscus-container");
@@ -111,8 +123,13 @@ ogType: article
     </script>
 </section>
 
-<dialog class="site-dialog lightbox" id="lightbox" aria-label="Image preview">
-    <button class="dialog-close" type="button" data-dialog-close aria-label="Close image preview">&times;</button>
-    <img id="lightbox-img" src="" alt="">
-    <p class="lightbox-caption" id="lightbox-caption"></p>
+<dialog class="lightbox" id="lightbox" aria-label="Image preview">
+    <div class="dialog__head">
+        <span><svg class="ico" aria-hidden="true"><use href="#i-image"></use></svg>Image preview</span>
+        <button class="dialog__close" type="button" data-dialog-close aria-label="Close image preview">&times;</button>
+    </div>
+    <div class="dialog__body">
+        <img id="lightbox-img" alt="">
+        <p class="lightbox__caption" id="lightbox-caption"></p>
+    </div>
 </dialog>

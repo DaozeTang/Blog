@@ -1,0 +1,54 @@
+<header class="masthead" id="site-header">
+    <div class="shell masthead__inner">
+        <a class="brand" href="/" aria-label="{{ site.author.name }} — blog home">
+            <span class="brand__mark" aria-hidden="true">
+                <svg class="ico" viewBox="0 0 24 24"><use href="#i-prompt"></use></svg>
+            </span>
+            <span class="brand__text">DZT<span class="brand__dot">.</span></span>
+            <span class="brand__tag">LOG</span>
+        </a>
+
+        <nav class="nav" id="site-nav" aria-label="Main navigation">
+            {% for item in navigation.pages %}
+            <a class="nav__link {% if item.name == navTitle %}is-active{% endif %}" href="{{ item.url }}"{% if item.name == navTitle %} aria-current="page"{% endif %}>{{ item.name }}</a>
+            {% endfor %}
+            {% for item in navigation.external %}
+            <a class="nav__link nav__ext" href="{{ item.url }}" target="_blank" rel="noopener">{{ item.name }}<svg class="ico" aria-hidden="true"><use href="#i-external"></use></svg></a>
+            {% endfor %}
+        </nav>
+
+        <div class="masthead__tools">
+            <button class="iconbtn" type="button" id="nav-search-btn" aria-label="Search posts" title="Search posts (press /)" aria-haspopup="dialog">
+                <svg class="ico" aria-hidden="true"><use href="#i-search"></use></svg>
+            </button>
+            <button class="iconbtn" type="button" id="theme-toggle" aria-label="Change color theme">
+                <svg class="ico" aria-hidden="true"><use id="theme-icon" href="#i-sun"></use></svg>
+            </button>
+            <button class="iconbtn nav-burger" type="button" id="nav-burger" aria-label="Toggle navigation" aria-expanded="false" aria-controls="nav-drawer">
+                <svg class="ico" aria-hidden="true"><use href="#i-menu"></use></svg>
+            </button>
+        </div>
+    </div>
+
+    <div class="nav-drawer" id="nav-drawer" hidden>
+        <div class="shell nav-drawer__inner">
+            {% for item in navigation.pages %}
+            <a class="nav__link {% if item.name == navTitle %}is-active{% endif %}" href="{{ item.url }}">{{ item.name }}</a>
+            {% endfor %}
+            {% for item in navigation.external %}
+            <a class="nav__link nav__ext" href="{{ item.url }}" target="_blank" rel="noopener">{{ item.name }}<svg class="ico" aria-hidden="true"><use href="#i-external"></use></svg></a>
+            {% endfor %}
+        </div>
+    </div>
+</header>
+
+<dialog class="search-dialog" id="search-dialog" aria-label="Search posts">
+    <div class="dialog__head">
+        <span><svg class="ico" aria-hidden="true"><use href="#i-search"></use></svg>Search the archive</span>
+        <button class="dialog__close" type="button" data-dialog-close aria-label="Close search">&times;</button>
+    </div>
+    <div class="dialog__body">
+        <div class="pagefind-box" id="navbar-search"></div>
+        <p class="search-hint">Esc to close &middot; <a href="/search/">open full search page</a></p>
+    </div>
+</dialog>

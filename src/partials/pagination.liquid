@@ -1,26 +1,26 @@
 {% if pagination.pages.size > 1 %}
 <nav class="pager" aria-label="Pagination">
     {% if pagination.href.previous %}
-    <a class="pager-arrow" href="{{ pagination.href.previous }}" aria-label="Newer posts"><i class="fas fa-arrow-left" aria-hidden="true"></i><span>Newer</span></a>
+    <a class="pager__btn" href="{{ pagination.href.previous }}"><svg class="ico" aria-hidden="true"><use href="#i-arrow-left"></use></svg>Newer</a>
     {% else %}
-    <span class="pager-arrow disabled" aria-hidden="true"><i class="fas fa-arrow-left"></i><span>Newer</span></span>
+    <span class="pager__btn is-disabled" aria-hidden="true"><svg class="ico"><use href="#i-arrow-left"></use></svg>Newer</span>
     {% endif %}
 
-    <div class="pager-pages">
+    <div class="pager__pages">
         {% for href in pagination.hrefs %}
         {% assign pageIndex = forloop.index %}
         {% if href == page.url %}
-        <span class="pager-num active" aria-current="page" aria-label="Page {{ pageIndex }}, current page">{{ pageIndex }}</span>
+        <span class="pager__num is-active" aria-current="page" aria-label="Page {{ pageIndex }}, current page">{{ pageIndex }}</span>
         {% else %}
-        <a class="pager-num" href="{{ href }}" aria-label="Page {{ pageIndex }}">{{ pageIndex }}</a>
+        <a class="pager__num" href="{{ href }}" aria-label="Page {{ pageIndex }}">{{ pageIndex }}</a>
         {% endif %}
         {% endfor %}
     </div>
 
     {% if pagination.href.next %}
-    <a class="pager-arrow" href="{{ pagination.href.next }}" aria-label="Older posts"><span>Older</span><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    <a class="pager__btn" href="{{ pagination.href.next }}">Older<svg class="ico" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a>
     {% else %}
-    <span class="pager-arrow disabled" aria-hidden="true"><span>Older</span><i class="fas fa-arrow-right"></i></span>
+    <span class="pager__btn is-disabled" aria-hidden="true">Older<svg class="ico"><use href="#i-arrow-right"></use></svg></span>
     {% endif %}
 </nav>
 {% endif %}

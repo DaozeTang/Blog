@@ -5,81 +5,94 @@ navTitle: Archive
 permalink: /archive/
 ---
 
-<header class="page-header">
-    <h1 class="page-header-title">Archive<span class="title-dot">.</span></h1>
-    <div class="page-header-meta">
-        <span class="page-header-stat"><i class="far fa-file-lines" aria-hidden="true"></i> {{ collections.posts.size }} posts</span>
-        {% for group in collections.postsByYear %}
-        <a class="page-header-stat" href="#year-{{ group.year }}">{{ group.year }} &middot; {{ group.items.size }}</a>
-        {% endfor %}
-    </div>
+<header class="page-head">
+    <p class="kicker"><span class="led" aria-hidden="true"></span>Index &middot; every entry</p>
+    <h1 class="page-head__title">Archive<span style="color: var(--accent)">.</span></h1>
+    <p class="page-head__sub">Everything I have written down so far, sorted by year. Start with a category if you are
+        hunting for a topic, or scroll the ledger for the full history.</p>
+    <ul class="page-head__meta">
+        <li><span class="chip"><svg class="ico" aria-hidden="true"><use href="#i-file"></use></svg>{{ collections.posts.size }} posts</span></li>
+        <li><span class="chip"><svg class="ico" aria-hidden="true"><use href="#i-folder"></use></svg>{{ collections.categories.size }} categories</span></li>
+        <li><span class="chip"><svg class="ico" aria-hidden="true"><use href="#i-tag"></use></svg>{{ collections.tagList.size }} tags</span></li>
+        <li><a class="chip chip--accent" href="/rss.xml"><svg class="ico" aria-hidden="true"><use href="#i-rss"></use></svg>RSS</a></li>
+    </ul>
 </header>
 
-<section class="section">
-    <div class="section-head">
-        <span class="section-index" aria-hidden="true"></span>
-        <h2 class="section-title">Categories<span class="title-dot">.</span></h2>
-        <span class="section-rule" aria-hidden="true"></span>
-    </div>
-    <div class="term-cloud">
+<section class="sec archive-block" id="categories" aria-labelledby="cat-title">
+    <header class="sec-head">
+        <span class="sec-head__no" aria-hidden="true">01</span>
+        <h2 class="sec-head__title" id="cat-title">Categories<span class="sec-head__dot">.</span></h2>
+        <span class="sec-head__rule" aria-hidden="true"></span>
+    </header>
+    <div class="term-grid">
         {% for term in collections.categories %}
-        <a class="term-chip" href="/categories/{{ term.slug }}/">{{ term.name }}<span class="term-count">{{ term.items.size }}</span></a>
+        <a class="term-card" href="/categories/{{ term.slug }}/">
+            <span class="term-card__name">{{ term.name }}</span>
+            <span class="term-card__count">{{ term.items.size }} posts</span>
+        </a>
         {% endfor %}
     </div>
 </section>
 
-<section class="section">
-    <div class="section-head">
-        <span class="section-index" aria-hidden="true"></span>
-        <h2 class="section-title">Tags<span class="title-dot">.</span></h2>
-        <span class="section-rule" aria-hidden="true"></span>
-    </div>
-    <div class="term-cloud">
-        {% for term in collections.tagList limit: 14 %}
-        <a class="term-chip" href="/tags/{{ term.slug }}/"><span class="post-chip-hash">#</span>{{ term.name }}<span class="term-count">{{ term.items.size }}</span></a>
+<section class="sec archive-block" id="tags" aria-labelledby="tag-title">
+    <header class="sec-head">
+        <span class="sec-head__no" aria-hidden="true">02</span>
+        <h2 class="sec-head__title" id="tag-title">Tags<span class="sec-head__dot">.</span></h2>
+        <span class="sec-head__rule" aria-hidden="true"></span>
+    </header>
+    <div class="tag-cloud">
+        {% for term in collections.tagList limit: 18 %}
+        <a class="chip" href="/tags/{{ term.slug }}/"><span class="chip__hash">#</span>{{ term.name }}<span class="chip__count">{{ term.items.size }}</span></a>
         {% endfor %}
     </div>
-    {% if collections.tagList.size > 14 %}
-    {% assign remainingTags = collections.tagList.size | minus: 14 %}
+    {% if collections.tagList.size > 18 %}
+    {% assign remainingTags = collections.tagList.size | minus: 18 %}
     <details class="term-disclosure">
         <summary>
             <span class="term-show">Show {{ remainingTags }} more tags</span>
             <span class="term-hide">Show fewer tags</span>
-            <i class="fas fa-chevron-down" aria-hidden="true"></i>
+            <svg class="ico" aria-hidden="true"><use href="#i-chev-down"></use></svg>
         </summary>
-        <div class="term-cloud term-cloud-more">
-            {% for term in collections.tagList offset: 14 %}
-            <a class="term-chip" href="/tags/{{ term.slug }}/"><span class="post-chip-hash">#</span>{{ term.name }}<span class="term-count">{{ term.items.size }}</span></a>
+        <div class="tag-cloud term-cloud-more">
+            {% for term in collections.tagList offset: 18 %}
+            <a class="chip" href="/tags/{{ term.slug }}/"><span class="chip__hash">#</span>{{ term.name }}<span class="chip__count">{{ term.items.size }}</span></a>
             {% endfor %}
         </div>
     </details>
     {% endif %}
 </section>
 
-<section class="section">
-    <div class="section-head">
-        <span class="section-index" aria-hidden="true"></span>
-        <h2 class="section-title">Timeline<span class="title-dot">.</span></h2>
-        <span class="section-rule" aria-hidden="true"></span>
-    </div>
+<section class="sec archive-block" id="timeline" aria-labelledby="timeline-title">
+    <header class="sec-head">
+        <span class="sec-head__no" aria-hidden="true">03</span>
+        <h2 class="sec-head__title" id="timeline-title">Timeline<span class="sec-head__dot">.</span></h2>
+        <span class="sec-head__rule" aria-hidden="true"></span>
+        <div class="sec-head__aside">
+            <span class="chip">{{ collections.postsByYear.size }} years</span>
+        </div>
+    </header>
 
-    <ol class="archive-list">
+    <div class="year-stack">
         {% for group in collections.postsByYear %}
-        <li class="archive-year-marker" id="year-{{ group.year }}">
-            <h3 class="archive-year-label">{{ group.year }}</h3>
-        </li>
-        {% for post in group.items %}
-        <li class="archive-item">
-            <time class="archive-date mono" datetime="{{ post.data.published | isoDate }}">{{ post.data.published | monthDay }}</time>
-            <span class="archive-node" aria-hidden="true"></span>
-            <span class="archive-text">
-                <a class="archive-link" href="{{ post.url }}">{{ post.data.title }}</a>
-                {% if post.data.category and post.data.category != "" %}
-                <a class="archive-cat" href="/categories/{{ post.data.category | ghSlug }}/">{{ post.data.category }}</a>
-                {% endif %}
-            </span>
-        </li>
+        <section class="year-block" id="year-{{ group.year }}">
+            <div class="year-block__label">
+                <span class="year-block__year">{{ group.year }}</span>
+                <span class="year-block__count">{{ group.items.size }} post{% if group.items.size > 1 %}s{% endif %}</span>
+            </div>
+            <ol class="year-block__items">
+                {% for post in group.items %}
+                <li class="year-item">
+                    <a class="year-item__link" href="{{ post.url }}">
+                        <time class="year-item__date" datetime="{{ post.data.published | isoDate }}">{{ post.data.published | monthDay }}</time>
+                        <span class="year-item__title">{{ post.data.title }}</span>
+                        {% if post.data.category and post.data.category != "" %}
+                        <span class="year-item__cat">{{ post.data.category }}</span>
+                        {% endif %}
+                    </a>
+                </li>
+                {% endfor %}
+            </ol>
+        </section>
         {% endfor %}
-        {% endfor %}
-    </ol>
+    </div>
 </section>

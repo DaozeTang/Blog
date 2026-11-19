@@ -6,51 +6,62 @@ permalink: /tools/
 description: 我构建并部署的在线小工具合集。
 ---
 
-<header class="page-header">
-    <h1 class="page-header-title">Tools<span class="title-dot">.</span></h1>
-    <div class="page-header-meta">
-        <span class="page-header-stat"><i class="fas fa-toolbox" aria-hidden="true"></i> {{ tools.size }} tool{% if tools.size != 1 %}s{% endif %}</span>
-    </div>
+<header class="page-head">
+    <p class="kicker"><span class="led led--gold" aria-hidden="true"></span>Cartridge bay &middot; local-first</p>
+    <h1 class="page-head__title">Tools<span style="color: var(--accent)">.</span></h1>
+    <p class="page-head__sub">小工具，单文件，零依赖。数据只留在你自己的设备上 —— 插卡即用，拔卡即走。</p>
+    <ul class="page-head__meta">
+        <li><span class="chip"><svg class="ico" aria-hidden="true"><use href="#i-floppy"></use></svg>{{ tools.size }} tool{% if tools.size != 1 %}s{% endif %}</span></li>
+        <li><span class="chip chip--soft"><svg class="ico" aria-hidden="true"><use href="#i-lock"></use></svg>No network requests</span></li>
+    </ul>
 </header>
 
-<section class="section">
-    <ul class="tools-grid">
+<section class="sec">
+    <header class="sec-head">
+        <span class="sec-head__no" aria-hidden="true">01</span>
+        <h2 class="sec-head__title">Insert disk<span class="sec-head__dot">.</span></h2>
+        <span class="sec-head__rule" aria-hidden="true"></span>
+    </header>
+
+    <ul class="tool-grid">
         {% for tool in tools %}
-        <li class="tool-card panel{% if tool.status == 'archived' %} is-archived{% endif %}">
-            <div class="tool-card-head">
-                <span class="tool-icon" aria-hidden="true">
-                    <i class="{{ tool.icon | default: 'fa-solid fa-cube' }}"></i>
+        <li class="tool-card{% if tool.status == 'archived' %} is-archived{% endif %}">
+            <div class="tool-card__head">
+                <span class="tool-card__disk" aria-hidden="true">
+                    <svg class="ico"><use href="#i-floppy"></use></svg>
                 </span>
-                <h2 class="tool-name">
-                    <a class="tool-name-link" href="{{ tool.url }}" target="_blank" rel="noopener">{{ tool.name }}</a>
-                </h2>
+                <div>
+                    <h3 class="tool-card__title">
+                        <a href="{{ tool.url }}" target="_blank" rel="noopener">{{ tool.name }}</a>
+                    </h3>
+                    <p class="tool-card__tagline">{{ tool.tagline }}</p>
+                </div>
                 {% if tool.status == 'beta' %}
-                <span class="tool-badge tool-badge-beta">Beta</span>
+                <span class="tool-badge tool-badge--beta">Beta</span>
                 {% elsif tool.status == 'archived' %}
-                <span class="tool-badge tool-badge-archived">Archived</span>
+                <span class="tool-badge tool-badge--archived">Archived</span>
                 {% endif %}
             </div>
 
-            <p class="tool-tagline">{{ tool.tagline }}</p>
             {% if tool.description %}
-            <p class="tool-desc">{{ tool.description }}</p>
+            <p class="tool-card__desc">{{ tool.description }}</p>
             {% endif %}
 
             {% if tool.tech %}
-            <ul class="tool-tech">
+            <ul class="tool-card__tech">
                 {% for t in tool.tech %}
-                <li class="tool-tech-chip mono">{{ t }}</li>
+                <li class="chip">{{ t }}</li>
                 {% endfor %}
             </ul>
             {% endif %}
 
-            <div class="tool-actions">
-                <a class="social-btn social-btn-primary" href="{{ tool.url }}" target="_blank" rel="noopener">
-                    <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i>Open
+            <div class="tool-card__actions">
+                <a class="btn btn--sm btn--accent" href="{{ tool.url }}" target="_blank" rel="noopener">
+                    <svg class="ico" aria-hidden="true"><use href="#i-external"></use></svg>Launch
                 </a>
                 {% if tool.repo %}
-                <a class="social-btn" href="{{ tool.repo }}" target="_blank" rel="noopener">
-                    <i class="fab fa-github" aria-hidden="true"></i>Source
+                <a class="btn btn--sm" href="{{ tool.repo }}" target="_blank" rel="noopener">
+                    <svg class="ico" aria-hidden="true"><use href="#i-github"></use></svg>Source
                 </a>
                 {% endif %}
             </div>
