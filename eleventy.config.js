@@ -16,13 +16,24 @@ const POSTS_PER_PAGE = Math.max(1, Number(siteData.posts_per_page) || 10);
 
 const CJK_RE = /[㐀-䶿一-鿿豈-﫿]/g;
 
+// The post title is the page <h1>, so every content heading is normalised
+// to start at <h2>. This also removes heading-order gaps when an author uses
+// "#" or "###" as their first level.
 const demoteHeadings = (md) => {
     md.core.ruler.push("demote_post_headings", (state) => {
         const tokens = state.tokens;
+        let min = 7;
+        for (const token of tokens) {
+            if (token.type === "heading_open") {
+                min = Math.min(min, Number(token.tag.slice(1)));
+            }
+        }
+        if (min === 7) return;
+        const shift = 2 - min;
         for (let i = 0; i < tokens.length; i++) {
             const token = tokens[i];
             if (token.type !== "heading_open") continue;
-            const level = Math.min(Number(token.tag.slice(1)) + 1, 6);
+            const level = Math.max(2, Math.min(6, Number(token.tag.slice(1)) + shift));
             token.tag = `h${level}`;
             const close = tokens[i + 2];
             if (close && close.type === "heading_close") close.tag = token.tag;
@@ -44,6 +55,8 @@ module.exports = function (eleventyConfig) {
             placement: "after",
             class: "heading-anchor",
             symbol: "#",
+            // aria-hidden links must not stay in the tab order.
+            renderAttrs: () => ({ tabindex: "-1" }),
         }),
     });
 
@@ -221,7 +234,7 @@ module.exports = function (eleventyConfig) {
         return headings
             .map(
                 (h) =>
-                    `<li class="toc-item toc-l${h.level - minLevel + 1}"><a class="toc-link" href="#${encodeURI(h.id)}">${h.text}</a></li>`
+                    `<li class="toc__item toc__item--${h.level - minLevel + 1}"><a class="toc__link" href="#${encodeURI(h.id)}">${h.text}</a></li>`
             )
             .join("\n");
     });

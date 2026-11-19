@@ -1,0 +1,67 @@
+---
+layout: base.liquid
+title: Categories
+navTitle: Archive
+permalink: /categories/
+eleventyExcludeFromCollections: true
+description: Every category in the blog archive with its post count and latest entry.
+---
+
+{% assign maxCat = collections.categories.first.items.size %}
+
+<header class="page-head page-head--split">
+    <div class="page-head__main">
+        <p class="kicker"><span class="led" aria-hidden="true"></span>Index &middot; categories</p>
+        <h1 class="page-head__title">Categories<span style="color: var(--accent)">.</span></h1>
+        <p class="page-head__sub">The archive is filed under a handful of broad categories. Each one collects every post
+            that belongs to it, newest first.</p>
+        <ul class="page-head__meta">
+            <li><span class="chip"><svg class="ico" aria-hidden="true"><use href="#i-folder"></use></svg>{{ collections.categories.size }} categories</span></li>
+            <li><a class="chip" href="/archive/"><svg class="ico" aria-hidden="true"><use href="#i-archive"></use></svg>Archive</a></li>
+            <li><a class="chip" href="/tags/"><svg class="ico" aria-hidden="true"><use href="#i-tag"></use></svg>Tags</a></li>
+        </ul>
+    </div>
+
+    <aside class="page-head__aside" aria-label="Categories at a glance">
+        <div class="stamp">
+            <p class="stamp__head"><span class="led" aria-hidden="true"></span>Drawers<span class="stamp__tag">{{ collections.posts.size }} posts</span></p>
+            <p class="stamp__value">{{ collections.categories.size }}<span class="stamp__unit">categories</span></p>
+            <dl class="stamp__rows">
+                <div><dt>Largest</dt><dd>{{ collections.categories.first.name }}</dd></div>
+                <div><dt>Tags</dt><dd>{{ collections.tagList.size }}</dd></div>
+            </dl>
+        </div>
+    </aside>
+</header>
+
+<section class="sec" aria-labelledby="cat-index-title">
+    <header class="sec-head">
+        <span class="sec-head__no" aria-hidden="true">01</span>
+        <h2 class="sec-head__title" id="cat-index-title">All categories<span class="sec-head__dot">.</span></h2>
+        <span class="sec-head__rule" aria-hidden="true"></span>
+        <div class="sec-head__aside">
+            <span class="chip">{{ collections.categories.size }} entries</span>
+        </div>
+    </header>
+
+    <div class="cat-index">
+        {% assign catNo = 0 %}
+        {% for term in collections.categories %}
+        {% assign catNo = catNo | plus: 1 %}
+        <a class="cat-card px-hover" href="/categories/{{ term.slug }}/">
+            <span class="card-fx" aria-hidden="true"></span>
+            <span class="cat-card__top">
+                <span class="cat-card__no" aria-hidden="true">{% if catNo < 10 %}0{% endif %}{{ catNo }}</span>
+                <span class="cat-card__name">{{ term.name }}</span>
+                <span class="cat-card__count">{{ term.items.size }} post{% if term.items.size > 1 %}s{% endif %}</span>
+                <span class="cat-card__go" aria-hidden="true"><svg class="ico"><use href="#i-arrow-right"></use></svg></span>
+            </span>
+            <span class="cat-card__bar" aria-hidden="true"><i style="--p: {{ term.items.size | times: 100 | divided_by: maxCat }}%"></i></span>
+            <span class="cat-card__latest">
+                <span class="cat-card__label">Latest</span>
+                {{ term.items.first.data.title }}
+            </span>
+        </a>
+        {% endfor %}
+    </div>
+</section>

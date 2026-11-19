@@ -1,0 +1,107 @@
+---
+layout: base.liquid
+title: Tags
+navTitle: Archive
+permalink: /tags/
+eleventyExcludeFromCollections: true
+description: Every tag used across the blog, ordered by how often it appears.
+---
+
+{% assign onceCount = 0 %}
+{% for term in collections.tagList %}
+{% if term.items.size == 1 %}{% assign onceCount = onceCount | plus: 1 %}{% endif %}
+{% endfor %}
+{% assign maxTag = collections.tagList.first.items.size %}
+
+<header class="page-head page-head--split">
+    <div class="page-head__main">
+        <p class="kicker"><span class="led" aria-hidden="true"></span>Index &middot; tags</p>
+        <h1 class="page-head__title">Tags<span style="color: var(--accent)">.</span></h1>
+        <p class="page-head__sub">Every tag in the archive, ordered by how often it appears. Pick one to see the posts
+            filed under it.</p>
+        <ul class="page-head__meta">
+            <li><span class="chip"><svg class="ico" aria-hidden="true"><use href="#i-tag"></use></svg>{{ collections.tagList.size }} tags</span></li>
+            <li><a class="chip" href="/archive/"><svg class="ico" aria-hidden="true"><use href="#i-archive"></use></svg>Archive</a></li>
+            <li><a class="chip" href="/categories/"><svg class="ico" aria-hidden="true"><use href="#i-folder"></use></svg>Categories</a></li>
+        </ul>
+    </div>
+
+    <aside class="page-head__aside" aria-label="Tag index at a glance">
+        <div class="stamp">
+            <p class="stamp__head"><span class="led" aria-hidden="true"></span>Tag index<span class="stamp__tag">{{ collections.posts.size }} posts</span></p>
+            <p class="stamp__value">{{ collections.tagList.size }}<span class="stamp__unit">tags</span></p>
+            <dl class="stamp__rows">
+                <div><dt>Singletons</dt><dd>{{ onceCount }}</dd></div>
+                <div><dt>Categories</dt><dd>{{ collections.categories.size }}</dd></div>
+            </dl>
+        </div>
+    </aside>
+</header>
+
+<section class="sec" aria-labelledby="tag-index-title">
+    <header class="sec-head">
+        <span class="sec-head__no" aria-hidden="true">01</span>
+        <h2 class="sec-head__title" id="tag-index-title">All tags<span class="sec-head__dot">.</span></h2>
+        <span class="sec-head__rule" aria-hidden="true"></span>
+        <div class="sec-head__aside">
+            <span class="chip">{{ collections.tagList.size }} entries</span>
+        </div>
+    </header>
+
+    <div class="index-toolbar" data-term-toolbar hidden>
+        <div class="index-toolbar__row">
+            <label class="field__label" for="tag-filter">Filter tags</label>
+            <p class="index-count" data-term-count role="status" aria-live="polite"></p>
+        </div>
+        <input class="input index-toolbar__input" id="tag-filter" type="search" placeholder="Type part of a tag&hellip;" autocomplete="off" spellcheck="false" data-term-filter>
+    </div>
+
+    <section class="term-band" data-term-band aria-labelledby="band-hot">
+        <h3 class="term-band__title" id="band-hot">Most used<span>5 or more posts</span></h3>
+        <ul class="term-list">
+            {% for term in collections.tagList %}
+            {% if term.items.size >= 5 %}
+            <li class="term-row" data-term-row data-name="{{ term.name | downcase }}" data-slug="{{ term.slug }}">
+                <a class="term-row__link" href="/tags/{{ term.slug }}/">
+                    <span class="term-row__hash" aria-hidden="true">#</span>
+                    <span class="term-row__name">{{ term.name }}</span>
+                    <span class="term-row__bar" aria-hidden="true"><i style="--p: {{ term.items.size | times: 100 | divided_by: maxTag }}%"></i></span>
+                    <span class="term-row__count">{{ term.items.size }}</span>
+                </a>
+            </li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section class="term-band" data-term-band aria-labelledby="band-regular">
+        <h3 class="term-band__title" id="band-regular">Regular<span>2 to 4 posts</span></h3>
+        <ul class="term-list">
+            {% for term in collections.tagList %}
+            {% if term.items.size >= 2 and term.items.size <= 4 %}
+            <li class="term-row" data-term-row data-name="{{ term.name | downcase }}" data-slug="{{ term.slug }}">
+                <a class="term-row__link" href="/tags/{{ term.slug }}/">
+                    <span class="term-row__hash" aria-hidden="true">#</span>
+                    <span class="term-row__name">{{ term.name }}</span>
+                    <span class="term-row__bar" aria-hidden="true"><i style="--p: {{ term.items.size | times: 100 | divided_by: maxTag }}%"></i></span>
+                    <span class="term-row__count">{{ term.items.size }}</span>
+                </a>
+            </li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section class="term-band" data-term-band aria-labelledby="band-single">
+        <h3 class="term-band__title" id="band-single">Used once<span>A single post</span></h3>
+        <div class="tag-cloud tag-cloud--index">
+            {% for term in collections.tagList %}
+            {% if term.items.size == 1 %}
+            <a class="chip" href="/tags/{{ term.slug }}/" data-term-row data-name="{{ term.name | downcase }}" data-slug="{{ term.slug }}"><span class="chip__hash">#</span>{{ term.name }}<span class="chip__count">{{ term.items.size }}</span></a>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </section>
+
+    <p class="empty" data-term-empty hidden>No tag matches that filter.</p>
+</section>

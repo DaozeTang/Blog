@@ -5,17 +5,40 @@ navTitle: Archive
 permalink: /archive/
 ---
 
-<header class="page-head">
-    <p class="kicker"><span class="led" aria-hidden="true"></span>Index &middot; every entry</p>
-    <h1 class="page-head__title">Archive<span style="color: var(--accent)">.</span></h1>
-    <p class="page-head__sub">Everything I have written down so far, sorted by year. Start with a category if you are
-        hunting for a topic, or scroll the ledger for the full history.</p>
-    <ul class="page-head__meta">
-        <li><span class="chip"><svg class="ico" aria-hidden="true"><use href="#i-file"></use></svg>{{ collections.posts.size }} posts</span></li>
-        <li><span class="chip"><svg class="ico" aria-hidden="true"><use href="#i-folder"></use></svg>{{ collections.categories.size }} categories</span></li>
-        <li><span class="chip"><svg class="ico" aria-hidden="true"><use href="#i-tag"></use></svg>{{ collections.tagList.size }} tags</span></li>
-        <li><a class="chip chip--accent" href="/rss.xml"><svg class="ico" aria-hidden="true"><use href="#i-rss"></use></svg>RSS</a></li>
-    </ul>
+{% assign maxCat = 0 %}
+{% for term in collections.categories %}
+{% if term.items.size > maxCat %}{% assign maxCat = term.items.size %}{% endif %}
+{% endfor %}
+
+<header class="page-head page-head--split">
+    <div class="page-head__main">
+        <p class="kicker"><span class="led" aria-hidden="true"></span>Index &middot; every entry</p>
+        <h1 class="page-head__title">Archive<span style="color: var(--accent)">.</span></h1>
+        <p class="page-head__sub">Everything I have written down so far, sorted by year. Start with a category if you are
+            hunting for a topic, or scroll the ledger for the full history.</p>
+        <ul class="page-head__meta">
+            <li><span class="chip"><svg class="ico" aria-hidden="true"><use href="#i-file"></use></svg>{{ collections.posts.size }} posts</span></li>
+            <li><a class="chip" href="/categories/"><svg class="ico" aria-hidden="true"><use href="#i-folder"></use></svg>{{ collections.categories.size }} categories</a></li>
+            <li><a class="chip" href="/tags/"><svg class="ico" aria-hidden="true"><use href="#i-tag"></use></svg>{{ collections.tagList.size }} tags</a></li>
+            <li><a class="chip chip--accent" href="/rss.xml"><svg class="ico" aria-hidden="true"><use href="#i-rss"></use></svg>RSS</a></li>
+        </ul>
+    </div>
+
+    <aside class="page-head__aside" aria-label="Archive at a glance">
+        <div class="stamp">
+            <p class="stamp__head"><span class="led" aria-hidden="true"></span>Ledger<span class="stamp__tag">{{ collections.postsByYear.size }} yrs</span></p>
+            <p class="stamp__value">{{ collections.posts.size }}<span class="stamp__unit">posts</span></p>
+            <div class="years" aria-hidden="true">
+                {% for group in collections.postsByYear %}
+                <span class="years__cell{% if forloop.first %} is-now{% endif %}"><b>{{ group.year }}</b><i>{{ group.items.size }}</i></span>
+                {% endfor %}
+            </div>
+            <dl class="stamp__rows">
+                <div><dt>Categories</dt><dd>{{ collections.categories.size }}</dd></div>
+                <div><dt>Tags</dt><dd>{{ collections.tagList.size }}</dd></div>
+            </dl>
+        </div>
+    </aside>
 </header>
 
 <section class="sec archive-block" id="categories" aria-labelledby="cat-title">
@@ -23,12 +46,21 @@ permalink: /archive/
         <span class="sec-head__no" aria-hidden="true">01</span>
         <h2 class="sec-head__title" id="cat-title">Categories<span class="sec-head__dot">.</span></h2>
         <span class="sec-head__rule" aria-hidden="true"></span>
+        <div class="sec-head__aside">
+            <a class="chip" href="/categories/">All categories<svg class="ico" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a>
+        </div>
     </header>
     <div class="term-grid">
+        {% assign catNo = 0 %}
         {% for term in collections.categories %}
-        <a class="term-card" href="/categories/{{ term.slug }}/">
+        {% assign catNo = catNo | plus: 1 %}
+        <a class="term-card px-hover" href="/categories/{{ term.slug }}/">
+            <span class="card-fx" aria-hidden="true"></span>
+            <span class="term-card__no" aria-hidden="true">{% if catNo < 10 %}0{% endif %}{{ catNo }}</span>
             <span class="term-card__name">{{ term.name }}</span>
-            <span class="term-card__count">{{ term.items.size }} posts</span>
+            <span class="term-card__bar" aria-hidden="true"><i style="--p: {{ term.items.size | times: 100 | divided_by: maxCat }}%"></i></span>
+            <span class="term-card__count">{{ term.items.size }}</span>
+            <span class="term-card__go" aria-hidden="true"><svg class="ico"><use href="#i-arrow-right"></use></svg></span>
         </a>
         {% endfor %}
     </div>
@@ -39,6 +71,9 @@ permalink: /archive/
         <span class="sec-head__no" aria-hidden="true">02</span>
         <h2 class="sec-head__title" id="tag-title">Tags<span class="sec-head__dot">.</span></h2>
         <span class="sec-head__rule" aria-hidden="true"></span>
+        <div class="sec-head__aside">
+            <a class="chip" href="/tags/">All tags<svg class="ico" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a>
+        </div>
     </header>
     <div class="tag-cloud">
         {% for term in collections.tagList limit: 18 %}
@@ -73,6 +108,7 @@ permalink: /archive/
     </header>
 
     <div class="year-stack">
+        {% assign postNo = 0 %}
         {% for group in collections.postsByYear %}
         <section class="year-block" id="year-{{ group.year }}">
             <div class="year-block__label">
@@ -81,13 +117,16 @@ permalink: /archive/
             </div>
             <ol class="year-block__items">
                 {% for post in group.items %}
+                {% assign postNo = postNo | plus: 1 %}
                 <li class="year-item">
                     <a class="year-item__link" href="{{ post.url }}">
+                        <span class="year-item__no" aria-hidden="true">{% if postNo < 10 %}0{% endif %}{{ postNo }}</span>
                         <time class="year-item__date" datetime="{{ post.data.published | isoDate }}">{{ post.data.published | monthDay }}</time>
                         <span class="year-item__title">{{ post.data.title }}</span>
                         {% if post.data.category and post.data.category != "" %}
                         <span class="year-item__cat">{{ post.data.category }}</span>
                         {% endif %}
+                        <span class="year-item__go" aria-hidden="true"><svg class="ico"><use href="#i-arrow-right"></use></svg></span>
                     </a>
                 </li>
                 {% endfor %}

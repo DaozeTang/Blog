@@ -137,6 +137,17 @@
 .post-card__arrow .ico {
     width: 18px;
     height: 18px;
+    transition: transform var(--tick);
+}
+
+.post-card__link:hover .post-card__arrow .ico,
+.post-card__link:focus-visible .post-card__arrow .ico {
+    transform: translateX(3px);
+}
+
+.post-card__link:active {
+    transform: translate(0, 0);
+    box-shadow: var(--sh-none);
 }
 
 .post-card__link:hover .post-card__arrow {
@@ -161,6 +172,6 @@
     }
 
     .post-card__title {
-        font-size: 19px;
+        font-size: 24px;
     }
 }

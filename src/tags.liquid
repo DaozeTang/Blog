@@ -11,16 +11,35 @@ eleventyComputed:
 eleventyExcludeFromCollections: true
 ---
 
-<header class="page-head">
-    <p class="kicker"><span class="led" aria-hidden="true"></span>Tag</p>
-    <h1 class="page-head__title"><span style="color: var(--accent)">#</span>{{ term.name }}<span style="color: var(--accent)">.</span></h1>
-    <ul class="page-head__meta">
-        <li><span class="chip"><svg class="ico" aria-hidden="true"><use href="#i-file"></use></svg>{{ term.items.size }} post{% if term.items.size > 1 %}s{% endif %}</span></li>
-        <li><a class="chip" href="/archive/#tags">All tags<svg class="ico" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a></li>
-    </ul>
+{% assign firstYear = term.items.first.data.published | date: "%Y" %}
+{% assign lastYear = term.items.last.data.published | date: "%Y" %}
+
+<header class="page-head page-head--split">
+    <div class="page-head__main">
+        <p class="kicker"><span class="led" aria-hidden="true"></span>Tag</p>
+        <h1 class="page-head__title"><span style="color: var(--accent)">#</span>{{ term.name }}<span style="color: var(--accent)">.</span></h1>
+        <p class="page-head__sub">Every post filed under this tag, newest first.</p>
+        <ul class="page-head__meta">
+            <li><span class="chip"><svg class="ico" aria-hidden="true"><use href="#i-file"></use></svg>{{ term.items.size }} post{% if term.items.size > 1 %}s{% endif %}</span></li>
+            <li><a class="chip" href="/tags/">All tags<svg class="ico" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a></li>
+            <li><a class="chip" href="/archive/">Archive<svg class="ico" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a></li>
+        </ul>
+    </div>
+
+    <aside class="page-head__aside" aria-label="Tag summary">
+        <div class="stamp">
+            <p class="stamp__head"><span class="led" aria-hidden="true"></span>Tag sheet<span class="stamp__tag">#</span></p>
+            <p class="stamp__value">{{ term.items.size }}<span class="stamp__unit">posts</span></p>
+            <dl class="stamp__rows">
+                <div><dt>Span</dt><dd>{% if firstYear == lastYear %}{{ firstYear }}{% else %}{{ lastYear }}&ndash;{{ firstYear }}{% endif %}</dd></div>
+                <div><dt>All tags</dt><dd>{{ collections.tagList.size }}</dd></div>
+            </dl>
+        </div>
+    </aside>
 </header>
 
-<section class="sec post-feed">
+<section class="sec post-feed" aria-labelledby="posts-title">
+    <h2 class="visually-hidden" id="posts-title">Posts tagged #{{ term.name }}</h2>
     {% assign posts = term.items %}
     {% include "post-list" %}
 </section>

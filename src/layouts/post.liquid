@@ -67,7 +67,10 @@ ogType: article
                 <span class="post-nav__title">{{ newerPost.data.title }}</span>
             </a>
             {% else %}
-            <span class="post-nav__card is-empty" aria-hidden="true"></span>
+            <a class="post-nav__card post-nav__card--empty" href="/">
+                <span class="post-nav__label"><svg class="ico" aria-hidden="true"><use href="#i-arrow-left"></use></svg>Index</span>
+                <span class="post-nav__title">All posts</span>
+            </a>
             {% endif %}
             {% if olderPost %}
             <a class="post-nav__card post-nav--next" href="{{ olderPost.url }}">
@@ -75,7 +78,10 @@ ogType: article
                 <span class="post-nav__title">{{ olderPost.data.title }}</span>
             </a>
             {% else %}
-            <span class="post-nav__card is-empty" aria-hidden="true"></span>
+            <a class="post-nav__card post-nav__card--empty" href="/">
+                <span class="post-nav__label">Index<svg class="ico" aria-hidden="true"><use href="#i-arrow-right"></use></svg></span>
+                <span class="post-nav__title">All posts</span>
+            </a>
             {% endif %}
         </nav>
         {% endif %}
@@ -126,6 +132,15 @@ ogType: article
 <dialog class="lightbox" id="lightbox" aria-label="Image preview">
     <div class="dialog__head">
         <span><svg class="ico" aria-hidden="true"><use href="#i-image"></use></svg>Image preview</span>
+        <div class="lightbox__nav">
+            <button class="lightbox__step" type="button" data-lightbox-prev aria-label="Previous image">
+                <svg class="ico" aria-hidden="true"><use href="#i-chev-left"></use></svg>
+            </button>
+            <span class="lightbox__counter" id="lightbox-counter" aria-hidden="true">1 / 1</span>
+            <button class="lightbox__step" type="button" data-lightbox-next aria-label="Next image">
+                <svg class="ico" aria-hidden="true"><use href="#i-chev-right"></use></svg>
+            </button>
+        </div>
         <button class="dialog__close" type="button" data-dialog-close aria-label="Close image preview">&times;</button>
     </div>
     <div class="dialog__body">

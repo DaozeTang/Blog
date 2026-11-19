@@ -6,41 +6,60 @@ permalink: /tools/
 description: 我构建并部署的在线小工具合集。
 ---
 
-<header class="page-head">
-    <p class="kicker"><span class="led led--gold" aria-hidden="true"></span>Cartridge bay &middot; local-first</p>
-    <h1 class="page-head__title">Tools<span style="color: var(--accent)">.</span></h1>
-    <p class="page-head__sub">小工具，单文件，零依赖。数据只留在你自己的设备上 —— 插卡即用，拔卡即走。</p>
-    <ul class="page-head__meta">
-        <li><span class="chip"><svg class="ico" aria-hidden="true"><use href="#i-floppy"></use></svg>{{ tools.size }} tool{% if tools.size != 1 %}s{% endif %}</span></li>
-        <li><span class="chip chip--soft"><svg class="ico" aria-hidden="true"><use href="#i-lock"></use></svg>No network requests</span></li>
-    </ul>
+<header class="page-head page-head--split">
+    <div class="page-head__main">
+        <p class="kicker"><span class="led led--gold" aria-hidden="true"></span>Cartridge bay &middot; local-first</p>
+        <h1 class="page-head__title">Tools<span style="color: var(--accent)">.</span></h1>
+        <p class="page-head__sub">小工具，单文件，零依赖。数据只留在你自己的设备上 —— 插卡即用，拔卡即走。</p>
+        <ul class="page-head__meta">
+            <li><span class="chip"><svg class="ico" aria-hidden="true"><use href="#i-floppy"></use></svg>{{ tools.size }} tool{% if tools.size != 1 %}s{% endif %}</span></li>
+            <li><span class="chip chip--soft"><svg class="ico" aria-hidden="true"><use href="#i-lock"></use></svg>No network requests</span></li>
+        </ul>
+    </div>
+
+    <aside class="page-head__aside" aria-label="Cartridge bay at a glance">
+        <div class="stamp">
+            <p class="stamp__head"><span class="led led--gold" aria-hidden="true"></span>Cartridge bay<span class="stamp__tag">local</span></p>
+            <p class="stamp__value">{{ tools.size }}<span class="stamp__unit">tools</span></p>
+            <dl class="stamp__rows">
+                <div><dt>Files</dt><dd>{{ tools.size }}</dd></div>
+                <div><dt>Network</dt><dd>0 requests</dd></div>
+            </dl>
+        </div>
+    </aside>
 </header>
 
-<section class="sec">
+<section class="sec" aria-labelledby="disks-title">
     <header class="sec-head">
         <span class="sec-head__no" aria-hidden="true">01</span>
-        <h2 class="sec-head__title">Insert disk<span class="sec-head__dot">.</span></h2>
+        <h2 class="sec-head__title" id="disks-title">Insert disk<span class="sec-head__dot">.</span></h2>
         <span class="sec-head__rule" aria-hidden="true"></span>
+        <div class="sec-head__aside">
+            <span class="chip">{{ tools.size }} cartridge{% if tools.size != 1 %}s{% endif %}</span>
+        </div>
     </header>
 
     <ul class="tool-grid">
         {% for tool in tools %}
-        <li class="tool-card{% if tool.status == 'archived' %} is-archived{% endif %}">
+        <li class="tool-card px-hover{% if tool.status == 'archived' %} is-archived{% endif %}">
+            <span class="card-fx" aria-hidden="true"></span>
+            <div class="tool-card__bar">
+                <span class="tool-card__cart">Cart.{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
+                <span class="tool-card__state{% if tool.status %} is-{{ tool.status }}{% endif %}">
+                    <span class="led" aria-hidden="true"></span>{% if tool.status %}{{ tool.status }}{% else %}Ready{% endif %}
+                </span>
+            </div>
+
             <div class="tool-card__head">
                 <span class="tool-card__disk" aria-hidden="true">
                     <svg class="ico"><use href="#i-floppy"></use></svg>
                 </span>
                 <div>
                     <h3 class="tool-card__title">
-                        <a href="{{ tool.url }}" target="_blank" rel="noopener">{{ tool.name }}</a>
+                        <a href="{{ tool.url }}" target="_blank" rel="noopener">{{ tool.name }}<svg class="ico" aria-hidden="true"><use href="#i-external"></use></svg></a>
                     </h3>
                     <p class="tool-card__tagline">{{ tool.tagline }}</p>
                 </div>
-                {% if tool.status == 'beta' %}
-                <span class="tool-badge tool-badge--beta">Beta</span>
-                {% elsif tool.status == 'archived' %}
-                <span class="tool-badge tool-badge--archived">Archived</span>
-                {% endif %}
             </div>
 
             {% if tool.description %}
@@ -67,5 +86,31 @@ description: 我构建并部署的在线小工具合集。
             </div>
         </li>
         {% endfor %}
+    </ul>
+</section>
+
+<section class="sec" aria-labelledby="notes-title">
+    <header class="sec-head">
+        <span class="sec-head__no" aria-hidden="true">02</span>
+        <h2 class="sec-head__title" id="notes-title">Operating notes<span class="sec-head__dot">.</span></h2>
+        <span class="sec-head__rule" aria-hidden="true"></span>
+    </header>
+
+    <ul class="note-grid">
+        <li class="note">
+            <span class="note__ico" aria-hidden="true"><svg class="ico"><use href="#i-file"></use></svg></span>
+            <h3 class="note__title">Single file</h3>
+            <p class="note__text">每个工具都是一个独立的 HTML 文件，不需要安装，也不拉取外部依赖。</p>
+        </li>
+        <li class="note">
+            <span class="note__ico" aria-hidden="true"><svg class="ico"><use href="#i-lock"></use></svg></span>
+            <h3 class="note__title">Local first</h3>
+            <p class="note__text">数据保存在浏览器本地，页面不发起网络请求，内容不会离开你的设备。</p>
+        </li>
+        <li class="note">
+            <span class="note__ico" aria-hidden="true"><svg class="ico"><use href="#i-floppy"></use></svg></span>
+            <h3 class="note__title">Plug and play</h3>
+            <p class="note__text">打开即用，关掉即走；清空站点数据，就等于拔掉了这张卡带。</p>
+        </li>
     </ul>
 </section>

@@ -1,8 +1,18 @@
-<ol class="post-list" start="{{ pagination.pageNumber | default: 0 | times: 10 | plus: 1 }}">
+{%- comment -%}
+    Only the home feed paginates posts; category/tag pages paginate terms, so
+    their pageNumber must not shift the ledger numbering.
+{%- endcomment -%}
+{%- assign pageSize = pagination.size | default: 10 -%}
+{%- assign offset = 0 -%}
+{%- if pagination.alias == "posts" -%}
+    {%- assign offset = pagination.pageNumber | default: 0 | times: pageSize -%}
+{%- endif -%}
+<ol class="post-list" start="{{ offset | plus: 1 }}">
     {% for post in posts %}
     <li class="post-card">
         <a class="post-card__link" href="{{ post.url }}">
-            <span class="post-card__no" aria-hidden="true">{{ forloop.index | prepend: "0" | slice: -2, 2 }}</span>
+            {%- assign postNo = forloop.index | plus: offset -%}
+            <span class="post-card__no" aria-hidden="true">{% if postNo < 10 %}0{{ postNo }}{% else %}{{ postNo }}{% endif %}</span>
             <div class="post-card__body">
                 <div class="post-card__top">
                     <time datetime="{{ post.data.published | isoDate }}">{{ post.data.published | readableDate }}</time>

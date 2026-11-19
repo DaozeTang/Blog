@@ -5,7 +5,7 @@
 /* Reading progress: a segmented bar pinned under the masthead. */
 .progress {
     position: fixed;
-    top: var(--header-h);
+    top: var(--header-total);
     left: 0;
     right: 0;
     z-index: 55;
@@ -26,6 +26,11 @@
     background: var(--accent);
 }
 
+/* Finishing the article lights the bar up in gold, like a cleared stage. */
+.progress.is-done .progress__seg.is-on {
+    background: var(--gold);
+}
+
 .post-head {
     padding-bottom: var(--s-6);
 }
@@ -39,6 +44,7 @@
 
 .post-title {
     max-width: 34ch;
+    text-wrap: balance;
     margin: 0;
     color: var(--ink);
     font-family: var(--f-dot);
@@ -144,7 +150,7 @@
 .post-nav__title {
     color: var(--ink);
     font-family: var(--f-dot);
-    font-size: 20px;
+    font-size: 24px;
     line-height: 1.45;
 }
 
@@ -161,6 +167,35 @@
     border-color: var(--line);
     box-shadow: none;
     background: transparent;
+}
+
+/* When a post has no neighbour, the empty slot becomes a way back. */
+.post-nav__card--empty {
+    border-style: dashed;
+    border-color: var(--line);
+    background: var(--surface-2);
+    box-shadow: none;
+}
+
+.post-nav__card--empty:hover {
+    border-color: var(--line-strong);
+    background: var(--surface);
+    box-shadow: var(--sh-1);
+}
+
+.post-nav__card--empty .post-nav__title {
+    color: var(--ink-2);
+}
+
+/* Giscus injects its iframe asynchronously; until then, say what is coming. */
+#giscus-container:empty::before {
+    content: "Comments load from GitHub Discussions.";
+    display: block;
+    padding: var(--s-5);
+    color: var(--ink-4);
+    font-family: var(--f-mono);
+    font-size: 12px;
+    text-align: center;
 }
 
 /* Comments */
@@ -214,6 +249,6 @@
     }
 
     .post-title {
-        font-size: 28px;
+        font-size: 36px;
     }
 }

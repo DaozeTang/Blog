@@ -24,18 +24,18 @@ eleventyExcludeFromCollections: true
         </div>
     </div>
 
-    <aside class="cover__side">
+    <div class="cover__side">
         <div class="screen cover__screen">
             <canvas id="scene" data-scene="workshop" role="img" aria-label="Pixel-art illustration of a desk with a CRT monitor, a mug, books and a cat"></canvas>
             <span class="screen__glare" aria-hidden="true"></span>
         </div>
         <p class="px-caption cover__fig">fig.01 — the workshop · object detection, live</p>
-        <button class="cover__search" type="button" data-open-search>
+        <a class="cover__search" href="/search/" data-open-search>
             <svg class="ico" aria-hidden="true"><use href="#i-search"></use></svg>
             Search the archive
             <kbd>/</kbd>
-        </button>
-    </aside>
+        </a>
+    </div>
 </section>
 
 <div class="ticker" aria-hidden="true">
@@ -52,6 +52,10 @@ eleventyExcludeFromCollections: true
         {% endfor %}
     </div>
 </div>
+{% endif %}
+
+{% if pagination.pageNumber > 0 %}
+<h1 class="visually-hidden">Blog &mdash; page {{ pagination.pageNumber | plus: 1 }}</h1>
 {% endif %}
 
 <div class="split">

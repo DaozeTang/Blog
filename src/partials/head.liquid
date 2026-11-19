@@ -1,5 +1,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
 <meta name="description" content="{% if description %}{{ description | strip_html | strip_newlines | truncatewords: 40 }}{% else %}{{ site.description }}{% endif %}">
 <meta name="keywords" content="{{ site.keywords }}">
 <meta name="author" content="{{ site.author.name }}">
@@ -18,11 +19,15 @@
 <meta property="og:description" content="{% if description %}{{ description | strip_html | strip_newlines | truncatewords: 40 }}{% else %}{{ site.description }}{% endif %}">
 <meta property="og:url" content="{{ page.url | encodeUri | prepend: site.url }}">
 <meta property="og:image" content="{{ site.url }}/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Pixel-art blog cover">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" id="meta-theme-color" content="#f1e7d2">
 
 <script>
     (function () {
+        document.documentElement.classList.add("has-js");
         var mode = "system";
         try {
             var match = document.cookie.match(/(?:^|;\s*)dzt_theme=(light|dark|system)(?:;|$)/);

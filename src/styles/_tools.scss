@@ -16,7 +16,7 @@
     display: grid;
     gap: var(--s-3);
     margin: 0;
-    padding: var(--s-5);
+    padding: 0 var(--s-5) var(--s-5);
     border: var(--bw) solid var(--line-strong);
     background: var(--surface);
     box-shadow: var(--sh-3);
@@ -28,10 +28,65 @@
     box-shadow: var(--sh-4);
 }
 
+.tool-card:hover .tool-card__bar {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--bg);
+}
+
+.tool-card:hover .tool-card__disk {
+    transform: translateY(-2px);
+}
+
+.tool-card__disk {
+    transition: transform var(--tock);
+}
+
+.tool-card__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-2);
+    margin-bottom: var(--s-4);
+    padding: 7px 12px;
+    border-bottom: 2px solid var(--line);
+    background: var(--surface-2);
+    color: var(--ink-3);
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: var(--tick);
+}
+
+.tool-card__cart {
+    color: inherit;
+}
+
+.tool-card__state {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.tool-card__state .led {
+    width: 6px;
+    height: 6px;
+}
+
+.tool-card__state.is-beta .led {
+    background: var(--gold);
+}
+
+.tool-card__state.is-archived .led {
+    background: var(--coral);
+}
+
 .tool-card__head {
     display: flex;
     align-items: flex-start;
     gap: var(--s-3);
+    padding: 0;
 }
 
 .tool-card__disk {
@@ -41,7 +96,7 @@
     height: 56px;
     flex: 0 0 auto;
     border: var(--bw) solid var(--line-strong);
-    background: var(--ink);
+    background: #0b0d16;
     color: var(--accent-2);
     box-shadow: var(--sh-1);
 }
@@ -53,13 +108,31 @@
 
 .tool-card__title {
     margin: 0;
+    overflow-wrap: break-word;
     color: var(--ink);
     font-family: var(--f-dot);
     font-size: 24px;
     line-height: 1.35;
 }
 
+.tool-card__title a {
+    display: inline;
+}
+
+.tool-card__title a .ico {
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    margin-left: 6px;
+    vertical-align: -1px;
+    color: var(--ink-4);
+}
+
 .tool-card__title a:hover {
+    color: var(--accent);
+}
+
+.tool-card__title a:hover .ico {
     color: var(--accent);
 }
 
@@ -124,4 +197,61 @@
 
 .tool-card.is-archived {
     opacity: 0.75;
+}
+
+/* -----------------------------------------------------------------------------
+   Operating notes — three dashed cards under the bay.
+   -------------------------------------------------------------------------- */
+
+.note-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--s-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.note {
+    display: grid;
+    align-content: start;
+    gap: var(--s-2);
+    margin: 0;
+    padding: var(--s-4);
+    border: 2px dashed var(--line);
+    background: var(--surface);
+}
+
+.note__ico {
+    color: var(--accent);
+}
+
+.note__ico .ico {
+    width: 20px;
+    height: 20px;
+}
+
+.note__title {
+    margin: 0;
+    color: var(--ink);
+    font-family: var(--f-pixel);
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.note__text {
+    margin: 0;
+    color: var(--ink-3);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.tool-card__bar .led {
+    box-shadow: 0 0 0 2px var(--px-shadow);
+}
+
+.tool-card:hover .tool-card__bar .led {
+    background: var(--accent-2);
 }
