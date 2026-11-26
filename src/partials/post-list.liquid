@@ -9,30 +9,33 @@
 {%- endif -%}
 <ol class="post-list" start="{{ offset | plus: 1 }}">
     {% for post in posts %}
+    {%- assign postNo = forloop.index | plus: offset -%}
     <li class="post-card">
-        <a class="post-card__link" href="{{ post.url }}">
-            {%- assign postNo = forloop.index | plus: offset -%}
+        <a class="post-card__link px-hover" href="{{ post.url }}">
+            <span class="card-fx" aria-hidden="true"></span>
             <span class="post-card__no" aria-hidden="true">{% if postNo < 10 %}0{{ postNo }}{% else %}{{ postNo }}{% endif %}</span>
             <div class="post-card__body">
-                <div class="post-card__top">
-                    <time datetime="{{ post.data.published | isoDate }}">{{ post.data.published | readableDate }}</time>
-                    <span class="post-card__dot" aria-hidden="true">&#9670;</span>
+                <div class="post-card__meta">
+                    <time datetime="{{ post.data.published | isoDate }}">{{ post.data.published | date: "%Y-%m-%d" }}</time>
+                    <span class="post-card__sep" aria-hidden="true">/</span>
                     <span>{{ post.templateContent | readingTime }}</span>
                     {% if post.data.pinned %}
-                    <span class="post-card__pin"><svg class="ico" aria-hidden="true"><use href="#i-pin"></use></svg>Pinned</span>
+                    <span class="post-card__pin"><span class="led led--gold" aria-hidden="true"></span>Pinned</span>
                     {% endif %}
                 </div>
                 <h3 class="post-card__title">{{ post.data.title }}</h3>
                 {% if post.data.description and post.data.description != "" %}
                 <p class="post-card__desc">{{ post.data.description }}</p>
                 {% endif %}
-                <div class="post-card__tags chips">
+                <div class="post-card__foot">
                     {% if post.data.category and post.data.category != "" %}
-                    <span class="chip chip--soft">{{ post.data.category }}</span>
+                    <span class="cls post-card__cat">{{ post.data.category }}</span>
                     {% endif %}
-                    {% for tag in post.data.tags limit: 4 %}
-                    <span class="chip"><span class="chip__hash">#</span>{{ tag }}</span>
-                    {% endfor %}
+                    <span class="post-card__tags">
+                        {% for tag in post.data.tags limit: 4 %}
+                        <span class="post-card__tag"><span class="post-card__hash" aria-hidden="true">#</span>{{ tag }}</span>
+                        {% endfor %}
+                    </span>
                 </div>
             </div>
             <span class="post-card__arrow" aria-hidden="true"><svg class="ico"><use href="#i-arrow-right"></use></svg></span>

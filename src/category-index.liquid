@@ -11,7 +11,6 @@ description: Every category in the blog archive with its post count and latest e
 
 <header class="page-head page-head--split">
     <div class="page-head__main">
-        <p class="kicker"><span class="led" aria-hidden="true"></span>Index &middot; categories</p>
         <h1 class="page-head__title">Categories<span style="color: var(--accent)">.</span></h1>
         <p class="page-head__sub">The archive is filed under a handful of broad categories. Each one collects every post
             that belongs to it, newest first.</p>
@@ -50,17 +49,17 @@ description: Every category in the blog archive with its post count and latest e
         {% assign catNo = catNo | plus: 1 %}
         <a class="cat-card px-hover" href="/categories/{{ term.slug }}/">
             <span class="card-fx" aria-hidden="true"></span>
-            <span class="cat-card__top">
-                <span class="cat-card__no" aria-hidden="true">{% if catNo < 10 %}0{% endif %}{{ catNo }}</span>
+            <span class="cat-card__no" aria-hidden="true">{% if catNo < 10 %}0{% endif %}{{ catNo }}</span>
+            <span class="cat-card__body">
                 <span class="cat-card__name">{{ term.name }}</span>
-                <span class="cat-card__count">{{ term.items.size }} post{% if term.items.size > 1 %}s{% endif %}</span>
-                <span class="cat-card__go" aria-hidden="true"><svg class="ico"><use href="#i-arrow-right"></use></svg></span>
+                <span class="cat-card__latest">
+                    <span class="cat-card__label">Latest</span>
+                    {{ term.items.first.data.title }}
+                </span>
             </span>
             <span class="cat-card__bar" aria-hidden="true"><i style="--p: {{ term.items.size | times: 100 | divided_by: maxCat }}%"></i></span>
-            <span class="cat-card__latest">
-                <span class="cat-card__label">Latest</span>
-                {{ term.items.first.data.title }}
-            </span>
+            <span class="cat-card__count"><b>{{ term.items.size }}</b> post{% if term.items.size > 1 %}s{% endif %}</span>
+            <span class="cat-card__go" aria-hidden="true"><svg class="ico"><use href="#i-arrow-right"></use></svg></span>
         </a>
         {% endfor %}
     </div>

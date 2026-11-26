@@ -8,7 +8,6 @@ headExtra: '<link href="/pagefind/pagefind-ui.css" rel="stylesheet">'
 <div class="search-page" data-search-page>
     <header class="page-head page-head--split">
         <div class="page-head__main">
-            <p class="kicker"><span class="led led--blink" aria-hidden="true"></span>Terminal &middot; full-text index</p>
             <h1 class="page-head__title">Search<span style="color: var(--accent)">.</span></h1>
             <p class="page-head__sub">Every post on this blog, indexed at build time by Pagefind. Nothing leaves your browser.</p>
             <ul class="page-head__meta">
@@ -72,7 +71,7 @@ headExtra: '<link href="/pagefind/pagefind-ui.css" rel="stylesheet">'
         </div>
 
         <aside class="rail" aria-label="Search help">
-            <div class="rail__panel">
+            <div class="panel panel--flat rail__panel">
                 <p class="rail__label">Quick tags</p>
                 <div class="tag-cloud tag-cloud--rail">
                     {% for term in collections.tagList limit: 8 %}
@@ -81,7 +80,7 @@ headExtra: '<link href="/pagefind/pagefind-ui.css" rel="stylesheet">'
                 </div>
             </div>
 
-            <div class="rail__panel">
+            <div class="panel panel--flat rail__panel">
                 <p class="rail__label">How it works</p>
                 <ul class="key">
                     <li><span class="led" aria-hidden="true"></span><span>Index built at publish time</span></li>

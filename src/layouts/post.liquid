@@ -9,29 +9,27 @@ ogType: article
 
     <header class="post-head">
         {% if category and category != "" %}
-        <a class="chip chip--accent post-head__cat" href="/categories/{{ category | ghSlug }}/">
-            <svg class="ico" aria-hidden="true"><use href="#i-folder"></use></svg>{{ category }}
-        </a>
+        <a class="cls post-head__cat" href="/categories/{{ category | ghSlug }}/">{{ category }}</a>
         {% endif %}
 
         <h1 class="post-title">{{ title }}</h1>
 
         <ul class="post-meta" data-pagefind-ignore>
-            <li><svg class="ico" aria-hidden="true"><use href="#i-calendar"></use></svg><time datetime="{{ published | isoDate }}">{{ published | readableDate }}</time></li>
+            <li><span class="post-meta__k">Date</span><time datetime="{{ published | isoDate }}">{{ published | readableDate }}</time></li>
             {% if updated %}
-            <li><svg class="ico" aria-hidden="true"><use href="#i-sort"></use></svg>Updated {{ updated | readableDate }}</li>
+            <li><span class="post-meta__k">Updated</span><span>{{ updated | readableDate }}</span></li>
             {% endif %}
-            <li><svg class="ico" aria-hidden="true"><use href="#i-clock"></use></svg>{{ content | readingTime }}</li>
-            <li><svg class="ico" aria-hidden="true"><use href="#i-file"></use></svg>{{ content | wordCount }} chars</li>
+            <li><span class="post-meta__k">Read</span><span>{{ content | readingTime }}</span></li>
+            <li><span class="post-meta__k">Len</span><span>{{ content | wordCount }} chars</span></li>
             {% if pinned %}
-            <li><svg class="ico" aria-hidden="true"><use href="#i-pin"></use></svg>Pinned</li>
+            <li class="post-meta__pin"><span class="led led--gold" aria-hidden="true"></span>Pinned</li>
             {% endif %}
         </ul>
 
         {% if tags.size > 0 %}
-        <div class="post-tags chips" data-pagefind-ignore>
+        <div class="post-tags" data-pagefind-ignore>
             {% for tag in tags %}
-            <a class="chip" href="/tags/{{ tag | ghSlug }}/"><span class="chip__hash">#</span>{{ tag }}</a>
+            <a class="post-tag" href="/tags/{{ tag | ghSlug }}/"><span class="post-tag__hash" aria-hidden="true">#</span>{{ tag }}</a>
             {% endfor %}
         </div>
         {% endif %}
@@ -44,8 +42,8 @@ ogType: article
         </div>
         {% if tocHtml != '' %}
         <aside class="post-toc" aria-label="Table of contents" data-pagefind-ignore>
-            <nav class="toc panel panel--flat">
-                <p class="toc__label"><svg class="ico" aria-hidden="true"><use href="#i-list"></use></svg>Contents</p>
+            <nav class="toc post-toc__panel">
+                <p class="toc__label"><span>Contents</span><span class="toc__label-mark" aria-hidden="true">Nav</span></p>
                 <ol class="toc__list" id="toc-list">
                     {{ tocHtml }}
                 </ol>
@@ -97,7 +95,7 @@ ogType: article
             <span class="chip"><svg class="ico" aria-hidden="true"><use href="#i-comment"></use></svg>via GitHub</span>
         </div>
     </header>
-    <div class="panel panel--flat" style="padding: 16px">
+    <div class="panel panel--flat comments__body">
         <div id="giscus-container"></div>
     </div>
     <script>

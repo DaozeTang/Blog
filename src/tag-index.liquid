@@ -15,7 +15,6 @@ description: Every tag used across the blog, ordered by how often it appears.
 
 <header class="page-head page-head--split">
     <div class="page-head__main">
-        <p class="kicker"><span class="led" aria-hidden="true"></span>Index &middot; tags</p>
         <h1 class="page-head__title">Tags<span style="color: var(--accent)">.</span></h1>
         <p class="page-head__sub">Every tag in the archive, ordered by how often it appears. Pick one to see the posts
             filed under it.</p>
@@ -63,8 +62,8 @@ description: Every tag used across the blog, ordered by how often it appears.
             {% if term.items.size >= 5 %}
             <li class="term-row" data-term-row data-name="{{ term.name | downcase }}" data-slug="{{ term.slug }}">
                 <a class="term-row__link" href="/tags/{{ term.slug }}/">
-                    <span class="term-row__hash" aria-hidden="true">#</span>
-                    <span class="term-row__name">{{ term.name }}</span>
+                    <span class="term-row__no" aria-hidden="true">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
+                    <span class="term-row__name"><span class="term-row__hash" aria-hidden="true">#</span>{{ term.name }}</span>
                     <span class="term-row__bar" aria-hidden="true"><i style="--p: {{ term.items.size | times: 100 | divided_by: maxTag }}%"></i></span>
                     <span class="term-row__count">{{ term.items.size }}</span>
                 </a>
@@ -81,8 +80,8 @@ description: Every tag used across the blog, ordered by how often it appears.
             {% if term.items.size >= 2 and term.items.size <= 4 %}
             <li class="term-row" data-term-row data-name="{{ term.name | downcase }}" data-slug="{{ term.slug }}">
                 <a class="term-row__link" href="/tags/{{ term.slug }}/">
-                    <span class="term-row__hash" aria-hidden="true">#</span>
-                    <span class="term-row__name">{{ term.name }}</span>
+                    <span class="term-row__no" aria-hidden="true">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
+                    <span class="term-row__name"><span class="term-row__hash" aria-hidden="true">#</span>{{ term.name }}</span>
                     <span class="term-row__bar" aria-hidden="true"><i style="--p: {{ term.items.size | times: 100 | divided_by: maxTag }}%"></i></span>
                     <span class="term-row__count">{{ term.items.size }}</span>
                 </a>

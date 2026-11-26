@@ -1,40 +1,56 @@
 // =============================================================================
-//  COVER — the blog's attract screen.
+//  COVER — the field station plate: a monumental field-notes poster on the
+//  left, the live station plate on the right.
 // =============================================================================
 
 .cover {
     display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    grid-template-columns: minmax(0, 1.04fr) minmax(0, 0.96fr);
     gap: var(--s-8) var(--s-9);
     align-items: center;
-    padding: var(--s-7) 0 var(--s-6);
+    padding: var(--s-7) 0 var(--s-8);
 }
 
 .cover__main {
     min-width: 0;
 }
 
+/* Two stacked words set like a false-colour print. Silkscreen renders on its
+   8px grid, so every breakpoint below is a multiple of 8. */
 .cover__title {
-    margin: var(--s-4) 0 0;
+    max-width: 8ch;
+    margin: 0;
     color: var(--ink);
     font-family: var(--f-pixel);
-    font-size: 64px;
-    line-height: 0.92;
-    letter-spacing: -0.01em;
+    font-size: 104px;
+    font-weight: 400;
+    line-height: 0.84;
+    letter-spacing: -0.02em;
     text-transform: uppercase;
-    animation: wipe-in 520ms steps(7, end) both;
+    text-shadow:
+        2px 0 0 var(--coral-soft),
+        -2px 0 0 var(--blue-soft);
+    animation: wipe-in 480ms steps(6, end) both;
+}
+
+.cover__word {
+    display: block;
+    width: max-content;
+    max-width: 100%;
+}
+
+.cover__word + .cover__word {
+    margin-top: 6px;
+}
+
+.cover__dot {
+    color: var(--accent);
 }
 
 @media (prefers-reduced-motion: reduce) {
     .cover__title {
         animation: none;
     }
-}
-
-.cover__title span {
-    display: inline-block;
-    color: var(--accent);
-    transform: translateY(-6px);
 }
 
 .cover__lede {
@@ -45,190 +61,248 @@
     line-height: 1.85;
 }
 
+/* Instrument tags: a hairline strip of key / count pairs, not pills. */
 .cover__meta {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--s-2);
-    margin-top: var(--s-5);
+    gap: 4px;
+    margin: var(--s-5) 0 0;
+    padding: var(--s-3) 0 0;
+    border-top: var(--bw-2) solid var(--line);
+    list-style: none;
 }
 
-.cover__side {
-    min-width: 0;
-}
-
-.cover__screen {
-    position: relative;
-    aspect-ratio: 16 / 10;
-    box-shadow:
-        inset 2px 2px 0 rgba(0, 0, 0, 0.6),
-        inset -2px -2px 0 rgba(255, 255, 255, 0.08),
-        var(--sh-3);
-}
-
-.cover__screen canvas {
-    width: 100%;
-    height: 100%;
-    image-rendering: pixelated;
-}
-
-/* Same one-shot power-on sweep as the homepage portrait. */
-.cover__screen::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    z-index: 5;
-    height: 26%;
-    background: linear-gradient(
-        180deg,
-        transparent,
-        rgba(86, 217, 139, 0.16),
-        rgba(86, 217, 139, 0.32),
-        transparent
-    );
-    opacity: 0;
-    pointer-events: none;
-    animation: boot-scan 1200ms steps(10, end) 300ms 1 both;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .cover__screen::before {
-        display: none;
-    }
-}
-
-.cover__fig {
-    margin: var(--s-3) 0 0;
-}
-
-.cover__fig .px-caption {
+.cover__meta > li {
     margin: 0;
 }
 
-.cover__hud {
-    display: flex;
-    flex-wrap: wrap;
+.cover__tag {
+    display: inline-flex;
+    align-items: baseline;
     gap: var(--s-2);
-    margin-top: var(--s-4);
+    padding: 4px 8px 4px 7px;
+    border: var(--bw-2) solid var(--line);
+    background: transparent;
+    color: var(--ink-2);
+    transition: var(--move);
 }
 
-/* The quick search switch sits under the screen like a console button. */
-.cover__search {
-    display: flex;
-    align-items: center;
-    gap: var(--s-2);
-    width: 100%;
-    margin-top: var(--s-4);
-    padding: 10px 12px;
-    border: var(--bw) solid var(--line-strong);
-    background: var(--surface);
-    color: var(--ink-3);
+.cover__tag:hover {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--ink);
+}
+
+.cover__tag-k {
+    color: var(--ink-4);
     font-family: var(--f-mono);
-    font-size: 13px;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.cover__tag-v {
+    color: var(--ink);
+    font-family: var(--f-readout);
+    font-size: 19px;
+    font-variant-numeric: tabular-nums;
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+}
+
+.cover__tag:hover .cover__tag-k,
+.cover__tag:hover .cover__tag-v {
+    color: var(--accent);
+}
+
+.cover__tag--feed .cover__tag-v {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+/* The search affordance reads as the first line of a console session. */
+.cover__console {
+    margin-top: var(--s-6);
+}
+
+.cover__search {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto auto auto;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 11px 11px 11px 13px;
+    border: var(--bw-2) solid var(--line-strong);
+    background: var(--bg-2);
+    box-shadow: inset 0 1px 0 var(--px-hi);
+    color: var(--ink-2);
+    font-family: var(--f-mono);
+    font-size: 12px;
+    line-height: 1.4;
     text-align: left;
-    cursor: pointer;
-    box-shadow: var(--sh-1);
     transition: var(--move);
 }
 
 .cover__search:hover {
-    background: var(--surface-2);
+    border-color: var(--accent);
+    background: var(--surface);
     color: var(--ink);
-    transform: translate(-2px, -2px);
-    box-shadow: var(--sh-2);
+}
+
+.cover__search:focus-visible {
+    outline: var(--bw) solid var(--accent);
+    outline-offset: 3px;
+}
+
+.cover__search-prompt {
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.cover__search-label {
+    min-width: 0;
+    overflow: hidden;
+    letter-spacing: 0.02em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.cover__search-hint {
+    padding-left: 10px;
+    border-left: var(--bw-2) solid var(--line);
+    color: var(--ink-4);
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    white-space: nowrap;
 }
 
 .cover__search kbd {
-    margin-left: auto;
+    font-size: 10px;
+    line-height: 1.2;
 }
 
-/* -----------------------------------------------------------------------------
-   Ticker — the marquee under the cover.
-   -------------------------------------------------------------------------- */
-
-.ticker {
-    position: relative;
-    overflow: hidden;
-    border-top: var(--bw) solid var(--accent-3);
-    border-bottom: var(--bw) solid var(--accent-3);
-    background: var(--accent);
-    color: var(--on-accent);
+.cover__search .ico {
+    width: 14px;
+    height: 14px;
+    color: var(--ink-4);
+    transition: transform var(--tick), color var(--tick);
 }
 
-.ticker__track {
-    display: flex;
-    width: max-content;
-    animation: marquee 48s linear infinite;
+.cover__search:hover .ico {
+    color: var(--accent);
+    transform: translateX(3px);
 }
 
-.ticker:hover .ticker__track,
-.ticker:focus-within .ticker__track,
-.ticker.is-paused .ticker__track {
-    animation-play-state: paused;
-}
-
-.ticker__group {
+.cover__console-note {
     display: flex;
     align-items: center;
-    gap: var(--s-4);
-    padding: 10px var(--s-4);
-    white-space: nowrap;
-    font-family: var(--f-pixel);
-    font-size: 16px;
-    letter-spacing: 0.04em;
+    gap: 7px;
+    margin: var(--s-2) 0 0;
+    color: var(--ink-4);
+    font-family: var(--f-mono);
+    font-size: 9px;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
 }
 
-.ticker__sep {
-    color: var(--on-accent);
-    font-family: var(--f-mono);
-    opacity: 0.65;
+.cover__console-note .led {
+    width: 4px;
+    height: 4px;
+    box-shadow: none;
 }
 
-@media (prefers-reduced-motion: reduce) {
-    /* No marquee: keep one line and let it scroll by hand instead of
-       re-flowing the groups into clipped rows. */
-    .ticker {
-        overflow-x: auto;
-        scrollbar-width: thin;
-        -webkit-mask-image: linear-gradient(90deg, #000 0 94%, transparent);
-        mask-image: linear-gradient(90deg, #000 0 94%, transparent);
-    }
+/* -----------------------------------------------------------------------------
+   Side: the field station plate. The old workshop canvas keeps its id and scene,
+   so the pixel-scene script keeps running unchanged.
+   -------------------------------------------------------------------------- */
 
-    .ticker__track {
-        animation: none;
-        width: max-content;
-        flex-wrap: nowrap;
-    }
+.cover__side {
+    display: grid;
+    gap: var(--s-3);
+    align-content: center;
+    min-width: 0;
+}
+
+.cover__plate {
+    width: 100%;
+    aspect-ratio: 200 / 140;
+}
+
+.cover__fig {
+    margin: 0;
 }
 
 /* -----------------------------------------------------------------------------
    Responsive
    -------------------------------------------------------------------------- */
 
+@media (max-width: 1280px) {
+    .cover__title {
+        font-size: 96px;
+    }
+}
+
+@media (max-width: 1100px) {
+    .cover__title {
+        font-size: 88px;
+    }
+}
+
 @media (max-width: 1023px) {
     .cover {
         grid-template-columns: minmax(0, 1fr);
-        gap: var(--s-6);
+        gap: var(--s-7);
         padding-top: var(--s-6);
     }
 
     .cover__title {
-        font-size: 56px;
+        font-size: 72px;
     }
 
     .cover__side {
-        max-width: 560px;
+        max-width: 620px;
     }
 }
 
 @media (max-width: 560px) {
+    .cover {
+        padding-bottom: var(--s-6);
+    }
+
     .cover__title {
-        font-size: 40px;
+        font-size: 56px;
+        text-shadow:
+            1px 0 0 var(--coral-soft),
+            -1px 0 0 var(--blue-soft);
+    }
+
+    .cover__word + .cover__word {
+        margin-top: 2px;
     }
 
     .cover__lede {
         font-size: 16px;
+    }
+
+    .cover__search-hint {
+        display: none;
+    }
+
+    .cover__search {
+        grid-template-columns: auto minmax(0, 1fr) auto auto;
+    }
+
+    .cover__tag {
+        flex: 1 1 auto;
+    }
+
+    .cover__fig {
+        font-size: 9px;
     }
 }

@@ -9,49 +9,49 @@ eleventyExcludeFromCollections: true
 {% if pagination.pageNumber == 0 %}
 <section class="cover">
     <div class="cover__main">
-        <p class="kicker">
-            <span class="led led--blink" aria-hidden="true"></span>
-            Field notes &middot; since {{ site.start_year }} &middot; 16-bit
-        </p>
-        <h1 class="cover__title">Blog<span>.</span></h1>
+        <h1 class="cover__title" aria-label="Field notes.">
+            <span class="cover__word">Field</span>
+            <span class="cover__word">Notes<span class="cover__dot">.</span></span>
+        </h1>
         <p class="cover__lede">Technical notes on deep learning, computer vision, Linux ops, and the occasional
             rabbit hole &mdash; written down so I only have to debug things once.</p>
-        <div class="cover__meta">
-            <a class="chip" href="/archive/"><svg class="ico" aria-hidden="true"><use href="#i-file"></use></svg>{{ collections.posts.size }} posts</a>
-            <a class="chip" href="/archive/#categories"><svg class="ico" aria-hidden="true"><use href="#i-folder"></use></svg>{{ collections.categories.size }} categories</a>
-            <a class="chip" href="/archive/#tags"><svg class="ico" aria-hidden="true"><use href="#i-tag"></use></svg>{{ collections.tagList.size }} tags</a>
-            <a class="chip chip--accent" href="/rss.xml"><svg class="ico" aria-hidden="true"><use href="#i-rss"></use></svg>RSS</a>
+        <ul class="cover__meta" aria-label="Blog at a glance">
+            <li><a class="cover__tag" href="/archive/"><span class="cover__tag-k">Posts</span><span class="cover__tag-v">{{ collections.posts.size }}</span></a></li>
+            <li><a class="cover__tag" href="/archive/#categories"><span class="cover__tag-k">Categories</span><span class="cover__tag-v">{{ collections.categories.size }}</span></a></li>
+            <li><a class="cover__tag" href="/archive/#tags"><span class="cover__tag-k">Tags</span><span class="cover__tag-v">{{ collections.tagList.size }}</span></a></li>
+            <li><a class="cover__tag cover__tag--feed" href="/rss.xml"><span class="cover__tag-k">Feed</span><span class="cover__tag-v">RSS</span></a></li>
+        </ul>
+        <div class="cover__console">
+            <a class="cover__search" href="/search/" data-open-search aria-label="Search the archive, shortcut slash">
+                <span class="cover__search-prompt" aria-hidden="true">&gt;</span>
+                <span class="cover__search-label">Search the archive</span>
+                <span class="cover__search-hint" aria-hidden="true">local index</span>
+                <kbd aria-hidden="true">/</kbd>
+                <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+            </a>
+            <p class="cover__console-note"><span class="led" aria-hidden="true"></span>Full-text index &middot; runs in your browser</p>
         </div>
     </div>
 
-    <div class="cover__side">
-        <div class="screen cover__screen">
-            <canvas id="scene" data-scene="workshop" role="img" aria-label="Pixel-art illustration of a desk with a CRT monitor, a mug, books and a cat"></canvas>
-            <span class="screen__glare" aria-hidden="true"></span>
+    <aside class="cover__side" aria-label="Field station plate">
+        <div class="plate js-plate cover__plate">
+            <canvas class="plate__canvas" data-scene="station" role="img" aria-label="False-colour aerial view of a field station at night: a lab building with lit skylights, a dish antenna, a solar array and a cat on the gravel"></canvas>
+            <span class="plate__frame" aria-hidden="true"></span>
+            <div class="plate__bar" aria-hidden="true">
+                <span class="plate__rec"><span class="led"></span>Live</span>
+                <span class="plate__seg">station 01 &middot; night</span>
+                <span class="plate__seg">RGB &middot; 8 fps</span>
+                <span class="plate__seg plate__seg--right" data-readout></span>
+            </div>
+            <div class="plate__foot" aria-hidden="true">
+                <span class="plate__scale">0 &mdash; 20 m</span>
+                <span>frame 0001</span>
+                <span class="plate__north">N &uarr;</span>
+            </div>
         </div>
-        <p class="px-caption cover__fig">fig.01 — the workshop · object detection, live</p>
-        <a class="cover__search" href="/search/" data-open-search>
-            <svg class="ico" aria-hidden="true"><use href="#i-search"></use></svg>
-            Search the archive
-            <kbd>/</kbd>
-        </a>
-    </div>
+        <p class="px-caption cover__fig">fig.01 — field station 01 · object detection, live</p>
+    </aside>
 </section>
-
-<div class="ticker" aria-hidden="true">
-    <div class="ticker__track">
-        {% for i in (1..2) %}
-        <div class="ticker__group">
-            <span>Object detection</span><span class="ticker__sep">&#10022;</span>
-            <span>Efficient models</span><span class="ticker__sep">&#10022;</span>
-            <span>Remote sensing</span><span class="ticker__sep">&#10022;</span>
-            <span>Linux ops</span><span class="ticker__sep">&#10022;</span>
-            <span>Local-first tools</span><span class="ticker__sep">&#10022;</span>
-            <span>One bug, one note</span><span class="ticker__sep">&#10022;</span>
-        </div>
-        {% endfor %}
-    </div>
-</div>
 {% endif %}
 
 {% if pagination.pageNumber > 0 %}

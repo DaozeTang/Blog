@@ -56,14 +56,14 @@
        ------------------------------------------------------------------ */
 
     var themeToggle = document.getElementById("theme-toggle");
-    var THEME_COLORS = { light: "#f1e7d2", dark: "#101119" };
-    var MODE_ORDER = ["light", "dark", "system"];
+    var THEME_COLORS = { light: "#e8ebdb", dark: "#070b0d" };
+    var MODE_ORDER = ["dark", "light", "system"];
     var MODE_LABELS = {
-        light: "Theme: light (click for dark)",
-        dark: "Theme: dark (click to follow system)",
-        system: "Theme: follow system (click for light)"
+        dark: "Theme: night survey (click for daylight)",
+        light: "Theme: daylight survey (click to follow system)",
+        system: "Theme: follow system (click for night survey)"
     };
-    var THEME_NAMES = { light: "Light theme", dark: "Dark theme", system: "Following the system theme" };
+    var THEME_NAMES = { dark: "Night survey theme", light: "Daylight survey theme", system: "Following the system theme" };
 
     function currentMode() {
         return root.getAttribute("data-theme-mode") || "system";
@@ -711,19 +711,6 @@
             lightboxImg.removeAttribute("src");
             lightboxIndex = -1;
         });
-    }
-
-    /* ---------------------------------------------------------------------
-       Ticker: stop the belt while it is off screen.
-       ------------------------------------------------------------------ */
-
-    var ticker = document.querySelector(".ticker");
-    if (ticker && "IntersectionObserver" in window) {
-        new IntersectionObserver(function (entries) {
-            entries.forEach(function (entry) {
-                ticker.classList.toggle("is-paused", !entry.isIntersecting);
-            });
-        }, { threshold: 0 }).observe(ticker);
     }
 
     /* ---------------------------------------------------------------------
